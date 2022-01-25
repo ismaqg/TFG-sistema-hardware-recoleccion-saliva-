@@ -2,20 +2,31 @@ import constants
 import csv
 import sqlite3
 
-def get_admins():
-    admins = []
+admins = []
+operators = []
+
+def init_admins_and_operators_info():
+    global admins, operators
     with open(constants.ADMINSID_PATH, 'r') as fd:
         reader = csv.reader(fd)
         for row in reader:
             admins.append(row[0])
-    return admins
-
-def get_operators():
-    operators = []
     with open(constants.OPERATORSID_PATH, 'r') as fd:
         reader = csv.reader(fd)
         for row in reader:
-            operators.append(row[0])
+            operators.append(row[0])        
+
+def get_admins():
+    global admins
+    if not admins: # admins is an empty list
+        init_admins_and_operators_info()
+    return admins
+
+
+def get_operators():
+    global operators
+    if not operators: # operators is an empty list
+        init_admins_and_operators_info()
     return operators
 
 def create_DBs_if_not_exist():

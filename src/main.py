@@ -20,9 +20,6 @@ available_kits = constants.AVAILABLE_KITS_AFTER_REFILL
 stored_samples = 0 
 available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL 
 
-# operators and admins IDs:
-admins = DBcontroller.get_admins()
-operators = DBcontroller.get_operators()
 
 
 # -------- tkinter variables ----------------
@@ -32,6 +29,7 @@ operators = DBcontroller.get_operators()
 root = Screen_manager.start_application()
 
 DBcontroller.create_DBs_if_not_exist()
+DBcontroller.init_admins_and_operators_info()
 
 Screen_saver.getInstance().go_to_screen_saver()
 

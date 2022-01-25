@@ -1,7 +1,10 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk,Image
 import Screen_manager
 import constants
+import DBcontroller
+from Person import Person
 
 
 class LogIn_screen():  # singleton
@@ -20,8 +23,10 @@ class LogIn_screen():  # singleton
         else:
             self.__input_variable = StringVar() #Tkinter variable
 
-            self.__login_screen_frame = Screen_manager.init_screen_frame()
-            self.__login_screen_isActive = False # It is necessary to know when we are in the login tab so that the input is only processed in the login tab, since the function executed in every input is executed in any tab because the input is associated with root. 
+            self.__login_screen_isActive = False  # It is necessary to know when we are in the login tab so that the input is only processed in the login tab, since the function executed in every input is executed in any tab because the input is associated with root. 
+            self.__saver_countdown = None  # Identifies the inactivity countdown used to redisplay the screensaver. For the moment, is invalid, until the first countdown is started in the "go_to_login_screen" function.
+
+            self.__login_screen_frame = Screen_manager.init_screen_frame()            
 
             login_title = Label(self.__login_screen_frame, text="Bienvenido a SALIBANK", font = ("Verdana", 28), bg="#7BACFC")
             login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
@@ -38,12 +43,13 @@ class LogIn_screen():  # singleton
             login_language.grid(row=4, column=1, columnspan = 2, sticky = 'NSEW', pady=(10,0))
             self.__login_input_entry.focus_set() # keep the focus on the Entry so that it is ready to receive an input anytime (even if some other widget is clicked)
     
+            # wheight to each row and column is used to set the proportion that each element occupies with respect to the screen:
             self.__login_screen_frame.rowconfigure(0,weight=2)
             self.__login_screen_frame.rowconfigure(1,weight=4)
             self.__login_screen_frame.rowconfigure(2,weight=1)
             self.__login_screen_frame.rowconfigure(3,weight=0)
             self.__login_screen_frame.rowconfigure(4,weight=1)
-
+            
             self.__login_screen_frame.columnconfigure(0,weight=3)
             self.__login_screen_frame.columnconfigure(1,weight=1)
 
@@ -51,10 +57,51 @@ class LogIn_screen():  # singleton
                                                                             # and at the end the enter key is pressed. Nothing extra is needed to use it. The bind function MUST be used over the root window
             LogIn_screen.__instance = self
 
+
     # function to log in the application with the input data (from the barcode scanner). If log in is successful, the user will go to the main screen of the application
     def __try_to_logIn(self):
-        #TODO: aparte de todo lo que hay que hacer aqui, añadir a la DB de uso el intento de login (tanto en exito como en fracaso)
-        pass
+
+        # discard the inactivity countdown, because an interaction with a user has just occurred:
+        Screen_manager.get_root().after_cancel(self.__saver_countdown)
+
+        #check if the input belongs to a catalan health card or not:
+        if (self.__is_a_valid_TSI_number(self.__input_variable.get())):
+
+            person = Person(userCIP = self.__input_variable.get()[6:20]) # In the 'person' class, the distinction as to whether it is admin, operator or user is made
+            self.__login_screen_isActive = False  # the authentication has been successful, so we are about to exit the login screen
+
+            self.__login_input_entry.delete(0,'end')
+            self.__input_variable.set('')
+
+            if person.get_status() == "Admin":
+                DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN SUCCESS")
+                MainScreen_admin.getInstance().go_to_main_screen()
+            elif person.get_status() == "Operator":
+                DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN SUCESS")
+                MainScreen_operator.getInstance().go_to_main_screen()
+            else:
+                DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
+                MainScreen_user.getInstance().go_to_main_screen() 
+            
+            """
+            IMPORTANT:
+            Since I don't have access to the catsalut database, any barcode with the correct format is interpreted as an existing user.
+            But here a check should also be made to see if the CIP exists in the user catsalut database and, if it does not exist, it should be
+            registered in the 'info_uso' database as LOGIN FAILED. Also a warning indicating that the CIP is invalid should be shown on the screen to the user
+            and the __login_screen_isActive must be set to false and the saver (inactivity) countdown must restart.
+            """ 
+
+        else:
+            DBcontroller.add_new_event(self.__input_variable.get(), "INVALID LOGIN")
+            self.__login_input_entry.delete(0,'end')
+            self.__input_variable.set('')
+            messagebox.showwarning("IDENTIFICACIÓN ERRÓNEA", "Por favor, identifíquese con su tarjeta sanitaria individual")
+            # start again the inactivity countdown:
+            from Screen_saver import Screen_saver  # here to avoid circular dependency!
+            self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)            
+
+        
+
 
     # function to process the input of the barcode scanner
     def __process_input(self, event):
@@ -72,6 +119,8 @@ class LogIn_screen():  # singleton
         from Screen_saver import Screen_saver  # here to avoid circular dependency! https://agilno.com/why-cyclic-dependency-errors-occur-a-look-into-the-python-import-mechanism/
         self.__login_screen_isActive = True
         self.__login_screen_frame.tkraise()
-        Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)
+        # inactivity countdown (if SCREEN_SAVER_BACK_TIMER milliseconds elapse without there having been any input in the login screen, it returns to the saver screen) :
+        self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)
+        print("saver_countdown en el momento de su inicializacion vale" + str(self.__saver_countdown))
  
 
