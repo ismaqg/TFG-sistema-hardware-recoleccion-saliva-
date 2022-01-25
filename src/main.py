@@ -28,18 +28,16 @@ operators = DBcontroller.get_operators()
 # -------- tkinter variables ----------------
 
 
-# --------- Graphic App Creation ------------
+# --------- Main application code ----------- 
 root = Screen_manager.start_application()
 
+DBcontroller.create_DBs_if_not_exist()
 
-
-# --------- Main application code ----------- 
-DBcontroller.create_DB_if_not_exists()
-
-screen_saver_screen = Screen_saver()
+Screen_saver.getInstance().go_to_screen_saver()
 
 
 
 # -------- Looping the application ----------
+root.attributes("-fullscreen", True)
 root.mainloop()
 
