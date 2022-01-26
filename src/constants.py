@@ -23,3 +23,5 @@ SCREEN_WIDTH = get_monitors()[0].width
 SCREEN_HEIGHT = get_monitors()[0].height
 
 SCREEN_SAVER_BACK_TIMER = 5000 # in miliseconds
+
+CORRECT_PASSWORD = "1234" # TODO: ESTO NO LO PODEMOS TENER ASÍ DE INSEGURO. 

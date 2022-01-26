@@ -16,9 +16,9 @@ os.chdir( constants.PROGRAM_DIRECTORY_PATH ) # Needed for relative paths to work
 
 # ------------------- global variables ---------------------------
 # counters:
-available_kits = constants.AVAILABLE_KITS_AFTER_REFILL 
-stored_samples = 0 
-available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL 
+#available_kits = constants.AVAILABLE_KITS_AFTER_REFILL 
+#stored_samples = 0 
+#available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL 
 
 
 
@@ -26,16 +26,15 @@ available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL
 
 
 # --------- Main application code ----------- 
-root = Screen_manager.start_application()
-
 DBcontroller.create_DBs_if_not_exist()
 DBcontroller.init_admins_and_operators_info()
 
+root = Screen_manager.start_application()
 Screen_saver.getInstance().go_to_screen_saver()
 
 
 
 # -------- Looping the application ----------
 root.attributes("-fullscreen", True)
-root.mainloop()
+mainloop() # TODO: Probar a poner root.mainloop a ver si se fastidia algo en lo del nuevo toplevel para la admin authentication
 

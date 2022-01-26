@@ -1,6 +1,7 @@
 import constants
 import csv
 import sqlite3
+import time
 
 admins = []
 operators = []
@@ -35,20 +36,32 @@ def create_DBs_if_not_exist():
     cursor = connection.cursor()
     cursor.execute( """ CREATE TABLE if not exists muestras_saliva (
                 CIP text,
-                last_pickup_date text,
-                submit_date text,
+                last_pickup_time text,
+                submit_time text,
                 time_elapsed text ,
                 submission_ID text)
                 """)
     connection.commit()
     connection.close()
-    # kiok usage information DB:
-    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    # kiosk usage information DB:
+    connection = sqlite3.connect(constants.DB_USEINFO_PATH)
     cursor = connection.cursor()
     cursor.execute( """ CREATE TABLE if not exists info_uso (
-                ID_barcode text,
+                ID text,
                 event text,
-                event_date text)
+                event_time text)
                 """)
+    connection.commit()
+    connection.close()
+
+def add_new_event(ID, event):
+    connection = sqlite3.connect(constants.DB_USEINFO_PATH)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO info_uso VALUES (:ID, :event, :event_time)",
+			{
+				'ID': ID,
+				'event': event,
+				'event_time': time.strftime("%m/%d/%Y, %H:%M:%S")
+			}) # IMPORTANTE: En internet veras otra forma de hacer el insert mas corta. La puedes hacer pero tendras que mirar como he hecho el codigo del update para ver las adaptaciones que hay que hacer si quieres usar variables o cosas con .get() (como es el caso)
     connection.commit()
     connection.close()

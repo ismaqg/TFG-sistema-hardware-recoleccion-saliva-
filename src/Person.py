@@ -1,5 +1,7 @@
 import DBcontroller
 
+# TODO: Probablemente necesitara ser singleton a modo de unico "activeUser"
+
 class Person:
     def __init__(self, CIP):
         self.__CIP = CIP

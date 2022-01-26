@@ -5,6 +5,9 @@ import Screen_manager
 import constants
 import DBcontroller
 from Person import Person
+from MainScreen_admin import MainScreen_admin
+from Key_security import Key_security
+import time
 
 
 class LogIn_screen():  # singleton
@@ -65,20 +68,18 @@ class LogIn_screen():  # singleton
         Screen_manager.get_root().after_cancel(self.__saver_countdown)
 
         #check if the input belongs to a catalan health card or not:
-        if (self.__is_a_valid_TSI_number(self.__input_variable.get())):
+        if (LogIn_screen.__is_a_valid_TSI(self.__input_variable.get())):
 
-            person = Person(userCIP = self.__input_variable.get()[6:20]) # In the 'person' class, the distinction as to whether it is admin, operator or user is made
-            self.__login_screen_isActive = False  # the authentication has been successful, so we are about to exit the login screen
+            person = Person(self.__input_variable.get()[6:20]) # In the 'person' class, the distinction as to whether it is admin, operator or user is made
 
             self.__login_input_entry.delete(0,'end')
             self.__input_variable.set('')
 
-            if person.get_status() == "Admin":
-                DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN SUCCESS")
-                MainScreen_admin.getInstance().go_to_main_screen()
-            elif person.get_status() == "Operator":
-                DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN SUCESS")
-                MainScreen_operator.getInstance().go_to_main_screen()
+            if person.get_status() == "Admin" or person.get_status() == "Operator":
+                additional_security_check = Key_security()
+                # Program a timer to check the response to the 2nd authentication password and logIn if correct or abort if not correct:
+                Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
+
             else:
                 DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
                 MainScreen_user.getInstance().go_to_main_screen() 
@@ -102,13 +103,50 @@ class LogIn_screen():  # singleton
 
         
 
-
     # function to process the input of the barcode scanner
     def __process_input(self, event):
         if (self.__login_screen_isActive):
             self.__try_to_logIn()
         self.__input_variable.set('')
         self.__login_input_entry.delete(0,'end')
+
+    # function to check if a given string is a valid TSI code
+    @staticmethod
+    def __is_a_valid_TSI(string_to_check):
+        if len(string_to_check) != 24:
+            return False
+        if not string_to_check[0:6].isdigit() or not string_to_check[10:24].isdigit():
+            return False
+        if not string_to_check[6:10].isalpha():
+            return False
+        if string_to_check[0:6] != "803401": #catsalut TSI starts with this numbers
+            return False
+        if int(string_to_check[13:15]) > 12 or int(string_to_check[13:15]) == 0 or int(string_to_check[15:17]) > 31 or int(string_to_check[15:17]) == 0: # string_to_check[13:15] represents a month and string_to_check[15:17] represents a day
+            return False
+        return True
+
+    def __check_2nd_authentication_response_and_logIn_if_correct(self, additional_security_check, person):
+        if (not additional_security_check.key_introduced()):
+            # program to check the key input after another 0.5 seconds:
+            Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
+        elif (additional_security_check.password_is_correct()):
+            self.__login_screen_isActive = False  # the authentication has been successful, so we are about to exit the login screen
+            if person.get_status() == "Admin": 
+                DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN SUCCESS")
+                MainScreen_admin.getInstance().go_to_main_screen()
+            else: # Operator
+                DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN SUCCESS")
+                MainScreen_operator.getInstance().go_to_main_screen()
+        else:
+            if person.get_status() == "Admin":
+                DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN FAIL. WRONG SECURITY PASSWORD")
+            else: # operator
+                DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN FAIL. WRONG SECURITY PASSWORD")
+            messagebox.showwarning("ACCESO DENEGADO", "Número de acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave correcta")
+            # start again the inactivity countdown (to show again the saver):
+            from Screen_saver import Screen_saver  # here to avoid circular dependency!
+            self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
+
 
     # function to change the boolean value of the atribute isActive, which indicates if the login screen is the active screen in the application or not. This information is needed by the barcode scanner
     def set_login_screen_isActive(self, bool_isActive):
@@ -120,7 +158,5 @@ class LogIn_screen():  # singleton
         self.__login_screen_isActive = True
         self.__login_screen_frame.tkraise()
         # inactivity countdown (if SCREEN_SAVER_BACK_TIMER milliseconds elapse without there having been any input in the login screen, it returns to the saver screen) :
-        self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)
-        print("saver_countdown en el momento de su inicializacion vale" + str(self.__saver_countdown))
- 
+        self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
 
