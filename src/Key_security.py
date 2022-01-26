@@ -16,33 +16,36 @@ class Key_security:
         # new toplevel window
         self.__key_window = Toplevel()
         self.__key_window.title("Introduce your access key")
-        root_width = constants.SCREEN_WIDTH
-        root_height = constants.SCREEN_HEIGHT
-        self.__key_window.geometry( str(int(root_width/2)) + "x" + str(root_height) )
+        width = int(constants.SCREEN_WIDTH/2)
+        height = constants.SCREEN_HEIGHT
+        xoffset = int(constants.SCREEN_WIDTH/2) # the widget will start in the middle of the screen and thus occupy the right half of the screen
+        yoffset = 0
+        self.__key_window.geometry( str(width) + "x" + str(height) + "+" + str(xoffset) + "+" + str(yoffset))
 
         #ELIMINATE THE UPPER BAR AND MAKES THAT THE WINDOW CANNOT DISAPPEAR FROM THE SCREEN, NOT EVEN BY CLICKING ON THE ROOT WINDOW:
         self.__key_window.overrideredirect(True)
 
 
         # label and entry of the new window
-        title = Label(self.__key_window, text = "Introduce your access key")
-        title.grid(row = 0, column = 0, columnspan = 3, sticky = 'NSEW')
-        self.__entry = Entry(self.__key_window, borderwidth=5)
+        title = Label(self.__key_window, text = "Introduce tu clave de acceso", font = ("Verdana", 22, 'bold'))
+        title.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW')
+        self.__entry = Entry(self.__key_window, borderwidth=5, font = ("Verdana", 26, 'bold'))
         self.__entry.grid(row = 1, column = 0, columnspan = 3, sticky = 'NSEW')
 
         # buttons of the new window
-        Button(self.__key_window, text="1", command=lambda: self.__button_click(1)).grid(row = 2, column = 0, sticky = 'NSEW')
-        Button(self.__key_window, text="2", command=lambda: self.__button_click(2)).grid(row = 2, column = 1, sticky = 'NSEW')
-        Button(self.__key_window, text="3", command=lambda: self.__button_click(3)).grid(row = 2, column = 2, sticky = 'NSEW')
-        Button(self.__key_window, text="4", command=lambda: self.__button_click(4)).grid(row = 3, column = 0, sticky = 'NSEW')
-        Button(self.__key_window, text="5", command=lambda: self.__button_click(5)).grid(row = 3, column = 1, sticky = 'NSEW')
-        Button(self.__key_window, text="6", command=lambda: self.__button_click(6)).grid(row = 3, column = 2, sticky = 'NSEW')
-        Button(self.__key_window, text="7", command=lambda: self.__button_click(7)).grid(row = 4, column = 0, sticky = 'NSEW')
-        Button(self.__key_window, text="8", command=lambda: self.__button_click(8)).grid(row = 4, column = 1, sticky = 'NSEW')
-        Button(self.__key_window, text="9", command=lambda: self.__button_click(9)).grid(row = 4, column = 2, sticky = 'NSEW')
-        Button(self.__key_window, text="0", command=lambda: self.__button_click(0)).grid(row = 5, column = 1, sticky = 'NSEW')
-        Button(self.__key_window, text="CLEAR", fg = "red", command = self.__clear).grid(row = 5, column = 0, sticky = 'NSEW')
-        Button(self.__key_window, text="ACCEPT", fg = "green", command = self.__accept).grid(row = 5, column = 2, sticky = 'NSEW')
+        Button(self.__key_window, text="1", font = ("Verdana", 22), command=lambda: self.__button_click(1)).grid(row = 2, column = 0, sticky = 'NSEW')
+        Button(self.__key_window, text="2", font = ("Verdana", 22), command=lambda: self.__button_click(2)).grid(row = 2, column = 1, sticky = 'NSEW')
+        Button(self.__key_window, text="3", font = ("Verdana", 22), command=lambda: self.__button_click(3)).grid(row = 2, column = 2, sticky = 'NSEW')
+        Button(self.__key_window, text="4", font = ("Verdana", 22), command=lambda: self.__button_click(4)).grid(row = 3, column = 0, sticky = 'NSEW')
+        Button(self.__key_window, text="5", font = ("Verdana", 22), command=lambda: self.__button_click(5)).grid(row = 3, column = 1, sticky = 'NSEW')
+        Button(self.__key_window, text="6", font = ("Verdana", 22), command=lambda: self.__button_click(6)).grid(row = 3, column = 2, sticky = 'NSEW')
+        Button(self.__key_window, text="7", font = ("Verdana", 22), command=lambda: self.__button_click(7)).grid(row = 4, column = 0, sticky = 'NSEW')
+        Button(self.__key_window, text="8", font = ("Verdana", 22), command=lambda: self.__button_click(8)).grid(row = 4, column = 1, sticky = 'NSEW')
+        Button(self.__key_window, text="9", font = ("Verdana", 22), command=lambda: self.__button_click(9)).grid(row = 4, column = 2, sticky = 'NSEW')
+        Button(self.__key_window, text="0", font = ("Verdana", 22), command=lambda: self.__button_click(0)).grid(row = 5, column = 1, sticky = 'NSEW')
+        Button(self.__key_window, text="CLEAR", fg = "red", font = ("Verdana", 22, 'bold'), command = self.__clear).grid(row = 5, column = 0, sticky = 'NSEW')
+        Button(self.__key_window, text="ACCEPT", fg = "green", font = ("Verdana", 22, 'bold'), command = self.__accept).grid(row = 5, column = 2, sticky = 'NSEW')
+        Button(self.__key_window, text="EXIT", fg = "red", bg = "#c0c0c0", borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.__exit).grid(row = 0, column = 2, sticky = 'NSEW', padx=25, pady=25)
 
         # rows and columns config
         self.__key_window.rowconfigure(0, weight = 1)
@@ -71,16 +74,12 @@ class Key_security:
         self.__entry.delete(0, END)
 
     def __accept(self):
-        key_introduced = self.__entry.get()
-        if len(key_introduced) != len(constants.CORRECT_PASSWORD):
-            self.__entry.delete(0, END)
-            messagebox.showerror("LONGITUD DE CLAVE INCORRECTA", "La clave debe ser de " + str(constants.CORRECT_PASSWORD) + " números")
-        else:
-            self.__key_introduced = TRUE
-            if (key_introduced == constants.CORRECT_PASSWORD):
-                self.__key_is_correct = TRUE
-            self.__key_window.destroy()
+        self.__key_introduced = TRUE
+        if (self.__entry.get() == constants.CORRECT_PASSWORD):
+            self.__key_is_correct = TRUE
+        self.__key_window.destroy()
 
-    @staticmethod
-    def __ignore_event():
-        pass
+    def __exit(self):
+        self.__key_introduced = TRUE
+        self.__key_is_correct = FALSE
+        self.__key_window.destroy()

@@ -142,7 +142,7 @@ class LogIn_screen():  # singleton
                 DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN FAIL. WRONG SECURITY PASSWORD")
             else: # operator
                 DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN FAIL. WRONG SECURITY PASSWORD")
-            messagebox.showwarning("ACCESO DENEGADO", "Número de acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave correcta")
+            messagebox.showwarning("ACCESO DENEGADO", "Acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numérica correcta")
             # start again the inactivity countdown (to show again the saver):
             from Screen_saver import Screen_saver  # here to avoid circular dependency!
             self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
