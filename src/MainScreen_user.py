@@ -16,7 +16,7 @@ class MainScreen_user(MainScreen):  # singleton
         if MainScreen_user.__instance != None:
             raise Exception("MainScreen_admin class is singleton")
         else:
-            super().create_main_frame()
+            super().create_main_frames()
 
             # TODO: Declaro los botones y tal pero NO hago el .grid. El .grid lo pongo en el "go to main screen" antes del tk_raise
 
@@ -29,11 +29,11 @@ class MainScreen_user(MainScreen):  # singleton
         pass
 
     # override parent method
-    def __erase_mainScreen_contents(self):
+    def _erase_mainScreen_contents(self):
         # TODO: Los .gridforget. Si da error algo de quí es que se debe llamar _erase_mainScreen_contents en lugar de con __ delante. También tendría que cambiar la llamada de la funcion logOut
         pass
 
     def logOut(self):
-        self.__erase_mainScreen_contents()
+        self._erase_mainScreen_contents()
         super().logOut()
         pass

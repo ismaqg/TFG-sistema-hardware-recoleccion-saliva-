@@ -19,7 +19,7 @@ class MainScreen(ABC): # abstract
     _ms_body_frame = None
 
     @classmethod
-    def create_main_frame(cls):
+    def create_main_frames(cls):
         if (cls._main_screen_frame != None):  # check if main screen frame has already been created
             return
         cls._main_screen_frame = Screen_manager.init_screen_frame()

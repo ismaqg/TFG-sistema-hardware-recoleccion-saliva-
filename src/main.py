@@ -3,6 +3,7 @@ from tkinter import *
 import os
 import constants
 import DBcontroller
+import Counters
 from Screen_saver import *
 
 
@@ -14,21 +15,13 @@ os.chdir( constants.PROGRAM_DIRECTORY_PATH ) # Needed for relative paths to work
 
 
 
-# ------------------- global variables ---------------------------
-# counters:
-#available_kits = constants.AVAILABLE_KITS_AFTER_REFILL 
-#stored_samples = 0 
-#available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL 
-
-
-
-# -------- tkinter variables ----------------
-
 
 # --------- Main application code ----------- 
 DBcontroller.create_DBs_if_not_exist()
 DBcontroller.init_admins_and_operators_info()
 DBcontroller.add_new_event("-", "APLICACIÓN ENCENDIDA")
+
+Counters.initialize_information()
 
 root = Screen_manager.start_application()
 Screen_saver.getInstance().go_to_screen_saver()
