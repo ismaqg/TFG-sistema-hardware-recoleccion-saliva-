@@ -1,25 +1,26 @@
+from matplotlib.pyplot import summer
 from MainScreen import MainScreen
 
 
-class MainScreen_admin(MainScreen):  # singleton 
+class MainScreen_user(MainScreen):  # singleton 
 
     __instance = None
 
     @staticmethod
     def getInstance():
-        if MainScreen_admin.__instance == None:
-            MainScreen_admin()
-        return MainScreen_admin.__instance
+        if MainScreen_user.__instance == None:
+            MainScreen_user()
+        return MainScreen_user.__instance
 
     def __init__(self):
-        if MainScreen_admin.__instance != None:
+        if MainScreen_user.__instance != None:
             raise Exception("MainScreen_admin class is singleton")
         else:
             super().create_main_frame()
 
             # TODO: Declaro los botones y tal pero NO hago el .grid. El .grid lo pongo en el "go to main screen" antes del tk_raise
 
-            MainScreen_admin.__instance = self
+            MainScreen_user.__instance = self
 
 
     # override parent method

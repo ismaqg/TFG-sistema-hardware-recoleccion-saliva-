@@ -28,6 +28,7 @@ os.chdir( constants.PROGRAM_DIRECTORY_PATH ) # Needed for relative paths to work
 # --------- Main application code ----------- 
 DBcontroller.create_DBs_if_not_exist()
 DBcontroller.init_admins_and_operators_info()
+DBcontroller.add_new_event("-", "APLICACIÓN ENCENDIDA")
 
 root = Screen_manager.start_application()
 Screen_saver.getInstance().go_to_screen_saver()

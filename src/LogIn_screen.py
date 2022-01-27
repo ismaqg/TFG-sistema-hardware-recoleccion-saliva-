@@ -4,10 +4,12 @@ from PIL import ImageTk,Image
 import Screen_manager
 import constants
 import DBcontroller
-from Person import Person
+from Person import ActivePerson
 from MainScreen_admin import MainScreen_admin
+from MainScreen_operator import MainScreen_operator
+from MainScreen_user import MainScreen_user
 from Key_security import Key_security
-import time
+
 
 
 class LogIn_screen():  # singleton
@@ -37,13 +39,13 @@ class LogIn_screen():  # singleton
             login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
             login_info = Label(self.__login_screen_frame, text="Pase su tarjeta sanitaria individual por el lector de código de barras",font = ("Verdana", 14, "bold"), bg="#7BACFC")
             self.__login_input_entry = Entry(self.__login_screen_frame, textvariable = self.__input_variable, borderwidth=0,fg='white', highlightthickness = 0, insertbackground = "white") # invisible
-            login_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = ("Verdana", 12)) # TODO: Añadirle un command=cambiar a la pestaña de idiomas
+            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = ("Verdana", 12)) # TODO: Añadirle un command=cambiar a la pestaña de idiomas
 
             login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
             login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')
             login_info.grid(row=2, column=0, columnspan = 2, sticky = 'NSEW', pady = (0,10))
             self.__login_input_entry.grid(row=3,column=0, columnspan = 2, sticky = 'NSEW')
-            login_language.grid(row=4, column=1, columnspan = 2, sticky = 'NSEW', pady=(10,0))
+            self.__change_language.grid(row=4, column=1, columnspan = 2, sticky = 'NSEW', pady=(10,0))
             self.__login_input_entry.focus_set() # keep the focus on the Entry so that it is ready to receive an input anytime (even if some other widget is clicked)
     
             # wheight to each row and column is used to set the proportion that each element occupies with respect to the screen:
@@ -70,18 +72,20 @@ class LogIn_screen():  # singleton
         #check if the input belongs to a catalan health card or not:
         if (LogIn_screen.__is_a_valid_TSI(self.__input_variable.get())):
 
-            person = Person(self.__input_variable.get()[6:20]) # In the 'person' class, the distinction as to whether it is admin, operator or user is made
+            person = ActivePerson(self.__input_variable.get()[6:20]) # In the 'person' class, the distinction as to whether it is admin, operator or user is made
 
             self.__login_input_entry.delete(0,'end')
             self.__input_variable.set('')
 
-            if person.get_status() == "Admin" or person.get_status() == "Operator":
+            if person.get_status() == "ADMIN" or person.get_status() == "OPERATOR":
                 additional_security_check = Key_security()
-                # Program a timer to check the response to the 2nd authentication password and logIn if correct or abort if not correct:
+                self.__change_language["state"]= DISABLED  # disable the change language button while the key_security_screen is being showed
+                # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
                 Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
 
             else:
                 DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
+                self.__login_screen_isActive = False  # we are about to leave login screen
                 MainScreen_user.getInstance().go_to_main_screen() 
             
             """
@@ -105,10 +109,14 @@ class LogIn_screen():  # singleton
 
     # function to process the input of the barcode scanner
     def __process_input(self, event):
-        if (self.__login_screen_isActive):
+
+        if (self.__login_screen_isActive and not ActivePerson.isActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
+                                                                                  # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
             self.__try_to_logIn()
+
         self.__input_variable.set('')
         self.__login_input_entry.delete(0,'end')
+
 
     # function to check if a given string is a valid TSI code
     @staticmethod
@@ -125,23 +133,24 @@ class LogIn_screen():  # singleton
             return False
         return True
 
+    # only operators / admins in this function
     def __check_2nd_authentication_response_and_logIn_if_correct(self, additional_security_check, person):
         if (not additional_security_check.key_introduced()):
             # program to check the key input after another 0.5 seconds:
             Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
         elif (additional_security_check.password_is_correct()):
+            self.__change_language["state"]= NORMAL  # enable the change language button for the next time for the next time the user screen is reached
             self.__login_screen_isActive = False  # the authentication has been successful, so we are about to exit the login screen
-            if person.get_status() == "Admin": 
+            if person.get_status() == "ADMIN": 
                 DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN SUCCESS")
                 MainScreen_admin.getInstance().go_to_main_screen()
             else: # Operator
                 DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN SUCCESS")
                 MainScreen_operator.getInstance().go_to_main_screen()
         else:
-            if person.get_status() == "Admin":
-                DBcontroller.add_new_event(person.get_CIP(), "ADMIN LOGIN FAIL. WRONG SECURITY PASSWORD")
-            else: # operator
-                DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN FAIL. WRONG SECURITY PASSWORD")
+            ActivePerson.destroyCurrent()  # destroy current admin / operator. (a current admin / operator was created when the 1st identification step succeed, but the 2nd step has failed)
+            self.__change_language["state"]= NORMAL  # enable the change language button
+            DBcontroller.add_new_event(person.get_CIP(), person.get_status() + " LOGIN FAIL. WRONG SECURITY PASSWORD") 
             messagebox.showwarning("ACCESO DENEGADO", "Acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numérica correcta")
             # start again the inactivity countdown (to show again the saver):
             from Screen_saver import Screen_saver  # here to avoid circular dependency!
@@ -154,9 +163,9 @@ class LogIn_screen():  # singleton
 
     # function to change the current screen to the login screen
     def go_to_login_screen(self):
-        from Screen_saver import Screen_saver  # here to avoid circular dependency! https://agilno.com/why-cyclic-dependency-errors-occur-a-look-into-the-python-import-mechanism/
         self.__login_screen_isActive = True
         self.__login_screen_frame.tkraise()
         # inactivity countdown (if SCREEN_SAVER_BACK_TIMER milliseconds elapse without there having been any input in the login screen, it returns to the saver screen) :
+        from Screen_saver import Screen_saver  # here to avoid circular dependency! https://agilno.com/why-cyclic-dependency-errors-occur-a-look-into-the-python-import-mechanism/
         self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
 

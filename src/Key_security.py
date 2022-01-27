@@ -15,10 +15,9 @@ class Key_security:
 
         # new toplevel window
         self.__key_window = Toplevel()
-        self.__key_window.title("Introduce your access key")
         width = int(constants.SCREEN_WIDTH/2)
         height = constants.SCREEN_HEIGHT
-        xoffset = int(constants.SCREEN_WIDTH/2) # the widget will start in the middle of the screen and thus occupy the right half of the screen
+        xoffset = int(constants.SCREEN_WIDTH/4) # the widget will start in 1/4 of the screen and thus occupy the middle of the screen
         yoffset = 0
         self.__key_window.geometry( str(width) + "x" + str(height) + "+" + str(xoffset) + "+" + str(yoffset))
 
@@ -27,7 +26,7 @@ class Key_security:
 
 
         # label and entry of the new window
-        title = Label(self.__key_window, text = "Introduce tu clave de acceso", font = ("Verdana", 22, 'bold'))
+        title = Label(self.__key_window, text = "Introduce tu\nclave de acceso", font = ("Verdana", 26, 'bold'))
         title.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW')
         self.__entry = Entry(self.__key_window, borderwidth=5, font = ("Verdana", 26, 'bold'))
         self.__entry.grid(row = 1, column = 0, columnspan = 3, sticky = 'NSEW')

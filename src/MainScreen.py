@@ -1,5 +1,7 @@
-from abc import ABC, abstractmethod  # to make abstract classes
+from abc import ABC, abstractmethod
+from Person import ActivePerson  # to make abstract classes
 import Screen_manager
+import DBcontroller
 
 # The idea of ​​this class is that it will contain the frame of the main screen, but 3 classes will inherit from it, which must
 # have access to that frame. Those 3 classes that inherit are singleton and when they are instantiated for the first and only time
@@ -29,5 +31,11 @@ class MainScreen(ABC): # abstract
         pass
 
     @abstractmethod
-    def logOut(self):
+    def _erase_mainScreen_contents(self):
         pass
+
+    def logOut(self):
+        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), ActivePerson.getCurrent().get_status() + " LOGOUT")
+        ActivePerson.destroyCurrent()
+        from LogIn_screen import LogIn_screen  # here to avoid circular dependency
+        LogIn_screen.getInstance().go_to_login_screen()

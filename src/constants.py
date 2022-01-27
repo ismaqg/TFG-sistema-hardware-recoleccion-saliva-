@@ -22,6 +22,6 @@ NUMBER_OF_LABELS_IN_LABEL_ROLL = None     # TODO: ponerlo a la cantidad de etiqu
 SCREEN_WIDTH = get_monitors()[0].width
 SCREEN_HEIGHT = get_monitors()[0].height
 
-SCREEN_SAVER_BACK_TIMER = 5000 # in miliseconds
+SCREEN_SAVER_BACK_TIMER = 10000 # in miliseconds
 
 CORRECT_PASSWORD = "1234" # TODO: ESTO NO LO PODEMOS TENER ASÍ DE INSEGURO. 
