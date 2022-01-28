@@ -27,13 +27,16 @@ class MainScreen_admin(MainScreen):  # singleton
             self.__title = Label(MainScreen._ms_header_frame, text = "ADMINISTRADOR", bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
             self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", bg = constants.LIGHT_GRAY_BACKGROUNDCOLOR, borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.logOut) 
             self.__quit_program_b = Button(MainScreen._ms_header_frame, text = "APAGAR", bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.__quit_program)
-            MainScreen._ms_header_frame.columnconfigure(0, weight = 2)
+
+            MainScreen._ms_header_frame.columnconfigure(0, weight = 4)
             MainScreen._ms_header_frame.columnconfigure(1, weight = 1)
             MainScreen._ms_header_frame.columnconfigure(2, weight = 1)
+            MainScreen._ms_header_frame.rowconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one row in ms_header_frame) for sticky=NSEW of title, logout_b and quit_program_b to work correctly
 
-            self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = "Etiquetas impresora restantes: " + str(Counters.get_available_labels()), font = ("Verdana", 12, 'bold'))
-            self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = "Kits restantes: " + str(Counters.get_available_kits()), font = ("Verdana", 12, 'bold'))
-            self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " de " + str(constants.STORED_SAMPLES_LIMIT), font = ("Verdana", 12, 'bold'))
+
+            self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = "Etiquetas impresora restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
+            self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+            self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color())
 
             self.__refill_kits_b = Button(MainScreen._ms_body_frame, text = "REPONER\nKITS", font = ("Verdana", 22, 'bold'), command = self.__refill_kits)
             self.__refill_labels_b = Button(MainScreen._ms_body_frame, text = "REPONER\nETIQUETAS\nIMPRESORA", font = ("Verdana", 22, 'bold'), command = self.__refill_labels)
@@ -43,7 +46,6 @@ class MainScreen_admin(MainScreen):  # singleton
             MainScreen._ms_body_frame.rowconfigure(0, weight = 1)
             MainScreen._ms_body_frame.rowconfigure(1, weight = 4)
             MainScreen._ms_body_frame.rowconfigure(2, weight = 4)
-
             MainScreen._ms_body_frame.columnconfigure(0, weight = 1)
             MainScreen._ms_body_frame.columnconfigure(1, weight = 1)
             MainScreen._ms_body_frame.columnconfigure(2, weight = 1)
@@ -60,18 +62,18 @@ class MainScreen_admin(MainScreen):  # singleton
 
     @staticmethod
     def __refill_kits():
-        # TODO now: Llamar a Counters.set_kits(constants.KITSAFTERREFILL) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantos kits quedan. Y suponemos que por hardware no hay que hacer nada (abren el lateral con llave)
+        # TODO now: Llamar a Counters.set_kits(constants.KITSAFTERREFILL) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantos kits quedan (y el color). Y suponemos que por hardware no hay que hacer nada (abren el lateral con llave)
         # TODO futuro: Que el que hace refill tenga la posibilidad de indicar cuantos AÑADE, por si no llena el deposito entero. En ese caso, el valor de kits será el que había más el añadido
         pass
 
     @staticmethod
     def __refill_labels():
-        # TODO now: Llamar a Counters.set_labels(constants.LABELSAFTERREFILL) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantas etiquetas de impresora quedan
+        # TODO now: Llamar a Counters.set_labels(constants.LABELSAFTERREFILL) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantas etiquetas de impresora quedan (y el color)
         pass
 
     @staticmethod
     def __collect_samples():
-        # TODO now: Llamar a Counters.set_samples(0) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantos samples hay. Y suponemos que por hardware no hay que hacer nada (abren el lateral con llave)
+        # TODO now: Llamar a Counters.set_samples(0) + un showmessage por pantalla indicando el exito + actualizar label que indica cuantos samples hay (y el color). Y suponemos que por hardware no hay que hacer nada (abren el lateral con llave)
         pass
 
 
