@@ -65,3 +65,25 @@ def add_new_event(ID, event):
 			}) # IMPORTANTE: En internet veras otra forma de hacer el insert mas corta. La puedes hacer pero tendras que mirar como he hecho el codigo del update para ver las adaptaciones que hay que hacer si quieres usar variables o cosas con .get() (como es el caso)
     connection.commit()
     connection.close()
+
+def get_DB_content(DB_name):
+    DB_content = ''
+    connection = ''
+    if DB_name == "muestras_saliva":
+        DB_content = "(CIP , Momento recogida kit , Momento deposicion muestra , Tiempo transcurrido , Identificador muestra)\n\n"
+        connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    elif DB_name == "info_uso":
+        DB_content = "(Identificador o CIP , evento , Fecha y hora evento)\n\n"
+        connection = sqlite3.connect(constants.DB_USEINFO_PATH)
+    else:
+        raise Exception("Has llamado a get_DB_content pasando un nombre de DB distinto a muestras_saliva o info_uso")
+
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM " + DB_name)
+
+    results = cursor.fetchall()
+    for result in results:
+        DB_content += str(result) + '\n'
+
+    connection.close()
+    return DB_content

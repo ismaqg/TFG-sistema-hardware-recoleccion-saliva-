@@ -9,7 +9,7 @@ def initialize_information():
     global available_kits, stored_samples, available_labels
     available_kits = 5  #constants.AVAILABLE_KITS_AFTER_REFILL 
     stored_samples = 47  #0 
-    available_labels = 188  #constants.NUMBER_OF_LABELS_IN_LABEL_ROLL
+    available_labels = 72  #constants.NUMBER_OF_LABELS_IN_LABEL_ROLL
 
 
 
