@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+
+from tkinter import messagebox
+
 from Person import ActivePerson  # to make abstract classes
 import Screen_manager
 import DBcontroller
@@ -33,6 +36,16 @@ class MainScreen(ABC): # abstract
     @abstractmethod
     def _erase_mainScreen_contents(self):
         pass
+
+
+    @staticmethod
+    def _quit_program():  # only accessible from operator and admin
+        shutdown = messagebox.askokcancel("APAGAR", "El programa se cerrará y la máquina se apagará")
+        if shutdown == True:
+            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "APLICACIÓN APAGADA" )
+            Screen_manager.get_root().destroy()
+            # TODO: hacer un shutdown now de la rpi por codigo (y en el bashrc de la rpi hacer que se lance esta aplicacion directamente)
+        
 
     def logOut(self):
         DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), ActivePerson.getCurrent().get_status() + " LOGOUT")

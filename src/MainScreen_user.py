@@ -14,7 +14,7 @@ class MainScreen_user(MainScreen):  # singleton
 
     def __init__(self):
         if MainScreen_user.__instance != None:
-            raise Exception("MainScreen_admin class is singleton")
+            raise Exception("MainScreen_operator class is singleton")
         else:
             super().create_main_frames()
 

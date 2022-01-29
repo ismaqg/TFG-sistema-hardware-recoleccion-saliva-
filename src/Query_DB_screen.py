@@ -30,7 +30,7 @@ class Query_DB_screen: # singleton
             self.__current_DB = "info_uso"
 
             self.__title = Label(self.__DBscr_header_frame, text = "Base de Datos: " + self.__current_DB, bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = ("Verdana", 22, 'bold'), state = NORMAL if (ActivePerson.getCurrent().get_status() == "ADMIN") else DISABLED, command = self.__change_displayed_DB)
+            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__change_displayed_DB)
             self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
@@ -93,6 +93,8 @@ class Query_DB_screen: # singleton
 
 
     def go_to_query_DB_screen(self):
+        self.__change_displayed_DB_b["state"] = NORMAL if (ActivePerson.getCurrent().get_status() == "ADMIN") else DISABLED
         self.__current_DB = "info_uso"
+        self.__fill_display_box_with_DB_content()
         self.__DBscreen_frame.tkraise()
 
