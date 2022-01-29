@@ -44,7 +44,7 @@ class Key_security:
         Button(self.__key_window, text="0", font = ("Verdana", 22), command=lambda: self.__button_click(0)).grid(row = 5, column = 1, sticky = 'NSEW')
         Button(self.__key_window, text="CLEAR", fg = "red", font = ("Verdana", 22, 'bold'), command = self.__clear).grid(row = 5, column = 0, sticky = 'NSEW')
         Button(self.__key_window, text="ACCEPT", fg = "green", font = ("Verdana", 22, 'bold'), command = self.__accept).grid(row = 5, column = 2, sticky = 'NSEW')
-        Button(self.__key_window, text="EXIT", fg = "red", bg = constants.LIGHT_GRAY_BACKGROUNDCOLOR, borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.__exit).grid(row = 0, column = 2, sticky = 'NSEW', padx=25, pady=25)
+        Button(self.__key_window, text="EXIT", fg = "red", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__exit).grid(row = 0, column = 2, sticky = 'NSEW', padx=25, pady=25)
 
         # rows and columns config
         self.__key_window.rowconfigure(0, weight = 1)

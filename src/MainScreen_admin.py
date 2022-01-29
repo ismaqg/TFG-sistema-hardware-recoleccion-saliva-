@@ -30,7 +30,7 @@ class MainScreen_admin(MainScreen):  # singleton
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
             self.__title = Label(MainScreen._ms_header_frame, text = "ADMINISTRADOR", bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", bg = constants.LIGHT_GRAY_BACKGROUNDCOLOR, borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.logOut) 
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.logOut) 
             self.__quit_program_b = Button(MainScreen._ms_header_frame, text = "APAGAR", bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__quit_program)
 
             MainScreen._ms_header_frame.columnconfigure(0, weight = 4)
