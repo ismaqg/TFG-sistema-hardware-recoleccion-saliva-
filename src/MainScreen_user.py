@@ -1,5 +1,13 @@
-from matplotlib.pyplot import summer
+from tkinter import *
+from tkinter import messagebox
+
 from MainScreen import MainScreen
+from Person import ActivePerson
+from Help_screen import Help_screen
+from ClaimKit_screen import ClaimKit_screen
+from SubmitSample_screen import SubmitSample_screen
+import constants
+import DBcontroller
 
 
 class MainScreen_user(MainScreen):  # singleton 
@@ -16,24 +24,64 @@ class MainScreen_user(MainScreen):  # singleton
         if MainScreen_user.__instance != None:
             raise Exception("MainScreen_operator class is singleton")
         else:
-            super().create_main_frames()
+            MainScreen.create_main_frames()
 
-            # TODO: Declaro los botones y tal pero NO hago el .grid. El .grid lo pongo en el "go to main screen" antes del tk_raise
+            # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
+
+            self.__title = Label(MainScreen._ms_header_frame, text = "USUARIO " + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = ("Verdana", 22, 'bold'), fg="red", command = self.logOut) 
+
+            self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = "OBTENER KIT", font = ("Verdana", 22, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
+            self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = "ENTREGAR MUESTRA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
+            self.__info_b = Button(MainScreen._ms_body_frame, text = "¿QUÉ\nHAGO?", font = ("Verdana", 22, 'bold'), borderwidth=5, command = self.__show_usage_info)
+            self.__help_b = Button(MainScreen._ms_body_frame, text = "AYUDA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
 
             MainScreen_user.__instance = self
 
 
-    # override parent method
+    def __show_usage_info(self):
+        messagebox.showinfo("INFORMACIÓN DE USO", """
+        Primero, en caso de que no tenga un kit de recolección de muestra de saliva, debe presionar el botón de 'OBTENER KIT'. \n
+        Después, debe hacer click sobre el botón de 'ENTREGAR MUESTRA'. Allí se le mostrarán los pasos que debe seguir.  
+        """)
+        
+
+    # override abstract parent method
     def go_to_main_screen(self):
-        # TODO: Los .grid y luego el tk_raise
-        pass
+        # column and row configure (because the configuration of the frames is not the same as the user main screen):
+        MainScreen._user_header_frame_rowcolumn_configure()
+        MainScreen._user_body_frame_rowcolumn_configure()
+
+        # .grids are here and not in constructor because MainScreen_admin, MainScreen_operator and MainScreen_user share the same frame (the main screen frame where this widgets are displayed)
+        self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
+        self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 20)
+
+        if DBcontroller.user_has_kit():
+            self.__submit_sample_b["state"] = DISABLED
+        else: 
+            self.__submit_sample_b["state"] = NORMAL
+
+        self.__claim_kit_b.grid(row = 0, column = 0, rowspan = 2, sticky = 'NSEW', padx = (10, 5), pady = 10)
+        self.__submit_sample_b.grid(row = 0, column = 1, rowspan = 2, sticky = 'NSEW', padx = 5, pady = 10)
+        self.__info_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = (10, 5))
+        self.__help_b.grid(row = 1, column = 2, sticky = 'NSEW', padx = (5, 10), pady = (5, 10))
+
+        MainScreen._main_screen_frame.tkraise()
 
     # override parent method
     def _erase_mainScreen_contents(self):
-        # TODO: Los .gridforget. Si da error algo de quí es que se debe llamar _erase_mainScreen_contents en lugar de con __ delante. También tendría que cambiar la llamada de la funcion logOut
-        pass
+        self.__title.grid_forget()
+        self.__logout_b.grid_forget()
+
+        self.__claim_kit_b.grid_forget()
+        self.__submit_sample_b.grid_forget()
+        self.__info_b.grid_forget()
+        self.__help_b.grid_forget()
+
 
     def logOut(self):
-        self._erase_mainScreen_contents()
-        super().logOut()
-        pass
+        logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
+        if logout == True:
+            self._erase_mainScreen_contents()
+            super().logOut()
+        

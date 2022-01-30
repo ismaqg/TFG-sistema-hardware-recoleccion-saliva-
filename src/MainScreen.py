@@ -29,6 +29,46 @@ class MainScreen(ABC): # abstract
         cls._ms_header_frame = Screen_manager.header_frame(cls._main_screen_frame)
         cls._ms_body_frame = Screen_manager.body_frame(cls._main_screen_frame)
 
+    @classmethod
+    def _admin_and_operator_header_frame_rowcolumn_configure(cls):
+        cls._ms_header_frame.columnconfigure(0, weight = 4)
+        cls._ms_header_frame.columnconfigure(1, weight = 1)
+        cls._ms_header_frame.columnconfigure(2, weight = 1)
+        cls._ms_header_frame.rowconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one row in ms_header_frame) for sticky=NSEW of the inside widgets to work correctly
+
+    @classmethod
+    def _admin_and_operator_body_frame_rowcolumn_configure(cls):
+        cls._ms_body_frame.rowconfigure(0, weight = 1)
+        cls._ms_body_frame.rowconfigure(1, weight = 4)
+        cls._ms_body_frame.rowconfigure(2, weight = 4)
+        cls._ms_body_frame.columnconfigure(0, weight = 1)
+        cls._ms_body_frame.columnconfigure(1, weight = 1)
+        cls._ms_body_frame.columnconfigure(2, weight = 1)
+        cls._ms_body_frame.columnconfigure(3, weight = 1)
+        cls._ms_body_frame.columnconfigure(4, weight = 1)
+        cls._ms_body_frame.columnconfigure(5, weight = 1)
+
+    @classmethod
+    def _user_header_frame_rowcolumn_configure(cls):
+        cls._ms_header_frame.columnconfigure(0, weight = 5)
+        cls._ms_header_frame.columnconfigure(1, weight = 1)
+        cls._ms_header_frame.columnconfigure(2, weight = 0)
+        cls._ms_header_frame.rowconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one row in ms_header_frame) for sticky=NSEW of the inside widgets to work correctly
+
+    @classmethod
+    def _user_body_frame_rowcolumn_configure(cls):
+        cls._ms_body_frame.rowconfigure(0, weight = 1)
+        cls._ms_body_frame.rowconfigure(1, weight = 1)
+        cls._ms_body_frame.rowconfigure(2, weight = 0)
+        cls._ms_body_frame.columnconfigure(0, weight = 3)
+        cls._ms_body_frame.columnconfigure(1, weight = 3)
+        cls._ms_body_frame.columnconfigure(2, weight = 1)
+        cls._ms_body_frame.columnconfigure(3, weight = 0)
+        cls._ms_body_frame.columnconfigure(4, weight = 0)
+        cls._ms_body_frame.columnconfigure(5, weight = 0)
+         
+
+
     @abstractmethod
     def go_to_main_screen(self):
         pass

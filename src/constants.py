@@ -37,4 +37,11 @@ SAFE_BACKGROUNDCOLOR = "#a6ffa6"
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%
 
+PREVIOUS_INFO_SALIVA_TEST = """
+Deben transcurrir un mínimo de 30 minutos entre la última vez que ingirió cualquier tipo de comida o líquido y la recogida de saliva. \n
+\n
+Si ha transcurrido ese tiempo, pulsa el botón de "Cumplo los requisitos. Quiero recoger el kit". En ese caso podrá recoger el kit para la muestra de saliva en la compuerta lateral y será redirigido al menú principal, donde deberá pulsar el botón de 'Entregar muestra'. Allí se le mostrarán las siguientes instrucciones para el test de saliva.\n
+Si NO ha transcurrido ese tiempo, por favor pulse el botón de 'Volver' para ser redirigido al menú principal y a continuación pulse el botón de 'Cerrar sesión (SALIR)'. Vuelva a la máquina una vez cumpla con los requisitos previos a poder realizar el test de saliva.
+"""
+
 CORRECT_PASSWORD = "1234" # TODO: ESTO NO LO PODEMOS TENER ASÍ DE INSEGURO. 

@@ -1,3 +1,4 @@
+from Person import ActivePerson
 import constants
 import csv
 import sqlite3
@@ -87,3 +88,29 @@ def get_DB_content(DB_name):
 
     connection.close()
     return DB_content
+
+
+# the function raises an exception if the current person using the system is not an user
+# returns false if:
+#    - it's the first time that the user uses the system
+#    - the last register of the user says that he/she has submited a sample (which means that he/she hasn't a kit now)
+# returns true if:
+#    - the last register of the user says that he/she hasn't submited a sample (which means that he/she has a kit now)
+# Note: returning true doesn't disable the option of collecting another kit (because the user maybe lost his kit)
+def user_has_kit():
+    if ActivePerson.getCurrent().get_status() != "USER":
+        raise Exception("Current person using the system is not an user, it's a " + ActivePerson.getCurrent().get_status() + " so there is not information about if 'user has kit'")
+    else:
+        # TODO: Mirar en la DB y pillar el ultimo registro del user. Si tiene sample submiteada retornar false porque eso significa que la ultima interaccion que tuvo con la maquina fue para entregar el kit que tenia. Si no tiene sample submiteada pero sí kit recogido retornar true (que lo ha podido recoger en algun otro momento o en esa misma sesión de uso). Y si no hay nada en el registro retornar false (esta usando la maquina por primera vez)
+        connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC") # the last row of a certain user is the one with the highest oid (and the cip of that user). This is why I order descending and only get the first row after ordering
+        last_register_of_that_user = cursor.fetchone()
+        connection.close()
+        if last_register_of_that_user == None:
+            return False
+        else:
+            if last_register_of_that_user[2] == "NO SUBMISSION": # the column [2] has the information about the last submission moment
+                return True  # note that the fact that a row of one user exists, means that he/she requested a kit.
+            else: # the last interection of the user with the system was to submit a sample, so the user has not a kit.
+                return False 

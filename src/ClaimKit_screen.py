@@ -1,0 +1,65 @@
+from tkinter import *
+
+import Screen_manager
+import constants
+
+class ClaimKit_screen: # singleton
+    
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        if ClaimKit_screen.__instance == None:
+            ClaimKit_screen()
+        return ClaimKit_screen.__instance
+
+    def __init__(self):
+        if ClaimKit_screen.__instance != None:
+            raise Exception("ClaimKit_screen class is singleton")
+        else:
+
+            self.__claimKitscreen_frame = Screen_manager.init_screen_frame()
+            self.__claimKitscreen_header_frame = Screen_manager.header_frame(self.__claimKitscreen_frame)
+            self.__claimKitscreen_body_frame = Screen_manager.body_frame(self.__claimKitscreen_frame)
+
+            self.__title = Label(self.__claimKitscreen_header_frame, text = "OBTENER KIT", bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
+            self.__return_b = Button(self.__claimKitscreen_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
+
+            self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
+            self.__return_b.grid(row = 0, column = 1, sticky = 'NSEW', pady=20, padx=10)
+
+            self.__claimKitscreen_header_frame.columnconfigure(0, weight=5)
+            self.__claimKitscreen_header_frame.columnconfigure(1, weight=1)
+            self.__claimKitscreen_header_frame.rowconfigure(0, weight=1)  # it's necessary to give a weight (even though there is only one row in clamKitscreen_header_frame) for sticky=NSEW of the inside widgets to work correctly
+
+
+            self.__previous_info_title = Label(self.__claimKitscreen_body_frame, text = "INFORMACIÓN PREVIA:", bg = "white", fg = constants.CATSALUT_COLOR, font = ("Verdana", 22, 'bold'))
+            self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = ("Helvetica Now Display", 16), wrap = WORD)
+            self.__previous_info_displayer.insert(0.0, constants.PREVIOUS_INFO_SALIVA_TEST)
+            self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
+            self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = "Cumplo los requisitos.\n Quiero recoger el kit", font = ("Verdana", 22, 'bold'), command = self.__get_kit)
+
+            self.__previous_info_title.grid(row = 0, column = 0, sticky = 'NSEW', pady=25)
+            self.__previous_info_displayer.grid(row = 1, column = 0, sticky = 'NSEW', padx = 20)
+            self.__get_kit_b.grid(row = 2, column=0, sticky = 'NSEW', padx=120, pady=20)
+
+            self.__claimKitscreen_body_frame.rowconfigure(0, weight = 1)
+            self.__claimKitscreen_body_frame.rowconfigure(1, weight = 4)
+            self.__claimKitscreen_body_frame.rowconfigure(2, weight = 1)
+            self.__claimKitscreen_body_frame.columnconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one column in clamKitscreen_body_frame) for sticky=NSEW of the inside widgets to work correctly
+            
+
+            ClaimKit_screen.__instance = self
+
+
+    def __previous_screen(self):
+        from MainScreen_user import MainScreen_user  # declared here to avoid circular dependency. It cannot be declared at the beggining of the file cannot be declared at the top of the file or in the constructor
+        MainScreen_user.getInstance().go_to_main_screen()
+
+    @staticmethod
+    def __get_kit():
+        # TODO: Ver si arduino está vivo (y si no pues hacer lo que toque) y pedirle el kit + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + volver al menú anterior después de unos segundos y, al volver al menú anterior, DESACTIVAR LA OPCION DE QUE PUEDA PEDIR OTRO KIT EN ESE INICIO DE SESIÓN
+        pass
+
+    def go_to_claimKit_screen(self):
+        self.__claimKitscreen_frame.tkraise()

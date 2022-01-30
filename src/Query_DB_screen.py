@@ -31,7 +31,7 @@ class Query_DB_screen: # singleton
 
             self.__title = Label(self.__DBscr_header_frame, text = "Base de Datos: " + self.__current_DB, bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
             self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__change_displayed_DB)
-            self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
+            self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
             self.__change_displayed_DB_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10 , 5), pady = 20)

@@ -31,12 +31,6 @@ class MainScreen_operator(MainScreen):  # singleton
             self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.logOut) 
             self.__quit_program_b = Button(MainScreen._ms_header_frame, text = "APAGAR", bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = ("Verdana", 22, 'bold'), command = super()._quit_program)
 
-            MainScreen._ms_header_frame.columnconfigure(0, weight = 4)
-            MainScreen._ms_header_frame.columnconfigure(1, weight = 1)
-            MainScreen._ms_header_frame.columnconfigure(2, weight = 1)
-            MainScreen._ms_header_frame.rowconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one row in ms_header_frame) for sticky=NSEW of title, logout_b and quit_program_b to work correctly
-
-
             self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = "Etiquetas impresora restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
             self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
             self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) + ")", font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color())
@@ -45,16 +39,6 @@ class MainScreen_operator(MainScreen):  # singleton
             self.__refill_labels_b = Button(MainScreen._ms_body_frame, text = "REPONER\nETIQUETAS\nIMPRESORA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = self.__refill_labels)
             self.__collect_samples_b = Button(MainScreen._ms_body_frame, text = "RECOGER\nMUESTRAS", font = ("Verdana", 22, 'bold'), borderwidth=5, command = self.__collect_samples)
             self.__check_DB_b = Button(MainScreen._ms_body_frame, text = "CONSULTAR\nBASE DE DATOS", font = ("Verdana", 22, 'bold'), borderwidth=5, command = Query_DB_screen.getInstance().go_to_query_DB_screen) # no need to grid_forget() when switching to the DB_screen, because if you then go back from there to main_screen, the buttons you should see are the same
-
-            MainScreen._ms_body_frame.rowconfigure(0, weight = 1)
-            MainScreen._ms_body_frame.rowconfigure(1, weight = 4)
-            MainScreen._ms_body_frame.rowconfigure(2, weight = 4)
-            MainScreen._ms_body_frame.columnconfigure(0, weight = 1)
-            MainScreen._ms_body_frame.columnconfigure(1, weight = 1)
-            MainScreen._ms_body_frame.columnconfigure(2, weight = 1)
-            MainScreen._ms_body_frame.columnconfigure(3, weight = 1)
-            MainScreen._ms_body_frame.columnconfigure(4, weight = 1)
-            MainScreen._ms_body_frame.columnconfigure(5, weight = 1)
 
             MainScreen_operator.__instance = self
 
@@ -97,6 +81,10 @@ class MainScreen_operator(MainScreen):  # singleton
         self.__remaining_labels_info.config( text = "Etiquetas impresora restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
         self.__stored_samples_info.config( text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
 
+        # column and row configure (because the configuration of the frames is not the same as the user main screen):
+        MainScreen._admin_and_operator_header_frame_rowcolumn_configure()
+        MainScreen._admin_and_operator_body_frame_rowcolumn_configure()
+
         # .grids are here and not in constructor because MainScreen_admin, MainScreen_operator and MainScreen_user share the same frame (the main screen frame where this widgets are displayed)
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
         self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10, 5), pady = 20)
@@ -131,5 +119,7 @@ class MainScreen_operator(MainScreen):  # singleton
 
     # override concrete parent method
     def logOut(self):
-        self._erase_mainScreen_contents()
-        super().logOut()
+        logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
+        if logout == True:
+            self._erase_mainScreen_contents()
+            super().logOut()
