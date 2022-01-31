@@ -5,6 +5,7 @@ import constants
 import DBcontroller
 import Counters
 from Screen_saver import *
+import Checker
 
 
 
@@ -24,6 +25,12 @@ DBcontroller.add_new_event("-", "APLICACIÓN ENCENDIDA")
 Counters.initialize_information()
 
 root = Screen_manager.start_application()
+
+Checker.check_hardware_usable_at_turningON()
+Checker.check_available_labels_at_turningON()
+Checker.check_available_kits_at_turningON()
+Checker.check_not_max_stored_samples_at_turningON()
+
 Screen_saver.getInstance().go_to_screen_saver()
 
 

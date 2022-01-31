@@ -59,8 +59,6 @@ class Query_DB_screen: # singleton
             self.__DBscr_body_frame.rowconfigure(1, weight = 1) 
 
             # TODO: Si hay alguna funcionalidad que quieran hacer acerca de la DB, añadir botones con diferentes opciones a la derecha del todo. Por ejemplo la opcion de abajo a la derecha podria permitir ver la otra tabla que no se muestra (esta que sustituya el output de la otra tabla que se está viendo.
-            # TODO: Si no quieren ninguna funcionalidad más allá de poder ver la otra base de datos, puedo poner el boton de ver la otra BD en el header, al lado del boton de volver
-            # TODO: Voy a hacer que admin y operator puedan hacer lo mismo, pero si luego me dicen que operator no pueda hacer X cosas pues solo tengo que poner ese boton en cuestion a disable si es operator. Es decir, al declarar el boton poner algo tipo: state = ActivePerson.getCurrent().getStatus == Operator ? DISABLED : NORMAL.
 
             Query_DB_screen.__instance = self
 

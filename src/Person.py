@@ -1,7 +1,6 @@
 from ast import Raise
 import DBcontroller
 
-# TODO: Probablemente necesitara ser singleton a modo de unico "activeUser"
 
 # Represents de active user / operator / admin using the machine
 # Login will use the constructor and the rest of the classes, when need to consult the current active person, will use the getCurrent method.
@@ -22,7 +21,7 @@ class ActivePerson:
         ActivePerson.__instance = None
 
     @staticmethod
-    def isActivePerson():
+    def thereIsActivePerson():
         if ActivePerson.__instance == None:
             return False
         else:
@@ -32,6 +31,8 @@ class ActivePerson:
         if ActivePerson.__instance != None:
             raise Exception("There is someone using the system right now")
         else:
+            self.__user_has_submitted_in_this_session = False
+            self.__user_has_claimed_kit_in_this_session = False
             self.__CIP = CIP
             admins = DBcontroller.get_admins()
             operators = DBcontroller.get_operators()
@@ -50,3 +51,23 @@ class ActivePerson:
 
     def get_CIP(self):
         return self.__CIP
+
+    def get_has_submitted_in_this_session(self):
+        if self.__status != "USER":
+            raise Exception("current person using the system is not a user")
+        return self.__user_has_submitted_in_this_session
+
+    def set_has_submitted_to_true(self):
+        if self.__status != "USER":
+            raise Exception("current person using the system is not a user")
+        self.__user_has_submitted_in_this_session = True
+
+    def get_has_claimed_kit_in_this_session(self):
+        if self.__status != "USER":
+            raise Exception("current person using the system is not a user")
+        return self.__user_has_claimed_kit_in_this_session
+
+    def set_has_claimed_kit_to_true(self):
+        if self.__status != "USER":
+            raise Exception("current person using the system is not a user")
+        self.__user_has_claimed_kit_in_this_session = True

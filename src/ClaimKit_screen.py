@@ -2,6 +2,7 @@ from tkinter import *
 
 import Screen_manager
 import constants
+import Checker
 
 class ClaimKit_screen: # singleton
     
@@ -37,7 +38,7 @@ class ClaimKit_screen: # singleton
             self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = ("Helvetica Now Display", 16), wrap = WORD)
             self.__previous_info_displayer.insert(0.0, constants.PREVIOUS_INFO_SALIVA_TEST)
             self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
-            self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = "Cumplo los requisitos.\n Quiero recoger el kit", font = ("Verdana", 22, 'bold'), command = self.__get_kit)
+            self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = "Cumplo los requisitos.\n Quiero recoger el kit", borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.__get_kit)
 
             self.__previous_info_title.grid(row = 0, column = 0, sticky = 'NSEW', pady=25)
             self.__previous_info_displayer.grid(row = 1, column = 0, sticky = 'NSEW', padx = 20)
@@ -58,7 +59,8 @@ class ClaimKit_screen: # singleton
 
     @staticmethod
     def __get_kit():
-        # TODO: Ver si arduino está vivo (y si no pues hacer lo que toque) y pedirle el kit + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + volver al menú anterior después de unos segundos y, al volver al menú anterior, DESACTIVAR LA OPCION DE QUE PUEDA PEDIR OTRO KIT EN ESE INICIO DE SESIÓN
+        # TODO: Ver si arduino está vivo; si no está pues enviar mensaje y poner problema por pantalla y que se le cerrará sesión y que vuelva mas tarde y tal.
+        # TODO: En caso de arduino vivo: pedirle el kit (aun así con un timeout). Si salta el timeout hacer lo del if anterior, y si no salta pues llamar a decrementar variable kits disponibles + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + ActivePerson.getCurrent.set_has_claimed_kit_to_true() + volver al menú anterior después de unos segundos.
         pass
 
     def go_to_claimKit_screen(self):

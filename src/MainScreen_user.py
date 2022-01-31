@@ -56,10 +56,15 @@ class MainScreen_user(MainScreen):  # singleton
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
         self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 20)
 
-        if DBcontroller.user_has_kit():
+        if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():
             self.__submit_sample_b["state"] = DISABLED
         else: 
             self.__submit_sample_b["state"] = NORMAL
+
+        if ActivePerson.getCurrent().get_has_claimed_kit_in_this_session():
+            self.__claim_kit_b["state"] = DISABLED
+        else:
+            self.__claim_kit_b["state"] = NORMAL
 
         self.__claim_kit_b.grid(row = 0, column = 0, rowspan = 2, sticky = 'NSEW', padx = (10, 5), pady = 10)
         self.__submit_sample_b.grid(row = 0, column = 1, rowspan = 2, sticky = 'NSEW', padx = 5, pady = 10)

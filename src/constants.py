@@ -25,9 +25,9 @@ SCREEN_HEIGHT = get_monitors()[0].height
 SCREEN_SAVER_BACK_TIMER = 10000 # in miliseconds
 
 CATSALUT_COLOR = "#7BACFC"
-CATSALUT_COLOR2 = "#7db3e1"
-CATSALUT_COLOR3 = "#9fd2ec"
-#LIGHT_GRAY_BACKGROUNDCOLOR = "#c0c0c0" I finally dont use it
+#CATSALUT_COLOR2 = "#7db3e1"  I finally dont use it
+#CATSALUT_COLOR3 = "#9fd2ec"  I finally dont use it
+#LIGHT_GRAY_BACKGROUNDCOLOR = "#c0c0c0"  I finally dont use it
 LIGHT_RED_BACKGROUNDCOLOR = "#ffa6a6"
 
 ALARM_BACKGROUNDCOLOR = "#ffa6a6"

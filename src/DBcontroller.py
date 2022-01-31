@@ -62,7 +62,7 @@ def add_new_event(ID, event):
 			{
 				'ID': ID,
 				'event': event,
-				'event_time': time.strftime("%m/%d/%Y, %H:%M:%S")
+				'event_time': time.strftime("%d/%m/%Y, %H:%M:%S")
 			}) # IMPORTANTE: En internet veras otra forma de hacer el insert mas corta. La puedes hacer pero tendras que mirar como he hecho el codigo del update para ver las adaptaciones que hay que hacer si quieres usar variables o cosas con .get() (como es el caso)
     connection.commit()
     connection.close()
@@ -101,7 +101,6 @@ def user_has_kit():
     if ActivePerson.getCurrent().get_status() != "USER":
         raise Exception("Current person using the system is not an user, it's a " + ActivePerson.getCurrent().get_status() + " so there is not information about if 'user has kit'")
     else:
-        # TODO: Mirar en la DB y pillar el ultimo registro del user. Si tiene sample submiteada retornar false porque eso significa que la ultima interaccion que tuvo con la maquina fue para entregar el kit que tenia. Si no tiene sample submiteada pero sí kit recogido retornar true (que lo ha podido recoger en algun otro momento o en esa misma sesión de uso). Y si no hay nada en el registro retornar false (esta usando la maquina por primera vez)
         connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC") # the last row of a certain user is the one with the highest oid (and the cip of that user). This is why I order descending and only get the first row after ordering

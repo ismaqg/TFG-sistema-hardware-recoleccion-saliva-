@@ -1,14 +1,17 @@
 from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk,Image
+
 import Screen_manager
 import constants
 import DBcontroller
+import Checker
 from Person import ActivePerson
 from MainScreen_admin import MainScreen_admin
 from MainScreen_operator import MainScreen_operator
 from MainScreen_user import MainScreen_user
 from Key_security import Key_security
+from Language_screen import Language_screen
 
 
 
@@ -39,7 +42,7 @@ class LogIn_screen():  # singleton
             login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
             login_info = Label(self.__login_screen_frame, text="Pase su tarjeta sanitaria individual por el lector de código de barras",font = ("Verdana", 16, "bold"), bg = constants.CATSALUT_COLOR)
             self.__login_input_entry = Entry(self.__login_screen_frame, textvariable = self.__input_variable, borderwidth=0,fg='white', highlightthickness = 0, insertbackground = "white") # invisible
-            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = ("Verdana", 14)) # TODO: Añadirle un command=cambiar a la pestaña de idiomas
+            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = ("Verdana", 14), command = Language_screen.getInstance().go_to_language_screen) 
 
             login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
             login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')
@@ -83,10 +86,17 @@ class LogIn_screen():  # singleton
                 # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
                 Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
 
-            else:
-                DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
-                self.__login_screen_isActive = False  # we are about to leave login screen
-                MainScreen_user.getInstance().go_to_main_screen() 
+            else: # USER
+                if Checker.check_available_resources_at_user_logIn() == False:  # cannot login because there are not available resources
+                    # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
+                    ActivePerson.destroyCurrent()
+                    messagebox.showerror("NO PUEDE INICIAR SESIÓN", "No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas y la máquina se apagará cuando pulse sobre 'OK'")
+                    # the program (and Rpi) will shut down because inavailability of resources is a critical problem. The operator that comes to solve the problem will turn on the Rpi again:
+                    Screen_manager.get_root().destroy() # TODO: At the Rpi change this line by a shutdown
+                else:
+                    DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
+                    self.__login_screen_isActive = False  # we are about to leave login screen
+                    MainScreen_user.getInstance().go_to_main_screen() 
             
             """
             IMPORTANT:
@@ -110,12 +120,13 @@ class LogIn_screen():  # singleton
     # function to process the input of the barcode scanner
     def __process_input(self, event):
 
-        if (self.__login_screen_isActive and not ActivePerson.isActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
+        if (self.__login_screen_isActive and not ActivePerson.thereIsActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
                                                                                   # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
             self.__try_to_logIn()
-
-        self.__input_variable.set('')
-        self.__login_input_entry.delete(0,'end')
+        
+        else: # in the try_to_logIn function those 2 lines below are executed. This else is necessary so that these lines are not executed when the program tries to login and cannot login due to lack of resources (in that case, the program is closed). If not, an exception would be thrown.
+            self.__input_variable.set('')
+            self.__login_input_entry.delete(0,'end')
 
 
     # function to check if a given string is a valid TSI code
@@ -148,9 +159,9 @@ class LogIn_screen():  # singleton
                 DBcontroller.add_new_event(person.get_CIP(), "OPERATOR LOGIN SUCCESS")
                 MainScreen_operator.getInstance().go_to_main_screen()
         else:
-            ActivePerson.destroyCurrent()  # destroy current admin / operator. (a current admin / operator was created when the 1st identification step succeed, but the 2nd step has failed)
             self.__change_language["state"]= NORMAL  # enable the change language button
-            DBcontroller.add_new_event(person.get_CIP(), person.get_status() + " LOGIN FAIL. WRONG SECURITY PASSWORD") 
+            DBcontroller.add_new_event(person.get_CIP(), person.get_status() + " LOGIN FAIL. WRONG SECURITY PASSWORD")
+            ActivePerson.destroyCurrent()  # destroy current admin / operator. (a current admin / operator was created when the 1st identification step succeed, but the 2nd step has failed) 
             messagebox.showwarning("ACCESO DENEGADO", "Acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numérica correcta")
             # start again the inactivity countdown (to show again the saver):
             from Screen_saver import Screen_saver  # here to avoid circular dependency!
