@@ -28,7 +28,7 @@ class MainScreen_operator(MainScreen):  # singleton
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
             self.__title = Label(MainScreen._ms_header_frame, text = "OPERADOR", bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.logOut) 
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.logOut_button) 
             self.__quit_program_b = Button(MainScreen._ms_header_frame, text = "APAGAR", bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = ("Verdana", 22, 'bold'), command = super()._quit_program)
 
             self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = "Etiquetas impresora restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = ("Verdana", 12, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
@@ -117,9 +117,13 @@ class MainScreen_operator(MainScreen):  # singleton
         self.__collect_samples_b.grid_forget()
         self.__check_DB_b.grid_forget()
 
-    # override concrete parent method
-    def logOut(self):
+    # override abstract parent method
+    def logOut_button(self):
         logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
         if logout == True:
-            self._erase_mainScreen_contents()
-            super().logOut()
+            self.logOut()
+
+    # override concrete parent method
+    def logOut(self):
+        self._erase_mainScreen_contents()
+        super().logOut()

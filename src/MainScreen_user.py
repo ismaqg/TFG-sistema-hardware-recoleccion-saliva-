@@ -29,7 +29,7 @@ class MainScreen_user(MainScreen):  # singleton
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
             self.__title = Label(MainScreen._ms_header_frame, text = "USUARIO " + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = ("Verdana", 22, 'bold'), fg="red", command = self.logOut) 
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = ("Verdana", 22, 'bold'), fg="red", command = self.logOut_button) 
 
             self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = "OBTENER KIT", font = ("Verdana", 22, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
             self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = "ENTREGAR MUESTRA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
@@ -56,11 +56,13 @@ class MainScreen_user(MainScreen):  # singleton
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
         self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 20)
 
-        if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():
+        """ TODO: PONER EN LA VERSION FINAL DEL CODIGO (O cuando ya tenga lo del arduino mejor dicho)
+        if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():  # actually checking if the user has delivered a sample in that session is redundant because when he/she delivers a sample the session closes inmediately
             self.__submit_sample_b["state"] = DISABLED
         else: 
             self.__submit_sample_b["state"] = NORMAL
-
+        """
+        
         if ActivePerson.getCurrent().get_has_claimed_kit_in_this_session():
             self.__claim_kit_b["state"] = DISABLED
         else:
@@ -73,7 +75,7 @@ class MainScreen_user(MainScreen):  # singleton
 
         MainScreen._main_screen_frame.tkraise()
 
-    # override parent method
+    # override abstract parent method
     def _erase_mainScreen_contents(self):
         self.__title.grid_forget()
         self.__logout_b.grid_forget()
@@ -83,10 +85,14 @@ class MainScreen_user(MainScreen):  # singleton
         self.__info_b.grid_forget()
         self.__help_b.grid_forget()
 
-
-    def logOut(self):
+    # override abstract parent method
+    def logOut_button(self):
         logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
         if logout == True:
-            self._erase_mainScreen_contents()
-            super().logOut()
+            self.logOut()
+
+    # override concrete parent method
+    def logOut(self):
+        self._erase_mainScreen_contents()
+        super().logOut()
         
