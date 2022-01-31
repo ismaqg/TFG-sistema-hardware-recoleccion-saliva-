@@ -102,13 +102,13 @@ class SubmitSample_screen: # singleton
             self.__next_step_b["text"] = "SIGUIENTE"
             self.__next_step_b["state"] = DISABLED
             # TODO: aqui que el bind con <return> ya haga caso y cuando se vea que la etiqueta se puede leer pues se pondra en ENABLED el boton de siguiente. Nota: en la comprobacion de la etiqueta leida hay que mirar que el input se haya hecho en el paso 5 obviamente. Borrar el siguiente codigo que es provisional:
-            time.sleep(5)
+            time.sleep(4)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 7:
             self.__next_step_b["text"] = "ENTREGADO"
             self.__next_step_b["state"] = DISABLED
             # TODO: cuando haya abierto la compuerta ya se puede poner el boton en enabled. Poner el codigo de esto en la funcion de __submit_sample. Borrar el siguiente codigo que es provisional:
-            time.sleep(5)
+            time.sleep(4)
             self.__next_step_b["state"] = NORMAL
 
  
