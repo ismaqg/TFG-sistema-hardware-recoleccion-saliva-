@@ -2,32 +2,32 @@ from tkinter import *
 import constants
 
 
-root = None
+__root = None
 
 def start_application():
-    global root
-    if root != None:
+    global __root
+    if __root != None:
         raise Exception("You have already created an application")
     else:
-        root = Tk()
+        __root = Tk()
         width = constants.SCREEN_WIDTH
         height = constants.SCREEN_HEIGHT
-        root.geometry(str(width) + "x" + str(height))
-        #root.config(cursor="none")
-    return root
+        __root.geometry(str(width) + "x" + str(height))
+        #__root.config(cursor="none")  # TODO: Uncomment for raspberry
+    return __root
 
 def get_root():
-    global root
-    if root == None:
+    global __root
+    if __root == None:
         raise Exception("You have not created started the application yet")
     else: 
-        return root
+        return __root
 
 def init_screen_frame():
-    global root
-    if root == None:
+    global __root
+    if __root == None:
         raise Exception("You need to start an application before creating frames")
-    frame = Frame(root, bg = "white", width = constants.SCREEN_WIDTH, height = constants.SCREEN_HEIGHT)
+    frame = Frame(__root, bg = "white", width = constants.SCREEN_WIDTH, height = constants.SCREEN_HEIGHT)
     frame.grid(row = 0, column = 0, sticky='NSEW') # sticky='NSWE': stick in all the walls of its container
     frame.grid_propagate(False) # don't propagate the grid information to its childrens
     return frame

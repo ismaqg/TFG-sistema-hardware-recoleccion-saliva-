@@ -36,13 +36,13 @@ class LogIn_screen():  # singleton
 
             self.__login_screen_frame = Screen_manager.init_screen_frame()            
 
-            login_title = Label(self.__login_screen_frame, text="Bienvenido a SALIBANK", font = ("Verdana", 28, 'bold'), bg = constants.CATSALUT_COLOR)
+            login_title = Label(self.__login_screen_frame, text="Bienvenido a SALIBANK", font = (constants.CATSALUT_TEXT_FONT, 28, 'bold'), bg = constants.CATSALUT_COLOR)
             login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
             self.__login_image = ImageTk.PhotoImage(Image.open(constants.IMAGES_DIRECTORY + "TSIdummy.png"))
             login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
-            login_info = Label(self.__login_screen_frame, text="Pase su tarjeta sanitaria individual por el lector de código de barras",font = ("Verdana", 16, "bold"), bg = constants.CATSALUT_COLOR)
+            login_info = Label(self.__login_screen_frame, text="Pase su tarjeta sanitaria individual por el lector de código de barras",font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_THIRD_TITLE_TEXT_SIZE, "bold"), bg = constants.CATSALUT_COLOR)
             self.__login_input_entry = Entry(self.__login_screen_frame, textvariable = self.__input_variable, borderwidth=0,fg='white', highlightthickness = 0, insertbackground = "white") # invisible
-            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = ("Verdana", 14), command = Language_screen.getInstance().go_to_language_screen) 
+            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = (constants.CATSALUT_TEXT_FONT, constants.SECONDARY_BUTTON_TEXT_SIZE), command = Language_screen.getInstance().go_to_language_screen) 
 
             login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
             login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')

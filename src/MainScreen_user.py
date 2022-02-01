@@ -28,13 +28,13 @@ class MainScreen_user(MainScreen):  # singleton
 
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
-            self.__title = Label(MainScreen._ms_header_frame, text = "USUARIO " + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = ("Verdana", 22, 'bold'), fg="red", command = self.logOut_button) 
+            self.__title = Label(MainScreen._ms_header_frame, text = "USUARIO " + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), fg="red", command = self.logOut_button) 
 
-            self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = "OBTENER KIT", font = ("Verdana", 22, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
-            self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = "ENTREGAR MUESTRA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
-            self.__info_b = Button(MainScreen._ms_body_frame, text = "¿QUÉ\nHAGO?", font = ("Verdana", 22, 'bold'), borderwidth=5, command = self.__show_usage_info)
-            self.__help_b = Button(MainScreen._ms_body_frame, text = "AYUDA", font = ("Verdana", 22, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
+            self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = "OBTENER KIT", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
+            self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = "ENTREGAR MUESTRA", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
+            self.__info_b = Button(MainScreen._ms_body_frame, text = "¿QUÉ\nHAGO?", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__show_usage_info)
+            self.__help_b = Button(MainScreen._ms_body_frame, text = "AYUDA", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
 
             MainScreen_user.__instance = self
 
@@ -54,7 +54,7 @@ class MainScreen_user(MainScreen):  # singleton
 
         # .grids are here and not in constructor because MainScreen_admin, MainScreen_operator and MainScreen_user share the same frame (the main screen frame where this widgets are displayed)
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
-        self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 20)
+        self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 10)
 
         """ TODO: PONER EN LA VERSION FINAL DEL CODIGO (O cuando ya tenga lo del arduino mejor dicho)
         if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():  # actually checking if the user has delivered a sample in that session is redundant because when he/she delivers a sample the session closes inmediately

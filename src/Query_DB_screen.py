@@ -29,13 +29,13 @@ class Query_DB_screen: # singleton
 
             self.__current_DB = "info_uso"
 
-            self.__title = Label(self.__DBscr_header_frame, text = "Base de Datos: " + self.__current_DB, bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__change_displayed_DB)
-            self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
+            self.__title = Label(self.__DBscr_header_frame, text = "BD: " + self.__current_DB, bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__change_displayed_DB)
+            self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
-            self.__change_displayed_DB_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10 , 5), pady = 20)
-            self.__return_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = 20)
+            self.__change_displayed_DB_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10 , 5), pady = 10)
+            self.__return_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = 10)
 
             self.__DBscr_header_frame.columnconfigure(0, weight = 4)
             self.__DBscr_header_frame.columnconfigure(1, weight = 1)
@@ -45,18 +45,16 @@ class Query_DB_screen: # singleton
 
             self.__DB_content_display_box = Text(self.__DBscr_body_frame) 
             self.__scrollbarY = Scrollbar(self.__DBscr_body_frame, orient = "vertical", command = self.__DB_content_display_box.yview)  # associate the yview of my content display to the value of the scrollbar
-            self.__scrollbarX = Scrollbar(self.__DBscr_body_frame, orient = "horizontal", command = self.__DB_content_display_box.xview)
-            self.__DB_content_display_box.config( xscrollcommand = self.__scrollbarX.set, yscrollcommand = self.__scrollbarY.set ) # associate the scrollbar with my contentdisplay
+            self.__DB_content_display_box.config( yscrollcommand = self.__scrollbarY.set ) # associate the scrollbar with my contentdisplay
             self.__fill_display_box_with_DB_content()
 
-            self.__DB_content_display_box.grid(row = 0, column = 0, sticky='NSEW', padx=(20,0), pady=(20,0) )
-            self.__scrollbarY.grid(row = 0, column=1, sticky='NSEW', padx=(0,20), pady=(20,0) )
-            self.__scrollbarX.grid(row = 1, column=0, columnspan=2, sticky='NSEW', padx=20, pady=(0,20) )
+            self.__DB_content_display_box.grid(row = 0, column = 0, sticky='NSEW', padx=(20,0), pady=10 )
+            self.__scrollbarY.grid(row = 0, column=1, sticky='NSEW', padx=(0,20), pady=10 )
 
             self.__DBscr_body_frame.columnconfigure(0, weight=29)
             self.__DBscr_body_frame.columnconfigure(1, weight=1)
-            self.__DBscr_body_frame.rowconfigure(0, weight = 10)
-            self.__DBscr_body_frame.rowconfigure(1, weight = 1) 
+            self.__DBscr_body_frame.rowconfigure(0, weight = 1)  # it's necessary to give a weight (even though there is only one row in the header_frame) for sticky=NSEW of title and return_b to work correctly
+             
 
             # TODO: Si hay alguna funcionalidad que quieran hacer acerca de la DB, añadir botones con diferentes opciones a la derecha del todo. Por ejemplo la opcion de abajo a la derecha podria permitir ver la otra tabla que no se muestra (esta que sustituya el output de la otra tabla que se está viendo.
 
@@ -65,9 +63,9 @@ class Query_DB_screen: # singleton
 
     def __fill_display_box_with_DB_content(self):
         self.__DB_content_display_box['state']=NORMAL
-        self.__DB_content_display_box.delete(0.0, END)
+        self.__DB_content_display_box.delete('1.0', END)
         DB_content = DBcontroller.get_DB_content(self.__current_DB)
-        self.__DB_content_display_box.insert(0.0, DB_content)
+        self.__DB_content_display_box.insert(INSERT, DB_content)
         self.__DB_content_display_box['state'] = DISABLED # Disabled makes it only readable (otherwise we would see the inputs there!)
 
 
@@ -87,7 +85,7 @@ class Query_DB_screen: # singleton
         else:
             self.__current_DB = "info_uso"
         self.__fill_display_box_with_DB_content()
-        self.__title["text"] = "Base de Datos: " + self.__current_DB
+        self.__title["text"] = "BD: " + self.__current_DB
 
 
     def go_to_query_DB_screen(self):

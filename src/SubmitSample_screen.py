@@ -26,20 +26,20 @@ class SubmitSample_screen: # singleton
             self.__submitS_header_frame = Screen_manager.header_frame( self.__submitSampleScreen_frame)
             self.__submitS_body_frame = Screen_manager.body_frame( self.__submitSampleScreen_frame)
 
-            self.__title = Label(self.__submitS_header_frame, text = "ENTREGAR MUESTRA", bg = constants.CATSALUT_COLOR, font = ("Verdana", 26, 'bold'))
-            self.__return_b = Button(self.__submitS_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = ("Verdana", 22, 'bold'), command = self.__previous_screen)
+            self.__title = Label(self.__submitS_header_frame, text = "ENTREGAR MUESTRA", bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__return_b = Button(self.__submitS_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
-            self.__return_b.grid(row = 0, column = 1, sticky = 'NSEW', pady=20, padx=10)
+            self.__return_b.grid(row = 0, column = 1, sticky = 'NSEW', pady=10, padx=10)
 
             self.__submitS_header_frame.columnconfigure(0, weight=5)
             self.__submitS_header_frame.columnconfigure(1, weight=1)
             self.__submitS_header_frame.rowconfigure(0, weight=1)  # it's necessary to give a weight (even though there is only one row in clamKitscreen_header_frame) for sticky=NSEW of the inside widgets to work correctly
 
 
-            self.__info_steps_title = Label(self.__submitS_body_frame, text = "PASO 1:", bg = "white", fg = constants.CATSALUT_COLOR, font = ("Verdana", 22, 'bold'))
+            self.__info_steps_title = Label(self.__submitS_body_frame, text = "PASO 1:", bg = "white", fg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
             self.__info_steps_displayer = Canvas(self.__submitS_body_frame)
-            self.__next_step_b = Button(self.__submitS_body_frame, text = "SIGUIENTE", borderwidth=3, font = ("Verdana", 22, 'bold'), command = self.__next_step_actions)
+            self.__next_step_b = Button(self.__submitS_body_frame, text = "SIGUIENTE", borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__next_step_actions)
 
             self.__info_steps_title.grid(row = 0, column = 0, sticky = 'NSEW')
             self.__info_steps_displayer.grid(row = 1, column = 0, sticky = 'NSEW', padx = 20)
