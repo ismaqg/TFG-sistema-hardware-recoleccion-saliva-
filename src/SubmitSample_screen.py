@@ -5,6 +5,7 @@ import time
 
 import Screen_manager
 import constants
+from Person import ActivePerson
 
 class SubmitSample_screen: # singleton
     
@@ -79,8 +80,7 @@ class SubmitSample_screen: # singleton
         if self.__current_step == 8: # It will be entered here when the action of the last step (step 7: deliver the sample) has been completed.
             messagebox.showinfo("MUESTRA ENTREGADA", "La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación")
             # TODO: register event in both databases!!!
-            from MainScreen_user import MainScreen_user  # here to avoid circular dependency
-            MainScreen_user.getInstance().logOut()
+            ActivePerson.getCurrent().logOut()
 
         self.__info_steps_title["text"] = "PASO " + str(self.__current_step)
         # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 7 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)

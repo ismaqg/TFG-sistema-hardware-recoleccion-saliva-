@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-from MainScreen import MainScreen
 from Not_available import Not_available
+from Person import ActivePerson
 
 import Screen_manager
 import constants
@@ -63,7 +63,7 @@ class ClaimKit_screen: # singleton
 
     @staticmethod
     def __get_kit():
-        if (Checker.is_arduino_alive()):
+        if False:#if (Checker.is_arduino_alive()):
 
             # TODO: pedirle el kit al arduino (aun así con un timeout). Si salta el timeout hacer lo del else de abajo, y si no salta pues llamar a decrementar variable kits disponibles + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + ActivePerson.getCurrent.set_has_claimed_kit_to_true() + llevarlo al menú de ENTREGAR MUESTRA SALIVA después de unos segundos.
 
@@ -72,8 +72,7 @@ class ClaimKit_screen: # singleton
             Checker.notify_operator("ARDUINO INOPERATIVO", Checker.Priority.CRITICAL)
             DBcontroller.add_new_event("-", "APP CLOSED. ARDUINO INOPERATIVE")
             messagebox.showerror("ERROR RECOGIDA KIT", "Lo sentimos, se ha producido un error interno. Se cerrará su sesión, vuelva más tarde por favor.")
-            from MainScreen_user import MainScreen_user  # declared here to avoid circular dependency 
-            MainScreen_user.getInstance().logOut()
+            ActivePerson.getCurrent().logOut()
             Not_available.getInstance().go_to_not_available_screen()
 
     def go_to_claimKit_screen(self):

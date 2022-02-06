@@ -91,8 +91,4 @@ class MainScreen(ABC): # abstract
         pass
 
 
-    def logOut(self):
-        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), ActivePerson.getCurrent().get_status() + " LOGOUT")
-        ActivePerson.destroyCurrent()
-        from LogIn_screen import LogIn_screen  # here to avoid circular dependency
-        LogIn_screen.getInstance().go_to_login_screen()
+    

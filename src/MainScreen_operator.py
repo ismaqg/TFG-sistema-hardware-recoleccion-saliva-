@@ -121,9 +121,5 @@ class MainScreen_operator(MainScreen):  # singleton
     def logOut_button(self):
         logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
         if logout == True:
-            self.logOut()
-
-    # override concrete parent method
-    def logOut(self):
-        self._erase_mainScreen_contents()
-        super().logOut()
+            self._erase_mainScreen_contents()
+            ActivePerson.getCurrent().logOut()

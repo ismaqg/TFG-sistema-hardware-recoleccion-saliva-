@@ -120,7 +120,7 @@ class LogIn_screen():  # singleton
     # function to process the input of the barcode scanner
     def __process_input(self, event):
 
-        if (self.__login_screen_isActive and not ActivePerson.thereIsActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
+        if (self.__login_screen_isActive and not ActivePerson.isThereActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
                                                                                   # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
             self.__try_to_logIn()
         

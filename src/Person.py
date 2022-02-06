@@ -1,4 +1,3 @@
-from ast import Raise
 import DBcontroller
 
 
@@ -21,11 +20,12 @@ class ActivePerson:
         ActivePerson.__instance = None
 
     @staticmethod
-    def thereIsActivePerson():
+    def isThereActivePerson():
         if ActivePerson.__instance == None:
             return False
         else:
             return True
+
 
     def __init__(self, CIP):
         if ActivePerson.__instance != None:
@@ -44,6 +44,15 @@ class ActivePerson:
                 self.__status = "USER"
             ActivePerson.__instance = self
 
+
+    def logOut(self):
+        if ActivePerson.__instance == None:
+            raise Exception("There is not a user / admin / operator using right now the system")
+        else:
+            DBcontroller.add_new_event(self.get_CIP(), self.get_status() + " LOGOUT")
+            ActivePerson.destroyCurrent()
+            from LogIn_screen import LogIn_screen  # Declared here to avoid circular dependency
+            LogIn_screen.getInstance().go_to_login_screen()
      
 
     def get_status(self):
