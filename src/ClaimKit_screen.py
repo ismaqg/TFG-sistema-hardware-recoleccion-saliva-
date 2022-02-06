@@ -1,8 +1,12 @@
 from tkinter import *
+from tkinter import messagebox
+from MainScreen import MainScreen
+from Not_available import Not_available
 
 import Screen_manager
 import constants
 import Checker
+import DBcontroller
 
 class ClaimKit_screen: # singleton
     
@@ -35,7 +39,7 @@ class ClaimKit_screen: # singleton
 
 
             self.__previous_info_title = Label(self.__claimKitscreen_body_frame, text = "INFORMACIÓN PREVIA:", bg = "white", fg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
-            self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = (constants.CATSALUT_TEXT_FONT, constants.PARAGRAPH_TEXT_SIZE), wrap = WORD)
+            self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = (constants.CATSALUT_TEXT_FONT, constants.PARAGRAPH_TEXT_SIZE), height = 11, wrap = WORD)  # height hardcoded to 11 because we want 11 lines of "previous information" to be showed on this screen on the raspberry 
             self.__previous_info_displayer.insert(INSERT, constants.PREVIOUS_INFO_SALIVA_TEST)
             self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
             self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = "Cumplo los requisitos.\n Quiero recoger el kit", borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__get_kit)
@@ -59,9 +63,18 @@ class ClaimKit_screen: # singleton
 
     @staticmethod
     def __get_kit():
-        # TODO: Ver si arduino está vivo; si no está pues enviar mensaje y poner problema por pantalla y que se le cerrará sesión y que vuelva mas tarde y tal.
-        # TODO: En caso de arduino vivo: pedirle el kit (aun así con un timeout). Si salta el timeout hacer lo del if anterior, y si no salta pues llamar a decrementar variable kits disponibles + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + ActivePerson.getCurrent.set_has_claimed_kit_to_true() + llevarlo al menú de ENTREGAR MUESTRA SALIVA después de unos segundos.
-        pass
+        if (Checker.is_arduino_alive()):
+
+            # TODO: pedirle el kit al arduino (aun así con un timeout). Si salta el timeout hacer lo del else de abajo, y si no salta pues llamar a decrementar variable kits disponibles + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + ActivePerson.getCurrent.set_has_claimed_kit_to_true() + llevarlo al menú de ENTREGAR MUESTRA SALIVA después de unos segundos.
+
+            pass
+        else:
+            Checker.notify_operator("ARDUINO INOPERATIVO", Checker.Priority.CRITICAL)
+            DBcontroller.add_new_event("-", "APP CLOSED. ARDUINO INOPERATIVE")
+            messagebox.showerror("ERROR RECOGIDA KIT", "Lo sentimos, se ha producido un error interno. Se cerrará su sesión, vuelva más tarde por favor.")
+            from MainScreen_user import MainScreen_user  # declared here to avoid circular dependency 
+            MainScreen_user.getInstance().logOut()
+            Not_available.getInstance().go_to_not_available_screen()
 
     def go_to_claimKit_screen(self):
         self.__claimKitscreen_frame.tkraise()

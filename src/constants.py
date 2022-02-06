@@ -57,3 +57,4 @@ BUTTON_TEXT_SIZE = 16
 SECONDARY_BUTTON_TEXT_SIZE = 14  # For not so relevant buttons in the application (like the change language button at login screen).
 PARAGRAPH_TEXT_SIZE = 12
 CONTROL_INFORMATION_TEXT_SIZE = 10  # For the control text boxes (only visible for admins and operators) indicating how much printer labels, kits and samples are in the system
+APP_NOT_AVAILABLE_ERROR_TEXT_SIZE = 56

@@ -56,7 +56,7 @@ class MainScreen_user(MainScreen):  # singleton
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
         self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 10)
 
-        """ TODO: PONER EN LA VERSION FINAL DEL CODIGO (O cuando ya tenga lo del arduino mejor dicho)
+        """ TODO: PONER EN LA VERSION FINAL DEL CODIGO (O cuando ya tenga lo del arduino mejor dicho). Lo tengo desactivado para en la demo parcial poder entrar en la pestaña de obtener kit
         if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():  # actually checking if the user has delivered a sample in that session is redundant because when he/she delivers a sample the session closes inmediately
             self.__submit_sample_b["state"] = DISABLED
         else: 

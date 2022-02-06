@@ -6,6 +6,7 @@ import Screen_manager
 import constants
 import DBcontroller
 import Checker
+from Not_available import Not_available
 from Person import ActivePerson
 from MainScreen_admin import MainScreen_admin
 from MainScreen_operator import MainScreen_operator
@@ -90,9 +91,8 @@ class LogIn_screen():  # singleton
                 if Checker.check_available_resources_at_user_logIn() == False:  # cannot login because there are not available resources
                     # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
                     ActivePerson.destroyCurrent()
-                    messagebox.showerror("NO PUEDE INICIAR SESIÓN", "No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas y la máquina se apagará cuando pulse sobre 'OK'")
-                    # the program (and Rpi) will shut down because inavailability of resources is a critical problem. The operator that comes to solve the problem will turn on the Rpi again:
-                    Screen_manager.get_root().destroy() # TODO: At the Rpi change this line by a shutdown
+                    messagebox.showerror("NO PUEDE INICIAR SESIÓN", "No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas")
+                    Not_available.getInstance().go_to_not_available_screen()
                 else:
                     DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
                     self.__login_screen_isActive = False  # we are about to leave login screen
