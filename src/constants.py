@@ -2,7 +2,7 @@ from screeninfo import get_monitors #to check width and height of the monitor
 
 # ------------ paths and constants -----------------------------
 
-PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/CODIGO_ISMA/src"  # path of this file's directory
+PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory
 # TODO IMPORTANTE: CAMBIAR LA LINEA DE ARRIBA CON EL PATH BUENO: /home/pi/Desktop/SALIBANK_PROGRAM/src !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ARD1_PORT = "/dev/ttyUSB0"
