@@ -74,7 +74,7 @@ class MainScreen(ABC): # abstract
         pass
 
     @abstractmethod
-    def _erase_mainScreen_contents(self):
+    def erase_mainScreen_contents(self):
         pass
 
 

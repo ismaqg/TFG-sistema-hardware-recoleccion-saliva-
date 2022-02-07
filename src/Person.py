@@ -52,6 +52,12 @@ class ActivePerson:
             DBcontroller.add_new_event(self.get_CIP(), self.get_status() + " LOGOUT")
             ActivePerson.destroyCurrent()
             from LogIn_screen import LogIn_screen  # Declared here to avoid circular dependency
+            from MainScreen_user import MainScreen_user
+            from MainScreen_admin import MainScreen_admin
+            from MainScreen_operator import MainScreen_operator
+            MainScreen_user.getInstance().erase_mainScreen_contents()
+            MainScreen_admin.getInstance().erase_mainScreen_contents()
+            MainScreen_operator.getInstance().erase_mainScreen_contents()
             LogIn_screen.getInstance().go_to_login_screen()
      
 

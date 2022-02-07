@@ -5,6 +5,10 @@ import time
 
 import Screen_manager
 import constants
+import Checker
+import Arduino_controller
+import Counters
+import DBcontroller
 from Person import ActivePerson
 
 class SubmitSample_screen: # singleton
@@ -60,14 +64,15 @@ class SubmitSample_screen: # singleton
         MainScreen_user.getInstance().go_to_main_screen()
 
 
+    # TODO: Algunos comentarios de aquí abajo los tendré que cambiar si al final las compuertas no son abiertas y cerradas por un arduino
     """
     STEP 1: Show the first instruction -> Salivate and spit in the big tube. The necessary of this step is done in go_to_submitSample_screen, not in next_step_actions.
     STEP 2: Show the 2nd instruction -> transfer saliva to small tube.
     STEP 3: Says that the next thing will be to print the identifier. The button in this step is "print label" but the printing is done during the next step
     STEP 4: While the printing is being done, this step shows how to stick the label and ask to stick like the image. When the printing has finished, the "next" button is enabled
     STEP 5: Says that a comprobation of the label sticked correctly is needed, so the user needs to pass the label through the label reader. When the reader reads the correct code, the "next" button is enabled
-    STEP 6: Show the next instruction -> Clean the tube.
-    STEP 7: Says It says to deliver the tube at the door that has been opened, and press "Entregado" when done. The button is disabled until the door is opened
+    STEP 6: Show the next instruction -> Clean the tube. And that the gate is going to start opening when clicking
+    STEP 7: It says to deliver the tube at the gate that has just openned, and press "Entregado" when done. The button is disabled until the door is opened
     STEP 8: It's not a step as such. If we are here we know that all of the above steps have already been completed, so in this point the user will be logged out
     """
     def __next_step_actions(self):
@@ -77,15 +82,13 @@ class SubmitSample_screen: # singleton
 
         self.__current_step += 1
 
-        if self.__current_step == 8: # It will be entered here when the action of the last step (step 7: deliver the sample) has been completed.
-            messagebox.showinfo("MUESTRA ENTREGADA", "La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación")
-            # TODO: register event in both databases!!!
-            ActivePerson.getCurrent().logOut()
+        if self.__current_step == 8: # It will be entered here when the action of the last step (step 7: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
+            self.__sample_submitted()
 
         self.__info_steps_title["text"] = "PASO " + str(self.__current_step)
         # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 7 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)
 
-        # Change the text of the button of this step:
+        # Change the text of the button of this step and make the actions associated, if any:
         if self.__current_step in {2, 5, 6}: 
             self.__next_step_b["text"] = "SIGUIENTE"
             self.__next_step_b["state"] = NORMAL
@@ -95,7 +98,7 @@ class SubmitSample_screen: # singleton
         elif self.__current_step == 4:
             self.__next_step_b["text"] = "SIGUIENTE"
             self.__next_step_b["state"] = DISABLED
-            # TODO: Añadir el codigo especial del paso de imprimir etiqueta (cuando se acabe la impresion el boton se pondra enabled). Borrar el siguiente codigo que es provisional:
+            # TODO: Añadir el codigo especial del paso de imprimir etiqueta (cuando se acabe la impresion el boton se pondra enabled). Ten en cuenta de mirar si está viva, si quedan etiqutas, añadir info a las BDs (evento + ID_etiqueta), etc. Borrar el siguiente codigo que es provisional:
             time.sleep(4)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 5:
@@ -107,17 +110,34 @@ class SubmitSample_screen: # singleton
         elif self.__current_step == 7:
             self.__next_step_b["text"] = "ENTREGADO"
             self.__next_step_b["state"] = DISABLED
-            # TODO: cuando haya abierto la compuerta ya se puede poner el boton en enabled. Poner el codigo de esto en la funcion de __submit_sample. Borrar el siguiente codigo que es provisional:
-            time.sleep(4)
+            self.__open_submit_gate()  # TODO: Si al final no hay que abrir una compuerta a través del arduino, quitar esto que no tendría sentido
             self.__next_step_b["state"] = NORMAL
 
  
+    def __open_submit_gate(self):  # TODO: Si al final no hay que abrir una compuerta a través del arduino, quitar esto que no tendría sentido
+        if (Checker.is_arduino_alive()):
+
+            # TODO: Pedirle al arduino que abra la compuerta y programar un timeout que puede saltar si tarda mucho
+    
+            time.sleep(4) # TODO: borrar este sleep, está emulando la apertura de la puerta que aún no está
+        else:
+            Arduino_controller.inoperative_arduino_actions()
         
 
-    def __submit_sample(self):
-        # TODO: Ver si arduino está vivo; si no está pues enviar mensaje y poner problema por pantalla y que se le cerrará sesión y que vuelva mas tarde y tal.
-        # TODO: En caso de arduino vivo: pedirle que abra la puerta (aun así con un timeout). Si salta el timeout hacer lo del if anterior, y si no salta pues llamar a incrementar variable muestras dadas + Registrar en las 2 BD (en la de muestras_saliva deberia haber por huevos un registro ya empezado y sin hora de entregar, ver que sea asi (en DBcontroller), aparte tendre que poner la diferencia entre la hora de recogidamuestra y la de entrega en la funcion esa de DBcontroller) + avisarle que ya puede entregar muestra en el lado + ActivePerson.getCurrent.set_has_submited_to_true() + avisar de que se le hará logout + active.logout().
-        pass
+    def __sample_submitted(self):
+        if (Checker.is_arduino_alive()):  # TODO: LEE ENTERO: Si al final no hay que cerrar ninguna compuerta con el arduino. borrar esta línea que no tendría sentido. SALVO QUE AL FINAL UTILICEMOS UN ARDUINO AHÍ PARA MEDIR LA TEMPERATURA O ALGO DEL ESTILO
+            Counters.increment_stored_samples()
+            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
+            DBcontroller.add_sample_submission()  # to muetras_saliva DB
+            ActivePerson.getCurrent().set_has_submitted_to_true()
+            messagebox.showinfo("MUESTRA ENTREGADA", "La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación")
+            ActivePerson.getCurrent().logOut()
+
+            # TODO: En caso de que sea el arduino el que abre y cierra puera, aquí tengo que cerrarla. Poner un timeout por si el arduino dejase de funcionar aquí (y si salta el timeout, ir a la pantalla de Not_available)
+    
+        else:
+            Arduino_controller.inoperative_arduino_actions()
+
 
 
     def go_to_submitSample_screen(self):

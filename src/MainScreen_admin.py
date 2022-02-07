@@ -99,7 +99,7 @@ class MainScreen_admin(MainScreen):  # singleton
         MainScreen._main_screen_frame.tkraise()
 
     # override abstract parent method
-    def _erase_mainScreen_contents(self):
+    def erase_mainScreen_contents(self):
         self.__title.grid_forget()
         self.__logout_b.grid_forget()
         self.__quit_program_b.grid_forget()
@@ -117,5 +117,5 @@ class MainScreen_admin(MainScreen):  # singleton
     def logOut_button(self):
         logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
         if logout == True:
-            self._erase_mainScreen_contents()
+            self.erase_mainScreen_contents()
             ActivePerson.getCurrent().logOut()

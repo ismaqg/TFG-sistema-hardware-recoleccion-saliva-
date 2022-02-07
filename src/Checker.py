@@ -13,6 +13,7 @@ from enum import Enum
 #ENUM:
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
+# TODO: Necesitaré una funcion para el arduino1 y otra para el arduino2
 def is_arduino_alive():
     # TODO. Mirar si esta vivo (y retornar true o false en consecuencia). En caso de no estar vivo hay que avisar del problema critico: notify_operator("ARDUINO NOT RESPONDING", Priority.CRITICAL)
     return True

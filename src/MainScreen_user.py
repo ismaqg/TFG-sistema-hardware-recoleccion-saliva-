@@ -56,12 +56,10 @@ class MainScreen_user(MainScreen):  # singleton
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
         self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 10)
 
-        """ TODO: PONER EN LA VERSION FINAL DEL CODIGO (O cuando ya tenga lo del arduino mejor dicho). Lo tengo desactivado para en la demo parcial poder entrar en la pestaña de obtener kit
         if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():  # actually checking if the user has delivered a sample in that session is redundant because when he/she delivers a sample the session closes inmediately
             self.__submit_sample_b["state"] = DISABLED
         else: 
             self.__submit_sample_b["state"] = NORMAL
-        """
         
         if ActivePerson.getCurrent().get_has_claimed_kit_in_this_session():
             self.__claim_kit_b["state"] = DISABLED
@@ -76,7 +74,7 @@ class MainScreen_user(MainScreen):  # singleton
         MainScreen._main_screen_frame.tkraise()
 
     # override abstract parent method
-    def _erase_mainScreen_contents(self):
+    def erase_mainScreen_contents(self):
         self.__title.grid_forget()
         self.__logout_b.grid_forget()
 
@@ -89,6 +87,6 @@ class MainScreen_user(MainScreen):  # singleton
     def logOut_button(self):
         logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
         if logout == True:
-            self._erase_mainScreen_contents()
+            self.erase_mainScreen_contents()
             ActivePerson.getCurrent().logOut()
         

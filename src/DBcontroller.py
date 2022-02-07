@@ -3,6 +3,7 @@ import constants
 import csv
 import sqlite3
 import time
+from datetime import datetime
 
 admins = []
 operators = []
@@ -124,7 +125,7 @@ def update_time_pickup_kit():
     cursor = connection.cursor()
     # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user:
     cursor.execute("SELECT oid FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC")
-    oid = cursor.fetchone()[0]  # [0] because we want only the number contained in the touble of one element that cursor.fetchone() is returning   
+    oid = cursor.fetchone()[0]  # [0] because we want only the integer contained in the tuple of one element that cursor.fetchone() is returning   
     # update that record:  
     cursor.execute("UPDATE muestras_saliva SET " +
                  "last_pickup_time = '" + time.strftime("%d/%m/%Y, %H:%M:%S") + "' " +
@@ -138,7 +139,7 @@ def update_time_pickup_kit():
 # NOTE: The submission time will be completed as "NO SUBMISSION"
 def add_new_record_with_pickup_kit():
     if user_has_kit():
-        raise Exception("add_new_record_with_pickup_kit")
+        raise Exception("PRE of add_new_record_with_pickup_kit is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
     cursor.execute("INSERT INTO muestras_saliva VALUES (:CIP, :last_pickup_time, :submit_time, :time_elapsed, :submission_ID)",
@@ -149,5 +150,26 @@ def add_new_record_with_pickup_kit():
                         'time_elapsed': "-",
                         'submission_ID': "-"
                     })
+    connection.commit()
+    connection.close()
+
+
+# PRE: The user has a kit (if not, it's impossible to submit a sample!)
+def add_sample_submission():
+    if not user_has_kit():
+        raise Exception("PRE of add_sample_submission is not satisfied")
+    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    cursor = connection.cursor()
+    # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user:
+    cursor.execute("SELECT oid, last_pickup_time FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC")
+    query_result = cursor.fetchone()  # touple of 2 elements: oid and last_pickup_time
+    oid = query_result[0]
+    claim_kit_time = query_result[1]
+    submit_time = time.strftime("%d/%m/%Y, %H:%M:%S")
+    # update that record with submission info:  
+    cursor.execute("UPDATE muestras_saliva SET " +
+                 "submit_time = '" + submit_time + "', " +
+                 "time_elapsed = '" + str( datetime.strptime(submit_time, "%d/%m/%Y, %H:%M:%S") - datetime.strptime(claim_kit_time, "%d/%m/%Y, %H:%M:%S") ) + "' " +  # "%d/%m/%Y, %H:%M:%S" indicates the format that the submit_time and claim_kit_time variables have.
+                 "WHERE oid = '" + str(oid) + "' ")
     connection.commit()
     connection.close()

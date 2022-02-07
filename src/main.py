@@ -35,7 +35,7 @@ Screen_saver.getInstance().go_to_screen_saver()
 
 
 
-#root.attributes("-fullscreen", True)
+root.attributes("-fullscreen", True)
 
 mainloop()
 
