@@ -19,8 +19,8 @@ STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras qu
 AVAILABLE_KITS_AFTER_REFILL = 20    # TODO: ponerlo a la cantidad de kits disponibles que vayan a caber en la maquina
 NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     # TODO: ponerlo a la cantidad de etiquetas que vengan en un rollo nuevo de la impresora
 
-SCREEN_WIDTH = get_monitors()[0].width
-SCREEN_HEIGHT = get_monitors()[0].height
+SCREEN_WIDTH = 800#get_monitors()[0].width
+SCREEN_HEIGHT = 480#get_monitors()[0].height
 
 SCREEN_SAVER_BACK_TIMER = 10000 # in miliseconds
 
@@ -29,7 +29,7 @@ ALARM_STOCK_THRESHOLD = 0.15 # 15%
 
 PREVIOUS_INFO_SALIVA_TEST = """Deben transcurrir un mínimo de 30 minutos entre la última vez que ingirió cualquier tipo de comida o líquido y la recogida de saliva. 
 
-Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero recoger el kit". Podrá recoger el kit para la muestra de saliva en la compuerta lateral y será redirigido al menú de entrega de muestra de saliva. Allí se le mostrarán las instrucciones para el test de saliva.
+Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero recoger el kit".
 
 Si NO ha transcurrido ese tiempo, por favor pulse el botón de 'VOLVER ATRÁS' para ser redirigido al menú principal y, a continuación, pulse el botón de 'Cerrar sesión (SALIR)'. Vuelva a la máquina una vez cumpla con los requisitos comentados."""
 

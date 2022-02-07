@@ -70,7 +70,7 @@ class LogIn_screen():  # singleton
     # function to log in the application with the input data (from the barcode scanner). If log in is successful, the user will go to the main screen of the application
     def __try_to_logIn(self):
 
-        # discard the inactivity countdown, because an interaction with a user has just occurred:
+        # discard the inactivity countdown, because an interaction with a user has just occurred and we don't want that this timer takes effect at half login (especially in a 2-steps login)
         Screen_manager.get_root().after_cancel(self.__saver_countdown)
 
         #check if the input belongs to a catalan health card or not:
@@ -87,7 +87,7 @@ class LogIn_screen():  # singleton
                 # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
                 Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
 
-            else: # USER
+            else: # USER. And entering here makes the afect of a root.after_cancel of those 500 ms to check the password, because the timer is not reprogramed.
                 if Checker.check_available_resources_at_user_logIn() == False:  # cannot login because there are not available resources
                     # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
                     ActivePerson.destroyCurrent()

@@ -1,3 +1,4 @@
+from time import time
 from tkinter import *
 from tkinter import messagebox
 from Not_available import Not_available
@@ -6,7 +7,10 @@ from Person import ActivePerson
 import Screen_manager
 import constants
 import Checker
+import Arduino_controller
+import Counters
 import DBcontroller
+from SubmitSample_screen import SubmitSample_screen
 
 class ClaimKit_screen: # singleton
     
@@ -39,7 +43,7 @@ class ClaimKit_screen: # singleton
 
 
             self.__previous_info_title = Label(self.__claimKitscreen_body_frame, text = "INFORMACIÓN PREVIA:", bg = "white", fg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
-            self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = (constants.CATSALUT_TEXT_FONT, constants.PARAGRAPH_TEXT_SIZE), height = 11, wrap = WORD)  # height hardcoded to 11 because we want 11 lines of "previous information" to be showed on this screen on the raspberry 
+            self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = (constants.CATSALUT_TEXT_FONT, constants.PARAGRAPH_TEXT_SIZE), height = 6, wrap = WORD)  # height hardcoded to 6 because we want 6 lines of "previous information" to be showed on this screen on the raspberry 
             self.__previous_info_displayer.insert(INSERT, constants.PREVIOUS_INFO_SALIVA_TEST)
             self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
             self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = "Cumplo los requisitos.\n Quiero recoger el kit", borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__get_kit)
@@ -56,24 +60,42 @@ class ClaimKit_screen: # singleton
 
             ClaimKit_screen.__instance = self
 
+    
+
 
     def __previous_screen(self):
         from MainScreen_user import MainScreen_user  # declared here to avoid circular dependency. It cannot be declared at the beggining of the file cannot be declared at the top of the file or in the constructor
         MainScreen_user.getInstance().go_to_main_screen()
 
-    @staticmethod
-    def __get_kit():
-        if False:#if (Checker.is_arduino_alive()):
 
-            # TODO: pedirle el kit al arduino (aun así con un timeout). Si salta el timeout hacer lo del else de abajo, y si no salta pues llamar a decrementar variable kits disponibles + Registrar en las 2 BD (en la de muestras_saliva: si ya habia peido kits antes sin entregar pues actualizamos la hora de la ultima vez que ha pedido kit y si no creamos nueva entrada) + avisarle que ya puede recoger el kit en el lado + ActivePerson.getCurrent.set_has_claimed_kit_to_true() + llevarlo al menú de ENTREGAR MUESTRA SALIVA después de unos segundos.
+    def __get_kit(self):
+        if (Checker.is_arduino_alive()):
 
-            pass
+            # TODO: Pedirle el kit al arduino y programar un timeout que puede saltar si tarda mucho
+            
+            timeout = False  # TODO: cambiarlo por lo del TODO anterior. La variablerepresenta timeout en la accion de abrir la puerta y dejar caer kit
+
+            if timeout:
+                Arduino_controller.inoperative_arduino_actions()
+            else:  # arduino ha abierto correctamente la puerta y ha dejado caer un kit 
+                Counters.decrement_available_kits()
+                DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")
+                if DBcontroller.user_has_kit():
+                    DBcontroller.update_time_pickup_kit()
+                else:
+                    DBcontroller.add_new_record_with_pickup_kit()
+                messagebox.showinfo("RECOGIDA KIT", "Ya puedes recoger el kit del depósito lateral. Será redirigido al menú de entrega de muestra de saliva, donde se le mostrarán las instrucciones") # TODO: No sé si es un depósito lateral, igual tengo que cambiar esto
+                ActivePerson.getCurrent().set_has_claimed_kit_to_true()
+
+                # TODO: No sé si hace falta decirle explícitamente al arduino que cierre la compuerta. En ese caso, añadirlo aquí
+
+                SubmitSample_screen.getInstance().go_to_submitSample_screen()
+                
         else:
-            Checker.notify_operator("ARDUINO INOPERATIVO", Checker.Priority.CRITICAL)
-            DBcontroller.add_new_event("-", "APP CLOSED. ARDUINO INOPERATIVE")
-            messagebox.showerror("ERROR RECOGIDA KIT", "Lo sentimos, se ha producido un error interno. Se cerrará su sesión, vuelva más tarde por favor.")
-            ActivePerson.getCurrent().logOut()
-            Not_available.getInstance().go_to_not_available_screen()
+            Arduino_controller.inoperative_arduino_actions()
+
+    
+
 
     def go_to_claimKit_screen(self):
         self.__claimKitscreen_frame.tkraise()

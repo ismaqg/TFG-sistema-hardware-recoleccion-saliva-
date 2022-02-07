@@ -90,6 +90,7 @@ def get_DB_content(DB_name):
     return DB_content
 
 
+# Basically: the functions returns if there is a record with kitpick information and without submit information
 # the function raises an exception if the current person using the system is not an user
 # returns false if:
 #    - it's the first time that the user uses the system
@@ -112,4 +113,41 @@ def user_has_kit():
             if last_register_of_that_user[2] == "NO SUBMISSION": # the column [2] has the information about the last submission moment
                 return True  # note that the fact that a row of one user exists, means that he/she requested a kit.
             else: # the last interection of the user with the system was to submit a sample, so the user has not a kit.
-                return False 
+                return False
+
+
+# PRE: The user has kit (i.e. the is a record of that user with kitpick information and without submit information)
+def update_time_pickup_kit():
+    if not user_has_kit():
+        raise Exception("PRE of update_time_pickup_kit is not satisfied")
+    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    cursor = connection.cursor()
+    # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user:
+    cursor.execute("SELECT oid FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC")
+    oid = cursor.fetchone()[0]  # [0] because we want only the number contained in the touble of one element that cursor.fetchone() is returning   
+    # update that record:  
+    cursor.execute("UPDATE muestras_saliva SET " +
+                 "last_pickup_time = '" + time.strftime("%d/%m/%Y, %H:%M:%S") + "' " +
+                 "WHERE oid = '" + str(oid) + "' ")  # str(oid) because oid variable is integer! (tested)
+    connection.commit()
+    connection.close() 
+
+
+# add new record to the medical info DB. A new record is created when the user, without a kit, wants a new kit. And is created with the kitpick information only (and will be completed with the sample deposition when the user submits a sample)
+# PRE: The user has NOT a kit (i.e. there is not a record of that user with kitpick information and without submit information)
+# NOTE: The submission time will be completed as "NO SUBMISSION"
+def add_new_record_with_pickup_kit():
+    if user_has_kit():
+        raise Exception("add_new_record_with_pickup_kit")
+    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO muestras_saliva VALUES (:CIP, :last_pickup_time, :submit_time, :time_elapsed, :submission_ID)",
+                    {
+                        'CIP': ActivePerson.getCurrent().get_CIP(),
+                        'last_pickup_time': time.strftime("%d/%m/%Y, %H:%M:%S"),
+                        'submit_time': "NO SUBMISSION",
+                        'time_elapsed': "-",
+                        'submission_ID': "-"
+                    })
+    connection.commit()
+    connection.close()

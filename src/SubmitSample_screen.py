@@ -116,7 +116,7 @@ class SubmitSample_screen: # singleton
 
     def __submit_sample(self):
         # TODO: Ver si arduino está vivo; si no está pues enviar mensaje y poner problema por pantalla y que se le cerrará sesión y que vuelva mas tarde y tal.
-        # TODO: En caso de arduino vivo: pedirle que abra la puerta (aun así con un timeout). Si salta el timeout hacer lo del if anterior, y si no salta pues llamar a incrementar variable muestras dadas + Registrar en las 2 BD (en la de muestras_saliva deberia haber por huevos un registro ya empezado y sin hora de entregar, ver que sea asi (en DBcontroller), aparte tendre que poner la diferencia entre la hora de recogidamuestra y la de entrega en la funcion esa de DBcontroller) + avisarle que ya puede entregar muestra en el lado + ActivePerson.getCurrent.set_has_submited_to_true() + volver al menú anterior después de unos segundos.
+        # TODO: En caso de arduino vivo: pedirle que abra la puerta (aun así con un timeout). Si salta el timeout hacer lo del if anterior, y si no salta pues llamar a incrementar variable muestras dadas + Registrar en las 2 BD (en la de muestras_saliva deberia haber por huevos un registro ya empezado y sin hora de entregar, ver que sea asi (en DBcontroller), aparte tendre que poner la diferencia entre la hora de recogidamuestra y la de entrega en la funcion esa de DBcontroller) + avisarle que ya puede entregar muestra en el lado + ActivePerson.getCurrent.set_has_submited_to_true() + avisar de que se le hará logout + active.logout().
         pass
 
 
