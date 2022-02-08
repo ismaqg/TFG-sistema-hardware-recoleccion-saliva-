@@ -132,7 +132,7 @@ class LogIn_screen():  # singleton
     # function to check if a given string is a valid TSI code
     @staticmethod
     def __is_a_valid_TSI(string_to_check):
-        if len(string_to_check) != 24:
+        if len(string_to_check) < 24 or len(string_to_check) > 25:  # catsalut TSI have 24 or 25 digits
             return False
         if not string_to_check[0:6].isdigit() or not string_to_check[10:24].isdigit():
             return False

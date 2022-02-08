@@ -50,7 +50,6 @@ class ActivePerson:
             raise Exception("There is not a user / admin / operator using right now the system")
         else:
             DBcontroller.add_new_event(self.get_CIP(), self.get_status() + " LOGOUT")
-            ActivePerson.destroyCurrent()
             from LogIn_screen import LogIn_screen  # Declared here to avoid circular dependency
             from MainScreen_user import MainScreen_user
             from MainScreen_admin import MainScreen_admin
@@ -58,6 +57,7 @@ class ActivePerson:
             MainScreen_user.getInstance().erase_mainScreen_contents()
             MainScreen_admin.getInstance().erase_mainScreen_contents()
             MainScreen_operator.getInstance().erase_mainScreen_contents()
+            ActivePerson.destroyCurrent()  # here and not before because the getInstance() of the 3 previous lines creates an instance if not exists, and to create the instance is called the ActivePerson.getCurrent(), which throws an exception if the current active user has been destroyed
             LogIn_screen.getInstance().go_to_login_screen()
      
 

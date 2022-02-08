@@ -31,7 +31,7 @@ PREVIOUS_INFO_SALIVA_TEST = """Deben transcurrir un mínimo de 30 minutos entre 
 
 Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero recoger el kit".
 
-Si NO ha transcurrido ese tiempo, por favor pulse el botón de 'VOLVER ATRÁS' para ser redirigido al menú principal y, a continuación, pulse el botón de 'Cerrar sesión (SALIR)'. Vuelva a la máquina una vez cumpla con los requisitos comentados."""
+Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""
 
 
 CORRECT_PASSWORD = "1234" # TODO: ESTO NO LO PODEMOS TENER ASÍ DE INSEGURO. 

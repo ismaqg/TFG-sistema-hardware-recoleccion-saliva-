@@ -77,7 +77,8 @@ class ClaimKit_screen: # singleton
 
             if timeout:
                 Arduino_controller.inoperative_arduino_actions()
-            else:  # arduino ha abierto correctamente la puerta y ha dejado caer un kit 
+            else:  # arduino has dropped a kit
+                # TODO: Encender barra leds del lado donde ha caido el kit. Con timeouts por si el arduino falla
                 Counters.decrement_available_kits()
                 DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")  # to info_uso DB
                 if DBcontroller.user_has_kit():
@@ -86,11 +87,8 @@ class ClaimKit_screen: # singleton
                     DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
                 messagebox.showinfo("RECOGIDA KIT", "Ya puedes recoger el kit del depósito lateral. Será redirigido al menú de entrega de muestra de saliva, donde se le mostrarán las instrucciones") # TODO: No sé si es un depósito lateral, igual tengo que cambiar esto
                 ActivePerson.getCurrent().set_has_claimed_kit_to_true()
-
-                # TODO: No sé si hace falta decirle explícitamente al arduino que cierre la compuerta. En ese caso, añadirlo aquí (con su respectivo timeout por si se quedase pillado al cerrarla)
-
+                # TODO: Apagar leds de la puerta. Con timeouts por si el arduino falla
                 SubmitSample_screen.getInstance().go_to_submitSample_screen()
-                
         else:
             Arduino_controller.inoperative_arduino_actions()
 

@@ -71,8 +71,8 @@ class SubmitSample_screen: # singleton
     STEP 3: Says that the next thing will be to print the identifier. The button in this step is "print label" but the printing is done during the next step
     STEP 4: While the printing is being done, this step shows how to stick the label and ask to stick like the image. When the printing has finished, the "next" button is enabled
     STEP 5: Says that a comprobation of the label sticked correctly is needed, so the user needs to pass the label through the label reader. When the reader reads the correct code, the "next" button is enabled
-    STEP 6: Show the next instruction -> Clean the tube. And that the gate is going to start opening when clicking
-    STEP 7: It says to deliver the tube at the gate that has just openned, and press "Entregado" when done. The button is disabled until the door is opened
+    STEP 6: Show the next instruction -> Clean the tube. 
+    STEP 7: It says to deliver the tube at the gate and press "Entregado" when done. The button is disabled until the door is opened
     STEP 8: It's not a step as such. If we are here we know that all of the above steps have already been completed, so in this point the user will be logged out
     """
     def __next_step_actions(self):
@@ -108,24 +108,21 @@ class SubmitSample_screen: # singleton
             time.sleep(4)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 7:
+            # TODO: Decirle al arduino que encienda los leds de la puerta que tiene que abrir. Con timeouts por si el arduino falla.
+            # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
             self.__next_step_b["text"] = "ENTREGADO"
             self.__next_step_b["state"] = DISABLED
-            self.__open_submit_gate()  # TODO: Si al final no hay que abrir una compuerta a través del arduino, quitar esto que no tendría sentido
             self.__next_step_b["state"] = NORMAL
-
- 
-    def __open_submit_gate(self):  # TODO: Si al final no hay que abrir una compuerta a través del arduino, quitar esto que no tendría sentido
-        if (Checker.is_arduino_alive()):
-
-            # TODO: Pedirle al arduino que abra la compuerta y programar un timeout que puede saltar si tarda mucho
-    
-            time.sleep(4) # TODO: borrar este sleep, está emulando la apertura de la puerta que aún no está
-        else:
-            Arduino_controller.inoperative_arduino_actions()
         
 
     def __sample_submitted(self):
-        if (Checker.is_arduino_alive()):  # TODO: LEE ENTERO: Si al final no hay que cerrar ninguna compuerta con el arduino. borrar esta línea que no tendría sentido. SALVO QUE AL FINAL UTILICEMOS UN ARDUINO AHÍ PARA MEDIR LA TEMPERATURA O ALGO DEL ESTILO
+        if (Checker.is_arduino_alive()):  
+
+            # TODO: Al final parece que usaremos el arduino a modo de sensor de que se haya entregado o para medir la temperatura. Así que poner ese código aquí dentro. OJO: Esta es la función de sample submitted, a
+            # la que se supone que llama cuando ya ha cerrado la puerta, así que posiblemente necesito otra función para mirar si se abre la puerta. O MEJOR: ese codigo de ver si se abre la puerta y tal ponerlo en el arduino que
+            #vaya mirando siempre, y luego en esta función consultarle al arduino: Oye, realmente ya abrió y cerró la puerta?. Y si no, si tengo que poner el codigo en este fichero, el lugar correcto sería el step 7, no esta función (que se llama en step 8)
+            # TODO: Poner timeouts en todas las comunicaciones con el arduino
+
             Counters.increment_stored_samples()
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
             DBcontroller.add_sample_submission()  # to muetras_saliva DB
@@ -133,8 +130,7 @@ class SubmitSample_screen: # singleton
             messagebox.showinfo("MUESTRA ENTREGADA", "La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación")
             ActivePerson.getCurrent().logOut()
 
-            # TODO: En caso de que sea el arduino el que abre y cierra puera, aquí tengo que cerrarla. Poner un timeout por si el arduino dejase de funcionar aquí (y si salta el timeout, ir a la pantalla de Not_available)
-    
+            # TODO: Apagar leds de la puerta que ya ha cerrado. Con timeouts por si el arduino falla   
         else:
             Arduino_controller.inoperative_arduino_actions()
 
@@ -147,6 +143,4 @@ class SubmitSample_screen: # singleton
         self.__next_step_b["state"] = NORMAL
         self.__info_steps_title["text"] = "PASO 1"
         self.__submitSampleScreen_frame.tkraise()
-        messagebox.showwarning("INFORMACIÓN PREVIA", """Recuerda que para que la muestra de saliva sea válida, no debes haber ingerido nada en los últimos 30 minutos. \n
-        En caso de que hayas comido o bebido algo hace menos de 30 minutos, cierra este mensaje, haz click en el botón de 'VOLVER ATRÁS' y después sal del programa (botón 'Cerrar Sesión'). \n
-        Podrás volver a usar esta máquina más adelante, cuando hayan transcurrido 30 minutos desde la última ingesta""")
+        messagebox.showwarning("INFORMACIÓN PREVIA", "Recuerda que para que la muestra de saliva sea válida, no debes haber ingerido nada en los últimos 30 minutos.")
