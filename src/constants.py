@@ -22,7 +22,8 @@ NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     # TODO: ponerlo a la cantidad de etique
 SCREEN_WIDTH = get_monitors()[0].width
 SCREEN_HEIGHT = get_monitors()[0].height
 
-SCREEN_SAVER_BACK_TIMER = 10000 # in miliseconds
+SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
+INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
 
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%
@@ -34,7 +35,7 @@ Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero
 Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""
 
 
-CORRECT_PASSWORD = "1234" # TODO: ESTO NO LO PODEMOS TENER ASÍ DE INSEGURO. 
+CORRECT_PASSWORD_ENCRIPTED = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"  # The password is "1234" and this hash is the encription of "1234" with sha256. Remember to delete this comment in the final version of SALIBANK (this is prototype) because here is shown the password decripted 
 
 
 

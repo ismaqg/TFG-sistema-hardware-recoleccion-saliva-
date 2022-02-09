@@ -87,8 +87,8 @@ class LogIn_screen():  # singleton
                 # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
                 Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
 
-            else: # USER. And entering here makes the afect of a root.after_cancel of those 500 ms to check the password, because the timer is not reprogramed.
-                if Checker.check_available_resources_at_user_logIn() == False:  # cannot login because there are not available resources
+            else: # USER. And entering here makes the same effect as a root.after_cancel of those 500 ms to check the password, because the timer is not reprogramed.
+                if Checker.check_available_resources() == False:  # cannot login because there are not available resources
                     # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
                     ActivePerson.destroyCurrent()
                     messagebox.showerror("NO PUEDE INICIAR SESIÓN", "No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas")
@@ -119,7 +119,6 @@ class LogIn_screen():  # singleton
 
     # function to process the input of the barcode scanner
     def __process_input(self, event):
-
         if (self.__login_screen_isActive and not ActivePerson.isThereActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
                                                                                   # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
             self.__try_to_logIn()

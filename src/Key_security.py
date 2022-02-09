@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
+
+import hashlib
+
 import constants
-import Screen_manager
 
 
 
@@ -74,7 +76,7 @@ class Key_security:
 
     def __accept(self):
         self.__key_introduced = TRUE
-        if (self.__entry.get() == constants.CORRECT_PASSWORD):
+        if (hashlib.sha256( str.encode(self.__entry.get()) ).hexdigest() == constants.CORRECT_PASSWORD_ENCRIPTED):
             self.__key_is_correct = TRUE
         self.__key_window.destroy()
 

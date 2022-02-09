@@ -85,7 +85,7 @@ def check_not_max_stored_samples_at_turningON():
             DBcontroller.add_new_event("-", "OPERADOR/ADMIN VACIÓ DEPÓSITO MUESTRAS EN EL ENCENDIDO, PARA HACER OPERABLE LA MÁQUINA")
 
 
-def check_available_resources_at_user_logIn():
+def check_available_resources():
     problems = ''
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
         problems += 'El deposito de muestras está lleno.\n'
@@ -95,15 +95,19 @@ def check_available_resources_at_user_logIn():
         problems += 'No quedan etiquetas.\n'
     if not is_arduino_alive():
         problems += 'Arduino inoperativo.\n'
+    # TODO: Mirar también si el 2o arduino está vivo
     if not is_printer_alive():
         problems += 'Impresora inoperativa.\n'
 
     if problems == '':
         return True
     else:  # if this occurs, a message is displayed, the event is registered and the rpi is powered off
-        print("Los problemas internos son: " + problems) 
-        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER LOGIN FAIL. NO AVAILABLE RESOURCES:\n" + problems)
-        notify_operator("Un usuario no he podido hacer login por los siguientes problemas: \n" + problems + " Por ende, se ha apagado la máquina", Priority.CRITICAL)
+        print("Los problemas internos son: " + problems)
+        if ActivePerson.isThereActivePerson():  # function called because someone tried to log in
+            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER LOGIN FAIL. NO AVAILABLE RESOURCES:\n" + problems)
+        else:  # function called because it has been seen that all the resources do not work well after a period of inactivity of the machine
+            DBcontroller.add_new_event("-", "AFTER INACTIVITY, DETECTED NO AVAILABLE RESOURCES:\n" + problems)
+        notify_operator("SALIBANK es inoperable por los siguientes problemas críticos : \n" + problems, Priority.CRITICAL)
         return False
 
 
