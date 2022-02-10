@@ -7,7 +7,7 @@ PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  #
 
 ARD1_PORT = "/dev/ttyUSB0"
 ARD2_PORT = "/dev/ttyUSB1"
-PRINTER_PORT = "/dev/usb/lp0"
+PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0
 
 DB_MEDICALINFO_PATH = "../res/database/muestras_saliva.db" 
 DB_USEINFO_PATH = "../res/database/info_uso.db"
@@ -24,6 +24,7 @@ SCREEN_HEIGHT = get_monitors()[0].height
 
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
+LABEL_PRINTING_TIMEOUT = 4 # in seconds
 
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%

@@ -28,7 +28,7 @@ Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()
 Checker.check_not_max_stored_samples_at_turningON()
 
-#os.chmod(constants.PRINTER_PORT, 0o666 )  # give RW permissions to the label printer  # TODO: Uncomment for raspberry
+# os.chmod(constants.PRINTER_PORT, 0o666 )  # give RW permissions to the label printer  # TODO: Uncomment for raspberry
 
 Screen_saver.getInstance().go_to_screen_saver()
 

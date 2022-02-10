@@ -19,10 +19,9 @@ def is_arduino_alive():
     return True
 
 def is_printer_alive():
-    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
-    """
+    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
     return os.path.exists(constants.PRINTER_PORT)
-    """
+    
     
 
 

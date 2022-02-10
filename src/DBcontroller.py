@@ -173,3 +173,19 @@ def add_sample_submission():
                  "WHERE oid = '" + str(oid) + "' ")
     connection.commit()
     connection.close()
+
+# PRE: The user has a kit
+def add_submission_ID(submissionID):
+    if not user_has_kit():
+        raise Exception("PRE of add_submission_ID is not satisfied")
+    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    cursor = connection.cursor()
+    # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user:
+    cursor.execute("SELECT oid FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC")
+    oid = cursor.fetchone()[0]  # [0] because we want only the integer contained in the tuple of one element that cursor.fetchone() is returning
+    # update that record:  
+    cursor.execute("UPDATE muestras_saliva SET " +
+                 "submission_ID = '" + submissionID + "' " +
+                 "WHERE oid = '" + str(oid) + "' ")  # str(oid) because oid variable is integer! (tested)
+    connection.commit()
+    connection.close()
