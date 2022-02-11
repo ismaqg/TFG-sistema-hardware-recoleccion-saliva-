@@ -82,26 +82,22 @@ class SubmitSample_screen: # singleton
     STEP 2: Show the 2nd instruction -> transfer saliva to small tube.
     STEP 3: Says that the next thing will be to print the identifier. The button in this step is "print label" but the printing is done during the next step
     STEP 4: While the printing is being done, this step shows how to stick the label and ask to stick like the image. When the printing has finished, the "next" button is enabled
-    STEP 5: Says that a comprobation of the label sticked correctly is needed, so the user needs to pass the label through the label reader. When the reader reads the correct code, the "next" button is enabled
-    STEP 6: Show the next instruction -> Clean the tube. 
-    STEP 7: It says to deliver the tube at the gate and press "Entregado" when done. The button is disabled until the door is opened
-    STEP 8: It's not a step as such. If we are here we know that all of the above steps have already been completed, so in this point the user will be logged out
+    STEP 5: Show the next instruction -> Clean the tube. 
+    STEP 6: It says to deliver the tube at the gate and press "Entregado" when done. The button is disabled until the door is opened
+    STEP 7: It's not a step as such. If we are here we know that all of the above steps have already been completed, so in this point the user will be logged out
     """
     def __next_step_actions(self):
 
-        # TODO in step 5: aqui puedo comprobar que la etiqueta impresa sea leible bindeando el <Return> a una funcion. Entonces tendria que hacer como en login: un if para mirar si estamos en esta pantalla (en submit screen) y si es un usuario (Y TAMBIEN SI EL PASO ACTUAL ES EL 5). Ten en cuenta que en cada lectura de etiqueta se ejecutaran las 2 funciones bindeadas pero como cada una está protegida por su if pues no pasa nada.
-        # TODO EN EL PASO 5 CADA VEZ QUE SE LEA ALGO INCORRECTO, SE PONDRA UN ERROR POR PANTALLA DE QUE NO ESTÁS LEYENDO LA ETIQUETA QUE TOCA O QUE NO ESTÁ BIEN PEGADA, QUE SI NO LO CONSIGUES LEER VUELVAS AL MENÚ PRINCIPAL PARA VOLVER A PEDIR OTRA ETIQUETA QUE PEGARÁS ENCIMA
-
         self.__current_step += 1
 
-        if self.__current_step == 8: # It will be entered here when the action of the last step (step 7: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
+        if self.__current_step == 7: # It will be entered here when the action of the last step (step 6: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
             self.__sample_submitted()
 
         self.__info_steps_title["text"] = "PASO " + str(self.__current_step)
-        # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 7 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)
+        # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 6 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)
 
         # Change the text of the button of this step and make the actions associated, if any:
-        if self.__current_step in {2, 5, 6}: 
+        if self.__current_step in {2, 5}: 
             self.__next_step_b["text"] = "SIGUIENTE"
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 3:
@@ -112,14 +108,7 @@ class SubmitSample_screen: # singleton
             self.__next_step_b["state"] = DISABLED
             self.__print_label()
             self.__next_step_b["state"] = NORMAL
-        elif self.__current_step == 5:
-            self.__next_step_b["text"] = "SIGUIENTE"
-            self.__next_step_b["state"] = DISABLED
-            # TODO: aqui que el bind con <return> ya haga caso y cuando se vea que la etiqueta se puede leer pues se pondra en ENABLED el boton de siguiente. Nota: en la comprobacion de la etiqueta leida hay que mirar que el input se haya hecho en el paso 5 obviamente. Borrar el siguiente codigo que es provisional:
-            time.sleep(4)
-            self.__next_step_b["state"] = NORMAL
-        elif self.__current_step == 7:
-            # TODO: Decirle al arduino que encienda los leds de la puerta que tiene que abrir. Con timeouts por si el arduino falla.
+        elif self.__current_step == 6:
             # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
             self.__next_step_b["text"] = "ENTREGADO"
             self.__next_step_b["state"] = DISABLED
@@ -131,7 +120,7 @@ class SubmitSample_screen: # singleton
 
             # TODO: Al final parece que usaremos el arduino a modo de sensor de que se haya entregado o para medir la temperatura. Así que poner ese código aquí dentro. OJO: Esta es la función de sample submitted, a
             # la que se supone que llama cuando ya ha cerrado la puerta, así que posiblemente necesito otra función para mirar si se abre la puerta. O MEJOR: ese codigo de ver si se abre la puerta y tal ponerlo en el arduino que
-            #vaya mirando siempre, y luego en esta función consultarle al arduino: Oye, realmente ya abrió y cerró la puerta?. Y si no, si tengo que poner el codigo en este fichero, el lugar correcto sería el step 7, no esta función (que se llama en step 8)
+            #vaya mirando siempre, y luego en esta función consultarle al arduino: Oye, realmente ya abrió y cerró la puerta?. Y si no, si tengo que poner el codigo en este fichero, el lugar correcto sería el step 6, no esta función (que se llama en step 8)
             # TODO: Poner timeouts en todas las comunicaciones con el arduino
 
             Counters.increment_stored_samples()
@@ -190,10 +179,8 @@ class SubmitSample_screen: # singleton
             signal.alarm(constants.LABEL_PRINTING_TIMEOUT)
 
             # send the information to the printer:
-            # TODO: Forzar a que esto falle. Por ejemplo, poniendo un sleep antes de esta linea (y despues de la comprobacion de si la impresora está viva) y durante el tiempo de ese sleep desconectando la impresora para que así esta linea falle, y así ver qué ocurre (si va a la pantalla de not available y se puede interactuar con esa pantalla o qué)
             send(instructions=print_instructions, printer_identifier=constants.PRINTER_PORT, backend_identifier=backendID, blocking=True)
                 
-
             # ignore the timeout because if this line is reached, the printer has just printed.
             signal.alarm(0)
 
@@ -201,7 +188,6 @@ class SubmitSample_screen: # singleton
             DBcontroller.add_submission_ID(labelID)
             Counters.decrement_available_labels()
             
-
         else:
             self.__printer_not_responding_while_printing(None, None)
             
