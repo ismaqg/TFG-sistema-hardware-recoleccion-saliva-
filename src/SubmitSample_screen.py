@@ -116,7 +116,7 @@ class SubmitSample_screen: # singleton
         
 
     def __sample_submitted(self):
-        if (Checker.is_arduino_alive()):  
+        if (Checker.is_arduino_storage_alive()):  
 
             # TODO: Al final parece que usaremos el arduino a modo de sensor de que se haya entregado o para medir la temperatura. Así que poner ese código aquí dentro. OJO: Esta es la función de sample submitted, a
             # la que se supone que llama cuando ya ha cerrado la puerta, así que posiblemente necesito otra función para mirar si se abre la puerta. O MEJOR: ese codigo de ver si se abre la puerta y tal ponerlo en el arduino que

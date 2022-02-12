@@ -13,10 +13,14 @@ from enum import Enum
 #ENUM:
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
-# TODO: Necesitaré una funcion para el arduino1 y otra para el arduino2
-def is_arduino_alive():
+def is_arduino_supply_alive():
     # TODO. Mirar si esta vivo (y retornar true o false en consecuencia). En caso de no estar vivo hay que avisar del problema critico: notify_operator("ARDUINO NOT RESPONDING", Priority.CRITICAL)
     return True
+
+def is_arduino_storage_alive():
+    # TODO. Mirar si esta vivo (y retornar true o false en consecuencia). En caso de no estar vivo hay que avisar del problema critico: notify_operator("ARDUINO NOT RESPONDING", Priority.CRITICAL)
+    return True
+
 
 def is_printer_alive():
     #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
@@ -38,8 +42,10 @@ def check_hardware_usable_at_turningON():
     problems = ''
     if not is_printer_alive():
         problems += 'PRINTER IS NOT CONNECTED OR NOT POWERED ON OR NOT WORKING\n'
-    if not is_arduino_alive():
-        problems += 'ARDUINO IS NOT CONNECTED OR NOT WORKING\n'    
+    if not is_arduino_supply_alive():
+        problems += 'ARDUINO SUPPLY MODULE IS NOT CONNECTED OR NOT WORKING\n'
+    if not is_arduino_storage_alive():
+        problems += 'ARDUINO STORAGE MODULE IS NOT CONNECTED OR NOT WORKING\n'    
     if problems != '':
         Screen_manager.get_root().destroy()
         raise Exception("THE PROGRAM CAN'T START BECAUSE:\n. PLEASE CHECK THAT THEY ARE WELL CONNECTED AND TURNED ON / WORKING" + problems)
@@ -92,9 +98,10 @@ def check_available_resources():
         problems += 'No quedan kits.\n'
     if Counters.get_available_labels() == 0:
         problems += 'No quedan etiquetas.\n'
-    if not is_arduino_alive():
-        problems += 'Arduino inoperativo.\n'
-    # TODO: Mirar también si el 2o arduino está vivo
+    if not is_arduino_supply_alive():
+        problems += 'Arduino supply inoperativo.\n'
+    if not is_arduino_storage_alive():
+        problems += 'Arduino storage inoperativo.\n'
     if not is_printer_alive():
         problems += 'Impresora inoperativa.\n'
 

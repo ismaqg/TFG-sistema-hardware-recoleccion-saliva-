@@ -25,12 +25,29 @@ def get_admins():
         init_admins_and_operators_info()
     return admins
 
-
 def get_operators():
     global operators
     if not operators: # operators is an empty list
         init_admins_and_operators_info()
     return operators
+
+
+# returns, in this order: available_kits, stored_samples and available_labels
+def read_available_resources_csv():
+    with open(constants.AVAILABLE_RESOURCES_PATH, 'r') as fd:
+        data = list(csv.reader(fd))
+    return [ int(data[0][1]), int(data[1][1]), int(data[2][1]) ]
+
+def write_available_resources_csv(available_kits, stored_samples, available_labels):
+    data = [
+        ['available_kits', available_kits],
+        ['stored_samples', stored_samples],
+        ['available_labels', available_labels]
+    ]
+    with open(constants.AVAILABLE_RESOURCES_PATH, 'w') as fd:
+        writer = csv.writer(fd)
+        writer.writerows(data)
+
 
 def create_DBs_if_not_exist():
     # saliva samples submision information DB:

@@ -14,6 +14,7 @@ DB_USEINFO_PATH = "../res/database/info_uso.db"
 IMAGES_DIRECTORY = "../res/images/"
 ADMINSID_PATH = "../res/adminsAndOperators/admins.csv"
 OPERATORSID_PATH = "../res/adminsAndOperators/operators.csv"
+AVAILABLE_RESOURCES_PATH = "../res/resources_data.csv"
 
 STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras que se pueden poner
 AVAILABLE_KITS_AFTER_REFILL = 20    # TODO: ponerlo a la cantidad de kits disponibles que vayan a caber en la maquina

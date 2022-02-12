@@ -1,20 +1,19 @@
 import constants
-from Checker import Priority
 import Checker
+from Checker import Priority
 import DBcontroller
 
-__available_kits = constants.AVAILABLE_KITS_AFTER_REFILL 
-__stored_samples = 0 
-__available_labels = constants.NUMBER_OF_LABELS_IN_LABEL_ROLL
+import csv
+
+
+__available_kits = None 
+__stored_samples = None 
+__available_labels = None
 
 def initialize_information():
-    # TODO: ESOS VALORES HARDCODEADOS ESTAN PARA TESTING, PERO EN LA VERSION DEFINITIVA DEBO CAMBIAR ESOS VALORES POR LO COMENTADO A LA DERECHA DEL TODO
     global __available_kits, __stored_samples, __available_labels
-    __available_kits = 0 #5  #constants.AVAILABLE_KITS_AFTER_REFILL 
-    __stored_samples = 47  #0 
-    __available_labels = 72  #constants.NUMBER_OF_LABELS_IN_LABEL_ROLL
-
-
+    __available_kits, __stored_samples, __available_labels = DBcontroller.read_available_resources_csv()
+    
 
 def get_available_kits():
     global __available_kits
@@ -33,14 +32,17 @@ def get_available_labels():
 def set_available_kits(x):
     global __available_kits
     __available_kits = x
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 
 def set_stored_samples(x):
     global __stored_samples
     __stored_samples = x
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 
 def set_available_labels(x):
     global __available_labels
     __available_labels = x
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 
 
 
@@ -58,6 +60,7 @@ def decrement_available_kits():
         Checker.notify_operator("Queda menos del " + constants.WARNING_STOCK_THRESHOLD*100 + " porciento de los kits", Priority.MEDIUM)
         DBcontroller.add_new_event("-", "Queda menos del " + constants.WARNING_STOCK_THRESHOLD*100 + " porciento de los kits")
     __available_kits -= 1
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
     
 
 def increment_stored_samples():
@@ -74,6 +77,7 @@ def increment_stored_samples():
         Checker.notify_operator("Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva", Priority.MEDIUM)
         DBcontroller.add_new_event("-", "Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva")
     __stored_samples += 1
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 
 
 def decrement_available_labels():
@@ -90,6 +94,7 @@ def decrement_available_labels():
         Checker.notify_operator("Queda menos del " + constants.WARNING_STOCK_THRESHOLD*100 + " porciento de las etiquetas", Priority.MEDIUM)
         DBcontroller.add_new_event("-", "Queda menos del " + constants.WARNING_STOCK_THRESHOLD*100 + " porciento de las etiquetas")
     __available_labels -= 1
+    DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 
 
 

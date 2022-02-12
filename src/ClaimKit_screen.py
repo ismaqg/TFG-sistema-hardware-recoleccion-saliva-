@@ -69,7 +69,7 @@ class ClaimKit_screen: # singleton
 
 
     def __get_kit(self):
-        if (Checker.is_arduino_alive()):
+        if (Checker.is_arduino_supply_alive()):
 
             # TODO: Pedirle el kit al arduino y programar un timeout que puede saltar si tarda mucho
             
