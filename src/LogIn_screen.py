@@ -28,6 +28,7 @@ class LogIn_screen():  # singleton
 
     def __init__(self):
         if LogIn_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("LogIn_screen class is singleton")
         else:
             self.__input_variable = StringVar() #Tkinter variable

@@ -24,6 +24,7 @@ class ClaimKit_screen: # singleton
 
     def __init__(self):
         if ClaimKit_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("ClaimKit_screen class is singleton")
         else:
 

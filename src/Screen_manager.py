@@ -7,6 +7,7 @@ __root = None
 def start_application():
     global __root
     if __root != None:
+        __root.destroy()
         raise Exception("You have already created an application")
     else:
         __root = Tk()

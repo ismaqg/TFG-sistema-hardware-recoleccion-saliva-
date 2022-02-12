@@ -1,4 +1,5 @@
 import DBcontroller
+import Screen_manager
 
 
 # Represents de active user / operator / admin using the machine
@@ -11,6 +12,7 @@ class ActivePerson:
     @staticmethod
     def getCurrent():
         if ActivePerson.__instance == None:
+            Screen_manager.get_root().destroy()
             raise Exception("There is not a user / admin / operator using right now the system")
         else:
             return ActivePerson.__instance
@@ -29,6 +31,7 @@ class ActivePerson:
 
     def __init__(self, CIP):
         if ActivePerson.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("There is someone using the system right now")
         else:
             self.__user_has_submitted_in_this_session = False
@@ -47,6 +50,7 @@ class ActivePerson:
 
     def logOut(self):
         if ActivePerson.__instance == None:
+            Screen_manager.get_root().destroy()
             raise Exception("There is not a user / admin / operator using right now the system")
         else:
             DBcontroller.add_new_event(self.get_CIP(), self.get_status() + " LOGOUT")
@@ -69,20 +73,24 @@ class ActivePerson:
 
     def get_has_submitted_in_this_session(self):
         if self.__status != "USER":
+            Screen_manager.get_root().destroy()
             raise Exception("current person using the system is not a user")
         return self.__user_has_submitted_in_this_session
 
     def set_has_submitted_to_true(self):
         if self.__status != "USER":
+            Screen_manager.get_root().destroy()
             raise Exception("current person using the system is not a user")
         self.__user_has_submitted_in_this_session = True
 
     def get_has_claimed_kit_in_this_session(self):
         if self.__status != "USER":
+            Screen_manager.get_root().destroy()
             raise Exception("current person using the system is not a user")
         return self.__user_has_claimed_kit_in_this_session
 
     def set_has_claimed_kit_to_true(self):
         if self.__status != "USER":
+            Screen_manager.get_root().destroy()
             raise Exception("current person using the system is not a user")
         self.__user_has_claimed_kit_in_this_session = True

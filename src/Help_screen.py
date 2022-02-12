@@ -1,4 +1,4 @@
-
+import Screen_manager
 
 
 class Help_screen: # singleton
@@ -13,6 +13,7 @@ class Help_screen: # singleton
 
     def __init__(self):
         if Help_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("Help_screen class is singleton")
         else:
 

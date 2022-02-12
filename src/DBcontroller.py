@@ -1,4 +1,5 @@
 from Person import ActivePerson
+import Screen_manager
 import constants
 import csv
 import sqlite3
@@ -95,6 +96,7 @@ def get_DB_content(DB_name):
         DB_content = "(Identificador o CIP , evento , Fecha y hora evento)\n\n"
         connection = sqlite3.connect(constants.DB_USEINFO_PATH)
     else:
+        Screen_manager.get_root().destroy()
         raise Exception("Has llamado a get_DB_content pasando un nombre de DB distinto a muestras_saliva o info_uso")
 
     cursor = connection.cursor()
@@ -118,6 +120,7 @@ def get_DB_content(DB_name):
 # Note: returning true doesn't disable the option of collecting another kit (because the user maybe lost his kit)
 def user_has_kit():
     if ActivePerson.getCurrent().get_status() != "USER":
+        Screen_manager.get_root().destroy()
         raise Exception("Current person using the system is not an user, it's a " + ActivePerson.getCurrent().get_status() + " so there is not information about if 'user has kit'")
     else:
         connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
@@ -137,6 +140,7 @@ def user_has_kit():
 # PRE: The user has kit (i.e. the is a record of that user with kitpick information and without submit information)
 def update_time_pickup_kit():
     if not user_has_kit():
+        Screen_manager.get_root().destroy()
         raise Exception("PRE of update_time_pickup_kit is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
@@ -156,6 +160,7 @@ def update_time_pickup_kit():
 # NOTE: The submission time will be completed as "NO SUBMISSION"
 def add_new_record_with_pickup_kit():
     if user_has_kit():
+        Screen_manager.get_root().destroy()
         raise Exception("PRE of add_new_record_with_pickup_kit is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
@@ -174,6 +179,7 @@ def add_new_record_with_pickup_kit():
 # PRE: The user has a kit (if not, it's impossible to submit a sample!)
 def add_sample_submission():
     if not user_has_kit():
+        Screen_manager.get_root().destroy()
         raise Exception("PRE of add_sample_submission is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
@@ -194,6 +200,7 @@ def add_sample_submission():
 # PRE: The user has a kit
 def add_submission_ID(submissionID):
     if not user_has_kit():
+        Screen_manager.get_root().destroy()
         raise Exception("PRE of add_submission_ID is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()

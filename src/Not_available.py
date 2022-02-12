@@ -20,6 +20,7 @@ class Not_available: # singleton
 
     def __init__(self):
         if Not_available.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("Not_available class is singleton")
         else:
 

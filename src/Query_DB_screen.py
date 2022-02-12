@@ -20,6 +20,7 @@ class Query_DB_screen: # singleton
 
     def __init__(self):
         if Query_DB_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("Query_BD_screen class is singleton")
         else:
             self.__DBscreen_frame = Screen_manager.init_screen_frame()

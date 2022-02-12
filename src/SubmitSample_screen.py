@@ -35,6 +35,7 @@ class SubmitSample_screen: # singleton
 
     def __init__(self):
         if SubmitSample_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("SubmitSample_screen class is singleton")
         else:
             self.__current_step = 1

@@ -1,5 +1,5 @@
 
-
+import Screen_manager
 
 class Language_screen: # singleton
     
@@ -13,6 +13,7 @@ class Language_screen: # singleton
 
     def __init__(self):
         if Language_screen.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("Language_screen class is singleton")
         else:
 

@@ -8,7 +8,7 @@ from ClaimKit_screen import ClaimKit_screen
 from SubmitSample_screen import SubmitSample_screen
 import constants
 import DBcontroller
-
+import Screen_manager
 
 class MainScreen_user(MainScreen):  # singleton 
 
@@ -22,6 +22,7 @@ class MainScreen_user(MainScreen):  # singleton
 
     def __init__(self):
         if MainScreen_user.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("MainScreen_operator class is singleton")
         else:
             MainScreen.create_main_frames()

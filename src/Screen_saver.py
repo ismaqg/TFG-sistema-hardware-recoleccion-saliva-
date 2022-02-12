@@ -21,6 +21,7 @@ class Screen_saver():  # singleton
 
     def __init__(self):
         if Screen_saver.__instance != None:
+            Screen_manager.get_root().destroy()
             raise Exception("Screen_saver class is singleton")
         else:
             self.__inactivity_countdown = None  # Identifies the inactivity countdown to check if all the resources are available (specially if hardware is responding)

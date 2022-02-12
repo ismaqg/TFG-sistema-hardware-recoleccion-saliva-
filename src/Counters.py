@@ -2,8 +2,8 @@ import constants
 import Checker
 from Checker import Priority
 import DBcontroller
+import Screen_manager
 
-import csv
 
 
 __available_kits = None 
@@ -49,6 +49,7 @@ def set_available_labels(x):
 def decrement_available_kits():
     global __available_kits
     if __available_kits == 0:
+        Screen_manager.get_root().destroy()
         raise Exception ("trying to decrement available kits when there are 0 available kits")
     if __available_kits == 1:
         Checker.notify_operator("Se han acabado los kits", Priority.CRITICAL)
@@ -66,6 +67,7 @@ def decrement_available_kits():
 def increment_stored_samples():
     global __stored_samples
     if __stored_samples == constants.STORED_SAMPLES_LIMIT:
+        Screen_manager.get_root().destroy()
         raise Exception ("trying to increment stored samples when there is no empty space")
     if __stored_samples == constants.STORED_SAMPLES_LIMIT - 1:
         Checker.notify_operator("No queda espacio para muestras", Priority.CRITICAL)
@@ -83,6 +85,7 @@ def increment_stored_samples():
 def decrement_available_labels():
     global __available_labels
     if __available_labels == 0:
+        Screen_manager.get_root().destroy()
         raise Exception ("trying to decrement available labels when there are 0 available labels")
     if __available_labels == 1:
         Checker.notify_operator("Se han acabado las etiquetas", Priority.CRITICAL)
