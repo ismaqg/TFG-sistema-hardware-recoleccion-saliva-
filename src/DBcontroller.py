@@ -8,9 +8,10 @@ from datetime import datetime
 
 admins = []
 operators = []
+operators_emails = []
 
 def init_admins_and_operators_info():
-    global admins, operators
+    global admins, operators, operators_emails
     with open(constants.ADMINSID_PATH, 'r') as fd:
         reader = csv.reader(fd)
         for row in reader:
@@ -18,7 +19,11 @@ def init_admins_and_operators_info():
     with open(constants.OPERATORSID_PATH, 'r') as fd:
         reader = csv.reader(fd)
         for row in reader:
-            operators.append(row[0])        
+            operators.append(row[0])
+    with open(constants.OPERATORS_EMAILS_PATH, 'r') as fd:
+        reader = csv.reader(fd)
+        for row in reader:
+            operators_emails.append(row[0])
 
 def get_admins():
     global admins
@@ -31,6 +36,12 @@ def get_operators():
     if not operators: # operators is an empty list
         init_admins_and_operators_info()
     return operators
+
+def get_operators_emails():
+    global operators_emails
+    if not operators_emails: # operators_emails is an empty list
+        init_admins_and_operators_info()
+    return operators_emails
 
 
 # returns, in this order: available_kits, stored_samples and available_labels

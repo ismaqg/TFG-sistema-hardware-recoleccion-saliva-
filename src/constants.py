@@ -14,6 +14,7 @@ DB_USEINFO_PATH = "../res/database/info_uso.db"
 IMAGES_DIRECTORY = "../res/images/"
 ADMINSID_PATH = "../res/adminsAndOperators/admins.csv"
 OPERATORSID_PATH = "../res/adminsAndOperators/operators.csv"
+OPERATORS_EMAILS_PATH = "../res/adminsAndOperators/emails.csv"  # contains the operators emails to contact then in case of any problem
 AVAILABLE_RESOURCES_PATH = "../res/resources_data.csv"
 
 STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras que se pueden poner
@@ -22,6 +23,8 @@ NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     # TODO: ponerlo a la cantidad de etique
 
 SCREEN_WIDTH = get_monitors()[0].width
 SCREEN_HEIGHT = get_monitors()[0].height
+
+SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms

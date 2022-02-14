@@ -2,6 +2,9 @@ from tkinter import messagebox
 
 import os.path
 
+import smtplib
+from email.message import EmailMessage
+
 import Counters
 import constants
 import DBcontroller
@@ -31,8 +34,17 @@ def is_printer_alive():
 
 
 def notify_operator(problem_description, priority):
-    # TODO: ENVIAR CORREO OPERADOR CON EL PROBLEMA CRITICO. Lo de prioridad es para saber como de alarmante poner el asunto del correo 
-    pass
+    receiver_email = DBcontroller.get_operators_emails()
+
+    msg = EmailMessage()
+    msg['Subject'] = "[" + priority.name + "]"
+    msg['From'] = constants.SALIBANK_MAIN_EMAIL
+    msg['To'] = ', '.join(receiver_email)
+    msg.set_content(problem_description)
+
+    server = smtplib.SMTP('localhost')
+    server.send_message(msg)
+    server.quit()
 
 
 

@@ -30,6 +30,7 @@ Checker.check_not_max_stored_samples_at_turningON()
 
 # os.chmod(constants.PRINTER_PORT, 0o666 )  # give RW permissions to the label printer  # TODO: Uncomment for raspberry
 
+
 Screen_saver.getInstance().go_to_screen_saver()
 
 
