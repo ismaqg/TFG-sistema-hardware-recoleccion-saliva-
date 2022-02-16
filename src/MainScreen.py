@@ -82,7 +82,7 @@ class MainScreen(ABC): # abstract
     def _quit_program():  # only accessible from operator and admin
         shutdown = messagebox.askokcancel("APAGAR", "El programa se cerrará y la máquina se apagará")
         if shutdown == True:
-            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "APLICACIÓN APAGADA" )
+            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "PROGRAM SHUTDOWN" )
             Screen_manager.get_root().destroy()
             # TODO: hacer un shutdown now de la rpi por codigo (y en el bashrc de la rpi hacer que se lance esta aplicacion directamente)    
 

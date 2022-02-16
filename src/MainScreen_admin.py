@@ -48,9 +48,8 @@ class MainScreen_admin(MainScreen):  # singleton
         messagebox.showinfo("Reponer kits", "Ya puedes abrir la puerta lateral y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK")
         Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
         self.__remaining_kits_info.config( text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR REPUSO KITS")
+        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR REPLENISHED KITS")
         messagebox.showinfo("Kits repuestos", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
-        # TODO: asegurarme de si el refill de kits se hace manual (abrir una puertecita manualmente) y no hay que hacer nada con el arduino de ahí. En caso de que haya que hacer algo, tengo que decirle aquí al arduino que lo haga
         # TODO futuro: Que el que hace refill tenga la posibilidad de indicar cuantos AÑADE, por si no llena el deposito entero. En ese caso, el valor de kits será el que había más el añadido
 
     def __collect_samples(self):
@@ -59,17 +58,15 @@ class MainScreen_admin(MainScreen):  # singleton
         self.__stored_samples_info["text"] = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
         self.__stored_samples_info["fg"] = Counters.get_stored_samples_fg_color()
         self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR RECOGIO MUESTRAS")
+        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES")
         messagebox.showinfo("Muestras recogidas", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
-        # TODO: asegurarme de si el refill de etiquetas se hace manual (abrir una puertecita manualmente) y no hay que hacer nada con el arduino de ahí. En caso de que haya que hacer algo, tengo que decirle aquí al arduino que lo haga 
 
     def __refill_labels(self):
         messagebox.showinfo("Reponer etiquetas", "Ya puedes abrir para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK")
         Counters.set_available_labels(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL)
         self.__remaining_labels_info.config( text = "Etiquetas restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR REPUSO ETIQUETAS")
+        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR REPLENISHED LABELS")
         messagebox.showinfo("Etiquetas repuestas", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
-        # TODO: asegurarme de si el refill de etiquetas se hace manual (abrir una puertecita manualmente) y no hay que hacer nada con el arduino de ahí. En caso de que haya que hacer algo, tengo que decirle aquí al arduino que lo haga 
 
 
     # override abstract parent method

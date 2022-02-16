@@ -37,7 +37,7 @@ PREVIOUS_INFO_SALIVA_TEST = """Deben transcurrir un mínimo de 30 minutos entre 
 
 Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero recoger el kit".
 
-Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""
+Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""  # TODO: Quitarlo de constantes y ponerlo en los archivos de lenguajes
 
 
 CORRECT_PASSWORD_ENCRIPTED = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"  # The password is "1234" and this hash is the encription of "1234" with sha256. Remember to delete this comment in the final version of SALIBANK (this is prototype) because here is shown the password decripted 

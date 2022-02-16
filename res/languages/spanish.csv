@@ -1,0 +1,86 @@
+Bienvenido a SALIBANK
+Pase su tarjeta sanitaria individual por el lector de código de barras
+Cambiar Idioma
+NO PUEDE INICIAR SESIÓN
+No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas
+IDENTIFICACIÓN ERRÓNEA
+Por favor, identifíquese con su tarjeta sanitaria individual
+ACCESO DENEGADO
+Acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numérica correcta
+Introduce tu\nclave de acceso
+APAGAR
+El programa se cerrará y la máquina se apagará
+ADMINISTRADOR
+OPERADOR
+CERRAR\nSESIÓN
+Etiquetas restantes: 
+Kits restantes: 
+Muestras entregadas: 
+ de 
+REPONER\nKITS
+REPONER\nETIQUETAS\nIMPRESORA
+RECOGER\nMUESTRAS
+CONSULTAR\nBASE DE DATOS
+Reponer kits
+Ya puedes abrir la puerta lateral y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK
+Kits repuestos
+Muestras recogidas
+Etiquetas repuestas
+Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.
+Recoger muestras
+Ya puedes abrir la puerta lateral y recoger las muestras entregadas por los usuarios. Cuando lo hayas hecho, pulsa OK
+Reponer etiquetas
+Ya puedes abrir para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK
+CERRAR SESIÓN
+¿Has acabado de utilizar la máquina?
+USUARIO 
+Cerrar\nsesión\n(SALIR)
+OBTENER KIT
+ENTREGAR MUESTRA
+¿QUÉ\nHAGO?
+AYUDA
+INFORMACIÓN DE USO
+"""””
+        Primero, en caso de que no tenga un kit de recolección de muestra de saliva, debe presionar el botón de 'OBTENER KIT'. \n
+        Después, debe hacer click sobre el botón de 'ENTREGAR MUESTRA'. Allí se le mostrarán los pasos que debe seguir.  
+        ""””"
+BD: 
+Cambiar\nBase de Datos
+VOLVER\nATRÁS
+OBTENER KIT
+INFORMACIÓN PREVIA:
+Cumplo los requisitos.\n Quiero recoger el kit
+RECOGIDA KIT
+Ya puedes recoger el kit del depósito lateral. Será redirigido al menú de entrega de muestra de saliva, donde se le mostrarán las instrucciones
+PASO
+SIGUIENTE
+IMPRIMIR ETIQUETA
+ENTREGADO
+MUESTRA ENTREGADA
+La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación
+ERROR IMPRESIÓN
+La impresora no responde o no quedan etiquetas. Se cerrará su sesión y avisaremos a un técnico. Vuelva más tarde, por favor
+Recuerda que para que la muestra de saliva sea válida, no debes haber ingerido nada en los últimos 30 minutos.
+"""""""Deben transcurrir un mínimo de 30 minutos entre la última vez que ingirió cualquier tipo de comida o líquido y la recogida de saliva. 
+
+Si ha transcurrido ese tiempo, pulse el botón de ""Cumplo los requisitos. Quiero recoger el kit"".
+
+Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""""""
+ERROR RECOGIDA KIT
+Lo sentimos, se ha producido un error interno. Se cerrará su sesión, vuelva más tarde por favor.
+ERROR. NO HAY ETIQUETAS
+El programa no puede iniciarse porque no quedan etiquetas en la impresora. Por favor, introduce un nuevo rollo en ella. Haz click en OK cuando lo hayas hecho
+REPOSICIÓN DE ETIQUETAS
+Estás seguro de haber introducido un nuevo rollo de etiquetas?
+ERROR. NO HAY KITS
+El programa no puede iniciarse porque no queda ningún kit que puedan utilizar los usuarios. Por favor, rellena el depósito de kits. Haz click en OK cuando lo hayas hecho
+REPOSICIÓN DE KITS
+Estas seguro de haber rellenado completamente el depósito de kits disponibles?
+ERROR. DEPOSITO LLENO
+El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Por favor, vacía el depósito de muestras. Haz click en OK cuando lo hayas hecho
+VACIADO DE DEPÓSITO
+Estas seguro de haber vaciado completamente el depósito de muestras?
+NO DISPONIBLE
+CERRAR PROGRAMA
+ACCESO DENEGADO
+Clave errónea
