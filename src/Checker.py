@@ -73,7 +73,7 @@ def check_available_labels_at_turningON():
             raise Exception("PROGRAM CAN'T START WITHOUT LABELS ON THE PRINTER")
         else:
             Counters.set_available_labels(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL)
-            DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPUSO ETIQUETAS EN EL ENCENDIDO, PARA HACER OPERABLE LA MÁQUINA")
+            DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPLENISHED LABELS AT POWER UP")
 
 #ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_available_kits_at_turningON():
@@ -86,20 +86,20 @@ def check_available_kits_at_turningON():
             raise Exception("PROGRAM CAN'T START WITHOUT AVAILABLE KITS")
         else:
             Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
-            DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPUSO KITS EN EL ENCENDIDO, PARA HACER OPERABLE LA MÁQUINA")
+            DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPLENISHED KITS AT POWER UP")
 
 # ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_not_max_stored_samples_at_turningON():
     # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
         messagebox.showerror("ERROR. DEPOSITO LLENO", "El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Por favor, vacía el depósito de muestras. Haz click en OK cuando lo hayas hecho")
-        response = messagebox.askyesno("REPOSICIÓN DE KITS", "Estas seguro de haber vaciado completamente el depósito de muestras?")
+        response = messagebox.askyesno("VACIADO DE DEPÓSITO", "Estas seguro de haber vaciado completamente el depósito de muestras?")
         if response == False:
             Screen_manager.get_root().destroy()
             raise Exception("PROGRAM CAN'T START WITH FULL SALIVA SAMPLE CONTAINER")
         else:
             Counters.set_stored_samples(0)
-            DBcontroller.add_new_event("-", "OPERADOR/ADMIN VACIÓ DEPÓSITO MUESTRAS EN EL ENCENDIDO, PARA HACER OPERABLE LA MÁQUINA")
+            DBcontroller.add_new_event("-", "OPERADOR/ADMIN EMPTY SAMPLE TANK AT POWER UP")
 
 
 def check_available_resources():

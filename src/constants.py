@@ -16,6 +16,9 @@ ADMINSID_PATH = "../res/adminsAndOperators/admins.csv"
 OPERATORSID_PATH = "../res/adminsAndOperators/operators.csv"
 OPERATORS_EMAILS_PATH = "../res/adminsAndOperators/emails.csv"  # contains the operators emails to contact then in case of any problem
 AVAILABLE_RESOURCES_PATH = "../res/resources_data.csv"
+SPANISH_LANGUAGE_PATH = "../res/languages/spanish.csv"
+CATALAN_LANGUAGE_PATH = "../res/languages/catalan.csv"
+ENGLISH_LANGUAGE_PATH = "../res/languages/english.csv"
 
 STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras que se pueden poner
 AVAILABLE_KITS_AFTER_REFILL = 20    # TODO: ponerlo a la cantidad de kits disponibles que vayan a caber en la maquina

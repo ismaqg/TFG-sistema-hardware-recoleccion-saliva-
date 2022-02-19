@@ -6,6 +6,7 @@ import Screen_manager
 import constants
 import DBcontroller
 import Checker
+import Language_controller
 from Not_available import Not_available
 from Person import ActivePerson
 from MainScreen_admin import MainScreen_admin
@@ -38,7 +39,7 @@ class LogIn_screen():  # singleton
 
             self.__login_screen_frame = Screen_manager.init_screen_frame()            
 
-            login_title = Label(self.__login_screen_frame, text="Bienvenido a SALIBANK", font = (constants.CATSALUT_TEXT_FONT, 28, 'bold'), bg = constants.CATSALUT_COLOR)
+            login_title = Label(self.__login_screen_frame, text = Language_controller.get_message("bienvenido a SALIBANK"), font = (constants.CATSALUT_TEXT_FONT, 28, 'bold'), bg = constants.CATSALUT_COLOR)
             login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
             self.__login_image = ImageTk.PhotoImage(Image.open(constants.IMAGES_DIRECTORY + "TSIdummy.png"))
             login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)

@@ -61,6 +61,16 @@ def write_available_resources_csv(available_kits, stored_samples, available_labe
         writer.writerows(data)
 
 
+def get_messages(language_file_path):
+    messages = []
+    with open(language_file_path, 'r') as fd:
+        reader = csv.reader(fd)
+        for row in reader:
+            messages.append(row[0])
+    return messages
+
+
+
 def create_DBs_if_not_exist():
     # saliva samples submision information DB:
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)

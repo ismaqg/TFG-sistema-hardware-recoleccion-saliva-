@@ -1,18 +1,18 @@
 Bienvenido a SALIBANK
-Pase su tarjeta sanitaria individual por el lector de cÛdigo de barras
+Pase su tarjeta sanitaria individual por el lector de c√≥digo de barras
 Cambiar Idioma
-NO PUEDE INICIAR SESI”N
-No puede iniciar sesiÛn por problemas internos. Vuelva a probarlo en un rato. Los operarios ya est·n avisados de los problemas
-IDENTIFICACI”N ERR”NEA
-Por favor, identifÌquese con su tarjeta sanitaria individual
+NO PUEDE INICIAR SESI√ìN
+No puede iniciar sesi√≥n por problemas internos. Vuelva a probarlo en un rato. Los operarios ya est√°n avisados de los problemas
+IDENTIFICACI√ìN ERR√ìNEA
+Por favor, identif√≠quese con su tarjeta sanitaria individual
 ACCESO DENEGADO
-Acceso errÛneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numÈrica correcta
+Acceso err√≥neo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave num√©rica correcta
 Introduce tu\nclave de acceso
 APAGAR
-El programa se cerrar· y la m·quina se apagar·
+El programa se cerrar√° y la m√°quina se apagar√°
 ADMINISTRADOR
 OPERADOR
-CERRAR\nSESI”N
+CERRAR\nSESI√ìN
 Etiquetas restantes: 
 Kits restantes: 
 Muestras entregadas: 
@@ -23,64 +23,61 @@ RECOGER\nMUESTRAS
 CONSULTAR\nBASE DE DATOS
 Reponer kits
 Ya puedes abrir la puerta lateral y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK
-Kits repuestos
-Muestras recogidas
-Etiquetas repuestas
-Gracias! Puedes seguir utilizando la aplicaciÛn, pero si ya has acabado no olvides cerrar sesiÛn.
 Recoger muestras
 Ya puedes abrir la puerta lateral y recoger las muestras entregadas por los usuarios. Cuando lo hayas hecho, pulsa OK
 Reponer etiquetas
 Ya puedes abrir para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK
-CERRAR SESI”N
-øHas acabado de utilizar la m·quina?
+Kits repuestos
+Muestras recogidas
+Etiquetas repuestas
+Gracias! Puedes seguir utilizando la aplicaci√≥n, pero si ya has acabado no olvides cerrar sesi√≥n.
+CERRAR SESI√ìN
+¬øHas acabado de utilizar la m√°quina?
 USUARIO 
-Cerrar\nsesiÛn\n(SALIR)
+Cerrar\nsesi√≥n\n(SALIR)
 OBTENER KIT
 ENTREGAR MUESTRA
-øQU…\nHAGO?
+¬øQU√â\nHAGO?
 AYUDA
-INFORMACI”N DE USO
-"""îî
-        Primero, en caso de que no tenga un kit de recolecciÛn de muestra de saliva, debe presionar el botÛn de 'OBTENER KIT'. \n
-        DespuÈs, debe hacer click sobre el botÛn de 'ENTREGAR MUESTRA'. AllÌ se le mostrar·n los pasos que debe seguir.  
-        ""îî"
+INFORMACI√ìN DE USO
+"""Primero, en caso de que no tenga un kit de recolecci√≥n de muestra de saliva, debe presionar el bot√≥n de 'OBTENER KIT'. \n
+Despu√©s, debe hacer click sobre el bot√≥n de 'ENTREGAR MUESTRA'. All√≠ se le mostrar√°n los pasos que debe seguir.  """
 BD: 
 Cambiar\nBase de Datos
-VOLVER\nATR¡S
+VOLVER\nATR√ÅS
 OBTENER KIT
-INFORMACI”N PREVIA:
+INFORMACI√ìN PREVIA:
 Cumplo los requisitos.\n Quiero recoger el kit
 RECOGIDA KIT
-Ya puedes recoger el kit del depÛsito lateral. Ser· redirigido al men˙ de entrega de muestra de saliva, donde se le mostrar·n las instrucciones
+Ya puedes recoger el kit del dep√≥sito lateral. Ser√° redirigido al men√∫ de entrega de muestra de saliva, donde se le mostrar√°n las instrucciones
 PASO
 SIGUIENTE
 IMPRIMIR ETIQUETA
 ENTREGADO
 MUESTRA ENTREGADA
-La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicaciÛn
-ERROR IMPRESI”N
-La impresora no responde o no quedan etiquetas. Se cerrar· su sesiÛn y avisaremos a un tÈcnico. Vuelva m·s tarde, por favor
-Recuerda que para que la muestra de saliva sea v·lida, no debes haber ingerido nada en los ˙ltimos 30 minutos.
-"""""""Deben transcurrir un mÌnimo de 30 minutos entre la ˙ltima vez que ingiriÛ cualquier tipo de comida o lÌquido y la recogida de saliva. 
+La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicaci√≥n
+ERROR IMPRESI√ìN
+La impresora no responde o no quedan etiquetas. Se cerrar√° su sesi√≥n y avisaremos a un t√©cnico. Vuelva m√°s tarde, por favor
+Recuerda que para que la muestra de saliva sea v√°lida, no debes haber ingerido nada en los √∫ltimos 30 minutos.
+"""""""Deben transcurrir un m√≠nimo de 30 minutos entre la √∫ltima vez que ingiri√≥ cualquier tipo de comida o l√≠quido y la recogida de saliva. 
 
-Si ha transcurrido ese tiempo, pulse el botÛn de ""Cumplo los requisitos. Quiero recoger el kit"".
+Si ha transcurrido ese tiempo, pulse el bot√≥n de ""Cumplo los requisitos. Quiero recoger el kit"".
 
-Si NO ha transcurrido ese tiempo, retorne al men˙ anterior y cierre sesiÛn. Vuelva m·s tarde."""""""
+Si NO ha transcurrido ese tiempo, retorne al men√∫ anterior y cierre sesi√≥n. Vuelva m√°s tarde."""""""
 ERROR RECOGIDA KIT
-Lo sentimos, se ha producido un error interno. Se cerrar· su sesiÛn, vuelva m·s tarde por favor.
+Lo sentimos, se ha producido un error interno. Se cerrar√° su sesi√≥n, vuelva m√°s tarde por favor.
 ERROR. NO HAY ETIQUETAS
 El programa no puede iniciarse porque no quedan etiquetas en la impresora. Por favor, introduce un nuevo rollo en ella. Haz click en OK cuando lo hayas hecho
-REPOSICI”N DE ETIQUETAS
-Est·s seguro de haber introducido un nuevo rollo de etiquetas?
+REPOSICI√ìN DE ETIQUETAS
+Est√°s seguro de haber introducido un nuevo rollo de etiquetas?
 ERROR. NO HAY KITS
-El programa no puede iniciarse porque no queda ning˙n kit que puedan utilizar los usuarios. Por favor, rellena el depÛsito de kits. Haz click en OK cuando lo hayas hecho
-REPOSICI”N DE KITS
-Estas seguro de haber rellenado completamente el depÛsito de kits disponibles?
+El programa no puede iniciarse porque no queda ning√∫n kit que puedan utilizar los usuarios. Por favor, rellena el dep√≥sito de kits. Haz click en OK cuando lo hayas hecho
+REPOSICI√ìN DE KITS
+Estas seguro de haber rellenado completamente el dep√≥sito de kits disponibles?
 ERROR. DEPOSITO LLENO
-El programa no puede iniciarse porque el depÛsito de muestras est· lleno y necesita vaciarse. Por favor, vacÌa el depÛsito de muestras. Haz click en OK cuando lo hayas hecho
-VACIADO DE DEP”SITO
-Estas seguro de haber vaciado completamente el depÛsito de muestras?
+El programa no puede iniciarse porque el dep√≥sito de muestras est√° lleno y necesita vaciarse. Por favor, vac√≠a el dep√≥sito de muestras. Haz click en OK cuando lo hayas hecho
+VACIADO DE DEP√ìSITO
+Estas seguro de haber vaciado completamente el dep√≥sito de muestras?
 NO DISPONIBLE
 CERRAR PROGRAMA
-ACCESO DENEGADO
-Clave errÛnea
+Clave err√≥nea

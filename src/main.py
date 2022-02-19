@@ -6,6 +6,8 @@ import DBcontroller
 import Counters
 from Screen_saver import *
 import Checker
+import Language_controller
+from Language_controller import Language
 
 
 
@@ -27,6 +29,8 @@ Checker.check_hardware_usable_at_turningON()
 Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()
 Checker.check_not_max_stored_samples_at_turningON()
+
+Language_controller.set_current_language(Language.SPANISH)
 
 # os.chmod(constants.PRINTER_PORT, 0o666 )  # give RW permissions to the label printer  # TODO: Uncomment for raspberry
 
