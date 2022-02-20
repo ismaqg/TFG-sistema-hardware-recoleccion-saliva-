@@ -43,9 +43,9 @@ class LogIn_screen():  # singleton
             login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
             self.__login_image = ImageTk.PhotoImage(Image.open(constants.IMAGES_DIRECTORY + "TSIdummy.png"))
             login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
-            login_info = Label(self.__login_screen_frame, text="Pase su tarjeta sanitaria individual por el lector de código de barras",font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_THIRD_TITLE_TEXT_SIZE, "bold"), bg = constants.CATSALUT_COLOR)
+            login_info = Label(self.__login_screen_frame, text = Language_controller.get_message("instrucciones login"),font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_THIRD_TITLE_TEXT_SIZE, "bold"), bg = constants.CATSALUT_COLOR)
             self.__login_input_entry = Entry(self.__login_screen_frame, textvariable = self.__input_variable, borderwidth=0,fg='white', highlightthickness = 0, insertbackground = "white") # invisible
-            self.__change_language = Button(self.__login_screen_frame, text="Cambiar Idioma", font = (constants.CATSALUT_TEXT_FONT, constants.SECONDARY_BUTTON_TEXT_SIZE), command = Language_screen.getInstance().go_to_language_screen) 
+            self.__change_language = Button(self.__login_screen_frame, text = Language_controller.get_message("cambiar idioma"), font = (constants.CATSALUT_TEXT_FONT, constants.SECONDARY_BUTTON_TEXT_SIZE), command = Language_screen.getInstance().go_to_language_screen) 
 
             login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
             login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')
@@ -93,7 +93,7 @@ class LogIn_screen():  # singleton
                 if Checker.check_available_resources() == False:  # cannot login because there are not available resources
                     # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
                     ActivePerson.destroyCurrent()
-                    messagebox.showerror("NO PUEDE INICIAR SESIÓN", "No puede iniciar sesión por problemas internos. Vuelva a probarlo en un rato. Los operarios ya están avisados de los problemas")
+                    messagebox.showerror(Language_controller.get_message("no puede iniciar sesion (cabecera)"), Language_controller.get_message("no puede iniciar sesion (cuerpo)"))
                     Not_available.getInstance().go_to_not_available_screen()
                 else:
                     DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
@@ -112,7 +112,7 @@ class LogIn_screen():  # singleton
             DBcontroller.add_new_event(self.__input_variable.get(), "INVALID LOGIN")
             self.__login_input_entry.delete(0,'end')
             self.__input_variable.set('')
-            messagebox.showwarning("IDENTIFICACIÓN ERRÓNEA", "Por favor, identifíquese con su tarjeta sanitaria individual")
+            messagebox.showwarning(Language_controller.get_message("identificacion erronea (cabecera)"), Language_controller.get_message("identificacion erronea (cuerpo)"))
             # start again the inactivity countdown:
             from Screen_saver import Screen_saver  # here to avoid circular dependency!
             self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)            
@@ -163,7 +163,7 @@ class LogIn_screen():  # singleton
             self.__change_language["state"]= NORMAL  # enable the change language button
             DBcontroller.add_new_event(person.get_CIP(), person.get_status() + " LOGIN FAIL. WRONG SECURITY PASSWORD")
             ActivePerson.destroyCurrent()  # destroy current admin / operator. (a current admin / operator was created when the 1st identification step succeed, but the 2nd step has failed) 
-            messagebox.showwarning("ACCESO DENEGADO", "Acceso erróneo. Por favor, vuelva a intentar acreditarse escaneando su tarjeta e introduciendo la clave numérica correcta")
+            messagebox.showwarning(Language_controller.get_message("acceso denegado (cabecera)"), Language_controller.get_message("acceso denegado (cuerpo)"))
             # start again the inactivity countdown (to show again the saver):
             from Screen_saver import Screen_saver  # here to avoid circular dependency!
             self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 

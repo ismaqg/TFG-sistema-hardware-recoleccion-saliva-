@@ -64,9 +64,9 @@ def write_available_resources_csv(available_kits, stored_samples, available_labe
 def get_messages(language_file_path):
     messages = []
     with open(language_file_path, 'r') as fd:
-        reader = csv.reader(fd)
+        reader = csv.reader(fd, delimiter=';')  # my csv is using ';' as delimiter, but if no delimiter is speficied, python think that ',' is also a valid delimiter (which, in this csv, will make the program to work abnormally because I'm using ',' in the middle of some rows). This is why we need to specify that ';' is the only valid separator/delimiter
         for row in reader:
-            messages.append(row[0])
+            messages.append(row[0].replace('\\n', '\n'))  # the 'replace' is because \n in the csv is stored as \\n
     return messages
 
 

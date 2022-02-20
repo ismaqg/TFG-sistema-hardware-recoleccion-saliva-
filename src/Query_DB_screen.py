@@ -4,6 +4,7 @@ from Person import ActivePerson
 import Screen_manager
 import constants
 import DBcontroller
+import Language_controller
 
 
 # only admins and users have access to this screen
@@ -30,9 +31,9 @@ class Query_DB_screen: # singleton
 
             self.__current_DB = "info_uso"
 
-            self.__title = Label(self.__DBscr_header_frame, text = "BD: " + self.__current_DB, bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
-            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = "Cambiar\nBase de Datos", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__change_displayed_DB)
-            self.__return_b = Button(self.__DBscr_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
+            self.__title = Label(self.__DBscr_header_frame, text = Language_controller.get_message("base de datos:") + self.__current_DB, bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__change_displayed_DB_b = Button(self.__DBscr_header_frame, text = Language_controller.get_message("cambiar de base de datos"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__change_displayed_DB)
+            self.__return_b = Button(self.__DBscr_header_frame, text = Language_controller.get_message("volver atrás"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
             self.__change_displayed_DB_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10 , 5), pady = 10)

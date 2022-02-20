@@ -73,11 +73,11 @@ def increment_stored_samples():
         Checker.notify_operator("No queda espacio para muestras", Priority.CRITICAL)
         DBcontroller.add_new_event("-", "NO QUEDA ESPACIO PARA MUESTRAS")
     elif float(__stored_samples) < int((1 - constants.ALARM_STOCK_THRESHOLD) * constants.STORED_SAMPLES_LIMIT)  and  float(__stored_samples-1) >= int((1 - constants.WARNING_STOCK_THRESHOLD) * constants.STORED_SAMPLES_LIMIT):  # the increase in storedsamples has made us just reach the alarm threshold
-        Checker.notify_operator("Se ha llenado más del del " + (1-constants.ALARM_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva", Priority.HIGH)
-        DBcontroller.add_new_event("-", "Se ha llenado más del del " + (1-constants.ALARM_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva")
+        Checker.notify_operator("Se ha llenado más del del " + (1-constants.ALARM_STOCK_THRESHOLD)*100 + " porciento del espacio para muestras de saliva", Priority.HIGH)
+        DBcontroller.add_new_event("-", "Se ha llenado más del del " + (1-constants.ALARM_STOCK_THRESHOLD)*100 + " porciento del espacio para muestras de saliva")
     elif float(__stored_samples) < int((1 - constants.ALARM_STOCK_THRESHOLD) * constants.STORED_SAMPLES_LIMIT)  and  float(__stored_samples-1) >= int((1 - constants.WARNING_STOCK_THRESHOLD) * constants.STORED_SAMPLES_LIMIT):  # the increase in storedsamples has made us just reach the warning threshold
-        Checker.notify_operator("Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva", Priority.MEDIUM)
-        DBcontroller.add_new_event("-", "Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " del espacio para muestras de saliva")
+        Checker.notify_operator("Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " porciento del espacio para muestras de saliva", Priority.MEDIUM)
+        DBcontroller.add_new_event("-", "Se ha llenado más del del " + (1-constants.WARNING_STOCK_THRESHOLD)*100 + " porciento del espacio para muestras de saliva")
     __stored_samples += 1
     DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
 

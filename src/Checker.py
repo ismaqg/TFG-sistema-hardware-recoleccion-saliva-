@@ -9,6 +9,7 @@ import Counters
 import constants
 import DBcontroller
 import Screen_manager
+import Language_controller
 from Person import ActivePerson
 from enum import Enum
 
@@ -66,8 +67,8 @@ def check_hardware_usable_at_turningON():
 def check_available_labels_at_turningON():
     # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
     if Counters.get_available_labels() == 0:
-        messagebox.showerror("ERROR. NO HAY ETIQUETAS", "El programa no puede iniciarse porque no quedan etiquetas en la impresora. Por favor, introduce un nuevo rollo en ella. Haz click en OK cuando lo hayas hecho")
-        response = messagebox.askyesno("REPOSICIÓN DE ETIQUETAS", "Estas seguro de haber introducido un nuevo rollo de etiquetas?")
+        messagebox.showerror(Language_controller.get_message("necesaria reposicion etiquetas (cabecera)"), Language_controller.get_message("necesaria reposicion etiquetas (cuerpo)"))
+        response = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion etiquetas (cabecera)"), Language_controller.get_message("comprobacion reposicion etiquetas (cuerpo)"))
         if response == False:
             Screen_manager.get_root().destroy()
             raise Exception("PROGRAM CAN'T START WITHOUT LABELS ON THE PRINTER")
@@ -79,8 +80,8 @@ def check_available_labels_at_turningON():
 def check_available_kits_at_turningON():
     # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
     if Counters.get_available_kits() == 0:
-        messagebox.showerror("ERROR. NO HAY KITS", "El programa no puede iniciarse porque no queda ningún kit que puedan utilizar los usuarios. Por favor, rellena el depósito de kits. Haz click en OK cuando lo hayas hecho")
-        response = messagebox.askyesno("REPOSICIÓN DE KITS", "Estas seguro de haber rellenado completamente el depósito de kits disponibles?")
+        messagebox.showerror(Language_controller.get_message("necesaria reposicion kits (cabecera)"), Language_controller.get_message("necesaria reposicion kits (cuerpo)"))
+        response = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion kits (cabecera)"), Language_controller.get_message("comprobacion reposicion kits (cuerpo)"))
         if response == False:
             Screen_manager.get_root().destroy()
             raise Exception("PROGRAM CAN'T START WITHOUT AVAILABLE KITS")
@@ -92,8 +93,8 @@ def check_available_kits_at_turningON():
 def check_not_max_stored_samples_at_turningON():
     # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
-        messagebox.showerror("ERROR. DEPOSITO LLENO", "El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Por favor, vacía el depósito de muestras. Haz click en OK cuando lo hayas hecho")
-        response = messagebox.askyesno("VACIADO DE DEPÓSITO", "Estas seguro de haber vaciado completamente el depósito de muestras?")
+        messagebox.showerror(Language_controller.get_message("necesario vaciado deposito muestras (cabecera)"), Language_controller.get_message("necesario vaciado deposito muestras (cuerpo)"))
+        response = messagebox.askyesno(Language_controller.get_message("comprobacion vaciado deposito muestras (cabecera)"), Language_controller.get_message("comprobacion vaciado deposito muestras (cuerpo)"))
         if response == False:
             Screen_manager.get_root().destroy()
             raise Exception("PROGRAM CAN'T START WITH FULL SALIVA SAMPLE CONTAINER")

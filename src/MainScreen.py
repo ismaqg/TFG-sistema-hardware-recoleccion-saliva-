@@ -5,6 +5,7 @@ from tkinter import messagebox
 from Person import ActivePerson  # to make abstract classes
 import Screen_manager
 import DBcontroller
+import Language_controller
 
 # The idea of ​​this class is that it will contain the frame of the main screen, but 3 classes will inherit from it, which must
 # have access to that frame. Those 3 classes that inherit are singleton and when they are instantiated for the first and only time
@@ -80,7 +81,7 @@ class MainScreen(ABC): # abstract
 
     @staticmethod
     def _quit_program():  # only accessible from operator and admin
-        shutdown = messagebox.askokcancel("APAGAR", "El programa se cerrará y la máquina se apagará")
+        shutdown = messagebox.askokcancel(Language_controller.get_message("apagar"), Language_controller.get_message("el programa se cerrará y la máquina se apagará"))
         if shutdown == True:
             DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "PROGRAM SHUTDOWN" )
             Screen_manager.get_root().destroy()

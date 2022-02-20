@@ -9,6 +9,7 @@ from SubmitSample_screen import SubmitSample_screen
 import constants
 import DBcontroller
 import Screen_manager
+import Language_controller
 
 class MainScreen_user(MainScreen):  # singleton 
 
@@ -29,22 +30,19 @@ class MainScreen_user(MainScreen):  # singleton
 
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
-            self.__title = Label(MainScreen._ms_header_frame, text = "USUARIO " + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "Cerrar\nsesión\n(SALIR)", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), fg="red", command = self.logOut_button) 
+            self.__title = Label(MainScreen._ms_header_frame, text = Language_controller.get_message("título usuario") + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("texto botón cerrar sesión para usuario"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), fg="red", command = self.logOut_button) 
 
-            self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = "OBTENER KIT", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
-            self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = "ENTREGAR MUESTRA", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
-            self.__info_b = Button(MainScreen._ms_body_frame, text = "¿QUÉ\nHAGO?", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__show_usage_info)
-            self.__help_b = Button(MainScreen._ms_body_frame, text = "AYUDA", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
+            self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("obtener un kit"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
+            self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("entregar una muestra"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
+            self.__info_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("¿qué hago?"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__show_usage_info)
+            self.__help_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("ayuda"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
 
             MainScreen_user.__instance = self
 
 
     def __show_usage_info(self):
-        messagebox.showinfo("INFORMACIÓN DE USO", """
-        Primero, en caso de que no tenga un kit de recolección de muestra de saliva, debe presionar el botón de 'OBTENER KIT'. \n
-        Después, debe hacer click sobre el botón de 'ENTREGAR MUESTRA'. Allí se le mostrarán los pasos que debe seguir.  
-        """)
+        messagebox.showinfo(Language_controller.get_message("respuesta al ¿qué hago? (cabecera)"), Language_controller.get_message("respuesta al ¿qué hago? (cuerpo)"))
         
 
     # override abstract parent method
@@ -86,7 +84,7 @@ class MainScreen_user(MainScreen):  # singleton
 
     # override abstract parent method
     def logOut_button(self):
-        logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
+        logout = messagebox.askyesno(Language_controller.get_message("mensaje cierre sesión (cabecera)"), Language_controller.get_message("mensaje cierre sesión (cuerpo)"))
         if logout == True:
             self.erase_mainScreen_contents()
             ActivePerson.getCurrent().logOut()

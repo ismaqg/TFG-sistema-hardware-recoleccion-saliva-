@@ -4,6 +4,7 @@ from tkinter import messagebox
 import hashlib
 
 import constants
+import Language_controller
 
 
 
@@ -28,7 +29,7 @@ class Key_security:
 
 
         # label and entry of the new window
-        title = Label(self.__key_window, text = "Introduce tu\nclave de acceso", font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
+        title = Label(self.__key_window, text = Language_controller.get_message("introduce tu clave de acceso"), font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
         title.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW')
         self.__entry = Entry(self.__key_window, borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
         self.__entry.grid(row = 1, column = 0, columnspan = 3, sticky = 'NSEW')

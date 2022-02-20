@@ -8,6 +8,7 @@ import Counters
 import constants
 import DBcontroller
 import Screen_manager
+import Language_controller
 
 class MainScreen_admin(MainScreen):  # singleton 
 
@@ -28,53 +29,53 @@ class MainScreen_admin(MainScreen):  # singleton
 
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
-            self.__title = Label(MainScreen._ms_header_frame, text = "ADMINISTRADOR", bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
-            self.__logout_b = Button(MainScreen._ms_header_frame, text = "CERRAR\nSESIÓN", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.logOut_button) 
-            self.__quit_program_b = Button(MainScreen._ms_header_frame, text = "APAGAR", bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = super()._quit_program)
+            self.__title = Label(MainScreen._ms_header_frame, text = Language_controller.get_message("título administrador"), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__logout_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("texto botón cerrar sesión para admin/operador"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.logOut_button) 
+            self.__quit_program_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("apagar"), bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = super()._quit_program)
 
-            self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = "Etiquetas restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
-            self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
-            self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) + ")", font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color())
+            self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
+            self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+            self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) + ")", font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color())
 
-            self.__refill_kits_b = Button(MainScreen._ms_body_frame, text = "REPONER\nKITS", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__refill_kits)
-            self.__refill_labels_b = Button(MainScreen._ms_body_frame, text = "REPONER\nETIQUETAS\nIMPRESORA", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__refill_labels)
-            self.__collect_samples_b = Button(MainScreen._ms_body_frame, text = "RECOGER\nMUESTRAS", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__collect_samples)
-            self.__check_DB_b = Button(MainScreen._ms_body_frame, text = "CONSULTAR\nBASE DE DATOS", font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Query_DB_screen.getInstance().go_to_query_DB_screen) # no need to grid_forget() when switching to the DB_screen, because if you then go back from there to main_screen, the buttons you should see are the same
+            self.__refill_kits_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("reponer kits"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__refill_kits)
+            self.__refill_labels_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("reponer etiquetas"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__refill_labels)
+            self.__collect_samples_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("recoger muestras"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__collect_samples)
+            self.__check_DB_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("consultar BD"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Query_DB_screen.getInstance().go_to_query_DB_screen) # no need to grid_forget() when switching to the DB_screen, because if you then go back from there to main_screen, the buttons you should see are the same
 
             MainScreen_admin.__instance = self
 
 
     def __refill_kits(self):  
-        messagebox.showinfo("Reponer kits", "Ya puedes abrir la puerta lateral y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK")
+        messagebox.showinfo(Language_controller.get_message("efectuar reposicion kits (cabecera)"), Language_controller.get_message("efectuar reposicion kits (cuerpo)"))
         Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
-        self.__remaining_kits_info.config( text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+        self.__remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR REPLENISHED KITS")
-        messagebox.showinfo("Kits repuestos", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
+        messagebox.showinfo( Language_controller.get_message("kits repuestos (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
         # TODO futuro: Que el que hace refill tenga la posibilidad de indicar cuantos AÑADE, por si no llena el deposito entero. En ese caso, el valor de kits será el que había más el añadido
 
     def __collect_samples(self):
-        messagebox.showinfo("Recoger muestras", "Ya puedes abrir la puerta lateral y recoger las muestras entregadas por los usuarios. Cuando lo hayas hecho, pulsa OK")
+        messagebox.showinfo(Language_controller.get_message("efectuar recogida muestras (cabecera)"), Language_controller.get_message("efectuar recogida muestras (cuerpo)"))
         Counters.set_stored_samples(0)
-        self.__stored_samples_info["text"] = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
+        self.__stored_samples_info["text"] = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
         self.__stored_samples_info["fg"] = Counters.get_stored_samples_fg_color()
         self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES")
-        messagebox.showinfo("Muestras recogidas", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
+        messagebox.showinfo( Language_controller.get_message("muestras recogidas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
 
     def __refill_labels(self):
-        messagebox.showinfo("Reponer etiquetas", "Ya puedes abrir para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK")
+        messagebox.showinfo(Language_controller.get_message("efectuar reposicion etiquetas (cabecera)"), Language_controller.get_message("efectuar reposicion etiquetas (cuerpo)"))
         Counters.set_available_labels(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL)
-        self.__remaining_labels_info.config( text = "Etiquetas restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
+        self.__remaining_labels_info.config( text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR REPLENISHED LABELS")
-        messagebox.showinfo("Etiquetas repuestas", "Gracias! Puedes seguir utilizando la aplicación, pero si ya has acabado no olvides cerrar sesión.")
+        messagebox.showinfo(Language_controller.get_message("etiquetas repuestas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
 
 
     # override abstract parent method
     def go_to_main_screen(self):
         # this is necessary if the mainscreen_operator and mainscreen_admin are already created and an operator has refilled kits / labels or collected samples:
-        self.__remaining_kits_info.config( text = "Kits restantes: " + str(Counters.get_available_kits()) + " de " + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color() )
-        self.__remaining_labels_info.config( text = "Etiquetas restantes: " + str(Counters.get_available_labels()) + " de " + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
-        self.__stored_samples_info.config( text = "Muestras entregadas: " + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
+        self.__remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color() )
+        self.__remaining_labels_info.config( text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
+        self.__stored_samples_info.config( text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
 
         # column and row configure (because the configuration of the frames is not the same as the user main screen):
         MainScreen._admin_and_operator_header_frame_rowcolumn_configure()
@@ -113,7 +114,7 @@ class MainScreen_admin(MainScreen):  # singleton
 
     # override abstract parent method
     def logOut_button(self):
-        logout = messagebox.askyesno("CERRAR SESIÓN", "¿Has acabado de utilizar la máquina?")
+        logout = messagebox.askyesno(Language_controller.get_message("mensaje cierre sesión (cabecera)"), Language_controller.get_message("mensaje cierre sesión (cuerpo)"))
         if logout == True:
             self.erase_mainScreen_contents()
             ActivePerson.getCurrent().logOut()

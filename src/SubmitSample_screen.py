@@ -20,6 +20,7 @@ import Checker
 import Arduino_controller
 import Counters
 import DBcontroller
+import Language_controller
 from Person import ActivePerson
 from Not_available import Not_available
 
@@ -44,8 +45,8 @@ class SubmitSample_screen: # singleton
             self.__submitS_header_frame = Screen_manager.header_frame( self.__submitSampleScreen_frame)
             self.__submitS_body_frame = Screen_manager.body_frame( self.__submitSampleScreen_frame)
 
-            self.__title = Label(self.__submitS_header_frame, text = "ENTREGAR MUESTRA", bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
-            self.__return_b = Button(self.__submitS_header_frame, text = "VOLVER\nATRÁS", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
+            self.__title = Label(self.__submitS_header_frame, text = Language_controller.get_message("entregar una muestra"), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__return_b = Button(self.__submitS_header_frame, text = Language_controller.get_message("volver atrás"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__previous_screen)
 
             self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
             self.__return_b.grid(row = 0, column = 1, sticky = 'NSEW', pady=10, padx=10)
@@ -55,9 +56,9 @@ class SubmitSample_screen: # singleton
             self.__submitS_header_frame.rowconfigure(0, weight=1)  # it's necessary to give a weight (even though there is only one row in clamKitscreen_header_frame) for sticky=NSEW of the inside widgets to work correctly
 
 
-            self.__info_steps_title = Label(self.__submitS_body_frame, text = "PASO 1:", bg = "white", fg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
+            self.__info_steps_title = Label(self.__submitS_body_frame, text = Language_controller.get_message("paso número...") + "1", bg = "white", fg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_SECOND_TITLE_TEXT_SIZE, 'bold'))
             self.__info_steps_displayer = Canvas(self.__submitS_body_frame)
-            self.__next_step_b = Button(self.__submitS_body_frame, text = "SIGUIENTE", borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__next_step_actions)
+            self.__next_step_b = Button(self.__submitS_body_frame, text = Language_controller.get_message("botón siguiente"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__next_step_actions)
 
             self.__info_steps_title.grid(row = 0, column = 0, sticky = 'NSEW')
             self.__info_steps_displayer.grid(row = 1, column = 0, sticky = 'NSEW', padx = 20)
@@ -94,24 +95,24 @@ class SubmitSample_screen: # singleton
         if self.__current_step == 7: # It will be entered here when the action of the last step (step 6: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
             self.__sample_submitted()
 
-        self.__info_steps_title["text"] = "PASO " + str(self.__current_step)
+        self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + str(self.__current_step)
         # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 6 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)
 
         # Change the text of the button of this step and make the actions associated, if any:
         if self.__current_step in {2, 5}: 
-            self.__next_step_b["text"] = "SIGUIENTE"
+            self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 3:
-            self.__next_step_b["text"] = "IMPRIMIR ETIQUETA"
+            self.__next_step_b["text"] = Language_controller.get_message("botón imprimir etiqueta")
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 4:
-            self.__next_step_b["text"] = "SIGUIENTE"
+            self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
             self.__next_step_b["state"] = DISABLED
             self.__print_label()
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 6:
             # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
-            self.__next_step_b["text"] = "ENTREGADO"
+            self.__next_step_b["text"] = Language_controller.get_message("botón avisar muestra entregada")
             self.__next_step_b["state"] = DISABLED
             self.__next_step_b["state"] = NORMAL
         
@@ -128,7 +129,7 @@ class SubmitSample_screen: # singleton
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
             DBcontroller.add_sample_submission()  # to muetras_saliva DB
             ActivePerson.getCurrent().set_has_submitted_to_true()
-            messagebox.showinfo("MUESTRA ENTREGADA", "La muestra ha sido entregada. Haz click sobre 'OK' para ser desconectado correctamente de la aplicación")
+            messagebox.showinfo(Language_controller.get_message("aviso de muestra entregada (cabecera)"), Language_controller.get_message("aviso de muestra entregada (cuerpo)"))
             ActivePerson.getCurrent().logOut()
 
             # TODO: Apagar leds de la puerta que ya ha cerrado. Con timeouts por si el arduino falla   
@@ -141,7 +142,7 @@ class SubmitSample_screen: # singleton
         if Checker.is_printer_alive() and Counters.get_available_labels() >= 1:
 
             #labelID = self.__generate_label_ID() <- TODO para versión final (no prototipo) en funcion de si puedan haber submissions simultaneas, de hw disponible y demás
-            labelID = time.strftime('%d%m%y%H%M%S')
+            labelID = time.strftime('%d%m%y%H%M%S')  # TODO: En la version final (no prototipo) no estará esta línea, sino la de abajo
             
             # generate the barcode (the barcode code will be the labelID variable)
             barcode_class = barcode.get_barcode_class('code128')
@@ -195,12 +196,12 @@ class SubmitSample_screen: # singleton
 
     @staticmethod
     def __printer_not_responding_while_printing(signum, frame):
-        messagebox.showerror("ERROR IMPRESIÓN", "La impresora no responde o no quedan etiquetas. Se cerrará su sesión y avisaremos a un técnico. Vuelva más tarde, por favor")
+        messagebox.showerror(Language_controller.get_message("aviso de error de impresión (cabecera)"), Language_controller.get_message("aviso de error de impresión (cuerpo)"))
         Checker.notify_operator("Impresora colgada a media impresión", Checker.Priority.CRITICAL)
         if Counters.get_available_labels() >= 1:
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER DISCONECTED: PRINTER NOT WORKING")
         else:
-            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER DISCONECTED: NO AVAILABLE LABELS")
+            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER DISCONECTED: NON AVAILABLE LABELS")
         ActivePerson.getCurrent().logOut()
         Not_available.getInstance().go_to_not_available_screen()
 
@@ -229,8 +230,8 @@ class SubmitSample_screen: # singleton
     def go_to_submitSample_screen(self):
         self.__current_step = 1
         # TODO: Añadir la imagen del step 1 al canva
-        self.__next_step_b["text"] = "SIGUIENTE"
+        self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
         self.__next_step_b["state"] = NORMAL
-        self.__info_steps_title["text"] = "PASO 1"
+        self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + "1"
         self.__submitSampleScreen_frame.tkraise()
-        messagebox.showwarning("INFORMACIÓN PREVIA", "Recuerda que para que la muestra de saliva sea válida, no debes haber ingerido nada en los últimos 30 minutos.")
+        messagebox.showwarning(Language_controller.get_message("información previa (cabecera)"), Language_controller.get_message("información previa (recordatorio)"))
