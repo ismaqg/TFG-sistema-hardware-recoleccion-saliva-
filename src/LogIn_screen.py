@@ -33,9 +33,7 @@ class LogIn_screen():  # singleton
             raise Exception("LogIn_screen class is singleton")
         else:
             self.__input_variable = StringVar() #Tkinter variable
-
             self.__login_screen_isActive = False  # It is necessary to know when we are in the login tab so that the input is only processed in the login tab, since the function executed in every input is executed in any tab because the input is associated with root. 
-            self.__saver_countdown = None  # Identifies the inactivity countdown used to redisplay the screensaver. For the moment, is invalid, until the first countdown is started in the "go_to_login_screen" function.
 
             self.__login_screen_frame = Screen_manager.init_screen_frame()            
 
@@ -66,7 +64,22 @@ class LogIn_screen():  # singleton
 
             Screen_manager.get_root().bind('<Return>', self.__process_input) # bind the "enter" key to a function. The barcode reader gives the input in the same way as if it were a keyboard
                                                                             # and at the end the enter key is pressed. Nothing extra is needed to use it. The bind function MUST be used over the root window
+            
+            from Screen_saver import Screen_saver  # here to avoid circular dependency
+            self.__saver_countdown = self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)  # Identifies the inactivity countdown used to redisplay the screensaver. For the moment, is invalid, until the first countdown is started in the "go_to_login_screen" function.
+            
             LogIn_screen.__instance = self
+
+
+    # function to process the input of the barcode scanner
+    def __process_input(self, event):
+        if (self.__login_screen_isActive and not ActivePerson.isThereActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
+                                                                                  # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
+            self.__try_to_logIn()
+        
+        else: # in the try_to_logIn function those 2 lines below are executed. This else is necessary so that these lines are not executed when the program tries to login and cannot login due to lack of resources (in that case, the program is closed). If not, an exception would be thrown.
+            self.__input_variable.set('')
+            self.__login_input_entry.delete(0,'end')
 
 
     # function to log in the application with the input data (from the barcode scanner). If log in is successful, the user will go to the main screen of the application
@@ -113,21 +126,8 @@ class LogIn_screen():  # singleton
             self.__login_input_entry.delete(0,'end')
             self.__input_variable.set('')
             messagebox.showwarning(Language_controller.get_message("identificacion erronea (cabecera)"), Language_controller.get_message("identificacion erronea (cuerpo)"))
-            # start again the inactivity countdown:
-            from Screen_saver import Screen_saver  # here to avoid circular dependency!
-            self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)            
+            self.restart_inactivity_countdown()            
 
-        
-
-    # function to process the input of the barcode scanner
-    def __process_input(self, event):
-        if (self.__login_screen_isActive and not ActivePerson.isThereActivePerson()):  # the first condition will only allow inputs from the login screen (for example, dont will allow from the screensaver).
-                                                                                  # And the 2nd condition it is there to avoid possible future bugs that may appear between the first and second identification of admins / operators, because there they are in the logIn screen but we really don't want to be able to read inputs
-            self.__try_to_logIn()
-        
-        else: # in the try_to_logIn function those 2 lines below are executed. This else is necessary so that these lines are not executed when the program tries to login and cannot login due to lack of resources (in that case, the program is closed). If not, an exception would be thrown.
-            self.__input_variable.set('')
-            self.__login_input_entry.delete(0,'end')
 
 
     # function to check if a given string is a valid TSI code
@@ -164,20 +164,23 @@ class LogIn_screen():  # singleton
             DBcontroller.add_new_event(person.get_CIP(), person.get_status() + " LOGIN FAIL. WRONG SECURITY PASSWORD")
             ActivePerson.destroyCurrent()  # destroy current admin / operator. (a current admin / operator was created when the 1st identification step succeed, but the 2nd step has failed) 
             messagebox.showwarning(Language_controller.get_message("acceso denegado (cabecera)"), Language_controller.get_message("acceso denegado (cuerpo)"))
-            # start again the inactivity countdown (to show again the saver):
-            from Screen_saver import Screen_saver  # here to avoid circular dependency!
-            self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
+            self.restart_inactivity_countdown() 
+
+
+    def restart_inactivity_countdown(self):
+        from Screen_saver import Screen_saver  # here to avoid circular dependency! https://agilno.com/why-cyclic-dependency-errors-occur-a-look-into-the-python-import-mechanism/
+        Screen_manager.get_root().after_cancel(self.__saver_countdown)
+        self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver)
 
 
     # function to change the boolean value of the atribute isActive, which indicates if the login screen is the active screen in the application or not. This information is needed by the barcode scanner
     def set_login_screen_isActive(self, bool_isActive):
         self.__login_screen_isActive = bool_isActive
 
+
     # function to change the current screen to the login screen
     def go_to_login_screen(self):
         self.__login_screen_isActive = True
         self.__login_screen_frame.tkraise()
-        # inactivity countdown (if SCREEN_SAVER_BACK_TIMER milliseconds elapse without there having been any input in the login screen, it returns to the saver screen) :
-        from Screen_saver import Screen_saver  # here to avoid circular dependency! https://agilno.com/why-cyclic-dependency-errors-occur-a-look-into-the-python-import-mechanism/
-        self.__saver_countdown = Screen_manager.get_root().after(constants.SCREEN_SAVER_BACK_TIMER, Screen_saver.getInstance().go_to_screen_saver) 
+        self.restart_inactivity_countdown()         
 

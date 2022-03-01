@@ -4,7 +4,6 @@ from PIL import ImageTk,Image
 import constants
 import Screen_manager
 import Checker
-import DBcontroller
 from Not_available import Not_available
 from LogIn_screen import LogIn_screen
 
@@ -30,9 +29,9 @@ class Screen_saver():  # singleton
 
             img = Image.open(constants.IMAGES_DIRECTORY + "screensaver.png")
             img = img.resize((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), Image.ANTIALIAS)
-            self.__saver_img = ImageTk.PhotoImage( img )
+            self.__saver_img = ImageTk.PhotoImage( img )  # saver_img needs to be a class atribute. Otherwise, it won't work
             wake_up_button = Button(self.__screen_saver_frame, image = self.__saver_img , command = self.__user_interaction)
-            wake_up_button.grid(row=0,column=0,sticky='NSEW')
+            wake_up_button.grid(row=0, column=0, sticky='NSEW')
 
             Screen_saver.__instance = self
 

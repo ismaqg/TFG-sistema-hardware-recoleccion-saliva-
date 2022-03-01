@@ -59,5 +59,6 @@ class Language_screen: # singleton
 
     def go_to_language_screen(self):
         from LogIn_screen import LogIn_screen  # here to avoid circular dependency
+        LogIn_screen.getInstance().restart_inactivity_countdown()
         LogIn_screen.getInstance().set_login_screen_isActive(False)
         self.__languageScreen_frame.tkraise()
