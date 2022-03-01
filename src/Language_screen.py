@@ -28,9 +28,9 @@ class Language_screen: # singleton
             img_spanish = Image.open(constants.IMAGES_DIRECTORY + "spanish.png")
             img_catalan = Image.open(constants.IMAGES_DIRECTORY + "catalan.png")
             img_english = Image.open(constants.IMAGES_DIRECTORY + "english.png")
-            img_spanish = img_spanish.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/2)), Image.ANTIALIAS)
-            img_catalan = img_catalan.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/2)), Image.ANTIALIAS)
-            img_english = img_english.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/2)), Image.ANTIALIAS)
+            img_spanish = img_spanish.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/3)), Image.ANTIALIAS)
+            img_catalan = img_catalan.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/3)), Image.ANTIALIAS)
+            img_english = img_english.resize((int(constants.SCREEN_WIDTH/3 - 20), int(constants.SCREEN_HEIGHT/3)), Image.ANTIALIAS)
             self.__img_spanish = ImageTk.PhotoImage( img_spanish )  # the images that we are going to use in the buttons need to be class atributes. Otherwise, it won't work
             self.__img_catalan = ImageTk.PhotoImage( img_catalan )
             self.__img_english = ImageTk.PhotoImage( img_english )
@@ -39,9 +39,9 @@ class Language_screen: # singleton
             self.__catalan_b = Button(self.__languageScreen_frame, image = self.__img_catalan, command=lambda:self.__change_language(Language.CATALAN))
             self.__english_b = Button(self.__languageScreen_frame, image = self.__img_english, command=lambda:self.__change_language(Language.ENGLISH))
 
-            self.__spanish_b.grid(row = 0, column = 0, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/4, padx = (20, 10)) 
-            self.__catalan_b.grid(row = 0, column = 1, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/4, padx = 10)
-            self.__english_b.grid(row = 0, column = 2, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/4, padx = (10, 20))
+            self.__spanish_b.grid(row = 0, column = 0, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/3, padx = (20, 10)) 
+            self.__catalan_b.grid(row = 0, column = 1, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/3, padx = 10)
+            self.__english_b.grid(row = 0, column = 2, sticky = 'NSEW', pady = constants.SCREEN_HEIGHT/3, padx = (10, 20))
 
             self.__languageScreen_frame.rowconfigure(0, weight=1)
             self.__languageScreen_frame.columnconfigure(0, weight=1)
