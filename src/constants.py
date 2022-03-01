@@ -2,8 +2,7 @@ from screeninfo import get_monitors #to check width and height of the monitor
 
 # ------------ paths and constants -----------------------------
 
-PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory
-# TODO IMPORTANTE: CAMBIAR LA LINEA DE ARRIBA CON EL PATH BUENO: /home/pi/Desktop/SALIBANK_PROGRAM/src !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory. #TODO: En la rpi es /home/pi/Desktop/SALIBANK_PROGRAM/src
 
 ARD1_PORT = "/dev/ttyUSB0"
 ARD2_PORT = "/dev/ttyUSB1"
