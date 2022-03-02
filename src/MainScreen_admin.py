@@ -70,6 +70,18 @@ class MainScreen_admin(MainScreen):  # singleton
         messagebox.showinfo(Language_controller.get_message("etiquetas repuestas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
 
 
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self):
+        self.__title["text"] = Language_controller.get_message("título administrador")
+        self.__logout_b["text"] = Language_controller.get_message("texto botón cerrar sesión para admin/operador")
+        self.__quit_program_b["text"] = Language_controller.get_message("apagar")
+        self.__refill_kits_b["text"] = Language_controller.get_message("reponer kits")
+        self.__refill_labels_b["text"] = Language_controller.get_message("reponer etiquetas")
+        self.__collect_samples_b["text"] = Language_controller.get_message("recoger muestras")
+        self.__check_DB_b["text"] = Language_controller.get_message("consultar BD")
+        # and the language of the information labels don't need to be changed, because the text of those labels is updated each time that the program goes to main screen
+
+
     # override abstract parent method
     def go_to_main_screen(self):
         # this is necessary if the mainscreen_operator and mainscreen_admin are already created and an operator has refilled kits / labels or collected samples:

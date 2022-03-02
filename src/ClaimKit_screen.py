@@ -1,7 +1,7 @@
 from time import time
 from tkinter import *
 from tkinter import messagebox
-from Not_available import Not_available
+from Not_available_screen import Not_available_screen
 from Person import ActivePerson
 
 import Screen_manager
@@ -95,6 +95,16 @@ class ClaimKit_screen: # singleton
             Arduino_controller.inoperative_arduino_actions()
 
     
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self):
+        self.__title["text"] = Language_controller.get_message("título obtener kit")
+        self.__return_b["text"] = Language_controller.get_message("volver atrás")
+        self.__previous_info_title["text"] = Language_controller.get_message("información previa (cabecera)")
+        self.__previous_info_displayer["state"] = NORMAL
+        self.__previous_info_displayer.delete('1.0', END)
+        self.__previous_info_displayer.insert(INSERT, Language_controller.get_message("información previa (extendida)"))
+        self.__previous_info_displayer["state"] = DISABLED
+        self.__get_kit_b["text"] = Language_controller.get_message("quiero recoger un kit")
 
     def go_to_claimKit_screen(self):
         self.__claimKitscreen_frame.tkraise()

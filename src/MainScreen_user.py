@@ -30,7 +30,7 @@ class MainScreen_user(MainScreen):  # singleton
 
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
-            self.__title = Label(MainScreen._ms_header_frame, text = Language_controller.get_message("título usuario") + ActivePerson.getCurrent().get_CIP(), bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))
+            self.__title = Label(MainScreen._ms_header_frame, text = Language_controller.get_message("título usuario") + "UNKNOWN CIP", bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))  # The "unknown cip" is changed when the programe goes to this screen
             self.__logout_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("texto botón cerrar sesión para usuario"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), fg="red", command = self.logOut_button) 
 
             self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("obtener un kit"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
@@ -43,13 +43,23 @@ class MainScreen_user(MainScreen):  # singleton
 
     def __show_usage_info(self):
         messagebox.showinfo(Language_controller.get_message("respuesta al ¿qué hago? (cabecera)"), Language_controller.get_message("respuesta al ¿qué hago? (cuerpo)"))
-        
+
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self):
+        self.__logout_b["text"] = Language_controller.get_message("texto botón cerrar sesión para usuario")
+        self.__claim_kit_b["text"] = Language_controller.get_message("obtener un kit")
+        self.__submit_sample_b["text"] = Language_controller.get_message("entregar una muestra")
+        self.__info_b["text"] = Language_controller.get_message("¿qué hago?")
+        # title text is changed every time that the program goes to main screen
 
     # override abstract parent method
     def go_to_main_screen(self):
         # column and row configure (because the configuration of the frames is not the same as the user main screen):
         MainScreen._user_header_frame_rowcolumn_configure()
         MainScreen._user_body_frame_rowcolumn_configure()
+
+        # change the text because maybe we have a new user
+        self.__title["text"] = Language_controller.get_message("título usuario") + ActivePerson.getCurrent().get_CIP()
 
         # .grids are here and not in constructor because MainScreen_admin, MainScreen_operator and MainScreen_user share the same frame (the main screen frame where this widgets are displayed)
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')

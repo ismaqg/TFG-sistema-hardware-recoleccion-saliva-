@@ -87,12 +87,20 @@ class Query_DB_screen: # singleton
         else:
             self.__current_DB = "info_uso"
         self.__fill_display_box_with_DB_content()
-        self.__title["text"] = "BD: " + self.__current_DB
+        self.__title["text"] = Language_controller.get_message("base de datos:") + self.__current_DB
+
+
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self): 
+        self.__change_displayed_DB_b["text"] = Language_controller.get_message("cambiar de base de datos")
+        self.__return_b["text"] = Language_controller.get_message("volver atrás")
+        # and the language of the title label doesn't need to be changed, because the text of this labels is updated each time that the program goes to main screen 
 
 
     def go_to_query_DB_screen(self):
         self.__change_displayed_DB_b["state"] = NORMAL if (ActivePerson.getCurrent().get_status() == "ADMIN") else DISABLED
         self.__current_DB = "info_uso"
+        self.__title["text"] = Language_controller.get_message("base de datos:") + self.__current_DB
         self.__fill_display_box_with_DB_content()
         self.__DBscreen_frame.tkraise()
 

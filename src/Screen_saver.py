@@ -4,7 +4,7 @@ from PIL import ImageTk,Image
 import constants
 import Screen_manager
 import Checker
-from Not_available import Not_available
+from Not_available_screen import Not_available_screen
 from LogIn_screen import LogIn_screen
 
 
@@ -44,7 +44,7 @@ class Screen_saver():  # singleton
         if available:
             self.__inactivity_countdown = Screen_manager.get_root().after(constants.INACTIVITY_CHECK_RESOURCES_TIMER, self.__inactivity_timeout)
         else:  # The operator has been warned on the previous function and the info_uso DB has been updated with this error
-            Not_available.getInstance().go_to_not_available_screen()
+            Not_available_screen.getInstance().go_to_Not_available_screen_screen()
 
     def go_to_screen_saver(self):
         self.__inactivity_countdown = Screen_manager.get_root().after(constants.INACTIVITY_CHECK_RESOURCES_TIMER, self.__inactivity_timeout)

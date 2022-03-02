@@ -101,6 +101,7 @@ def set_current_language(language):
     else:
         Screen_manager.get_root().destroy()
         raise Exception(str(language) + " unsuported language")
+    apply_new_language_in_screens()
 
 
 def get_message(identifier_str):
@@ -113,4 +114,25 @@ def get_message(identifier_str):
             Screen_manager.get_root().destroy()
             raise Exception(identifier_str + " is an invalid identifier_str for Language_controller")
         return messages[message_index]
+
+
+# when a new language is set, the text showed in the screens (which instances are already created) need to change
+def apply_new_language_in_screens():
+    from LogIn_screen import LogIn_screen
+    LogIn_screen.getInstance().change_language()
+    from MainScreen_admin import MainScreen_admin
+    MainScreen_admin.getInstance().change_language()
+    from MainScreen_operator import MainScreen_operator
+    MainScreen_operator.getInstance().change_language()
+    from MainScreen_user import MainScreen_user
+    MainScreen_user.getInstance().change_language()
+    from ClaimKit_screen import ClaimKit_screen
+    ClaimKit_screen.getInstance().change_language()
+    from SubmitSample_screen import SubmitSample_screen
+    SubmitSample_screen.getInstance().change_language()
+    from Query_DB_screen import Query_DB_screen
+    Query_DB_screen.getInstance().change_language()
+    from Not_available_screen import Not_available_screen
+    Not_available_screen.getInstance().change_language()
+    
         

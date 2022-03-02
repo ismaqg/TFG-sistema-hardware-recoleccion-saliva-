@@ -23,8 +23,8 @@ STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras qu
 AVAILABLE_KITS_AFTER_REFILL = 20    # TODO: ponerlo a la cantidad de kits disponibles que vayan a caber en la maquina
 NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     # TODO: ponerlo a la cantidad de etiquetas que vengan en un rollo nuevo de la impresora
 
-SCREEN_WIDTH = get_monitors()[0].width
-SCREEN_HEIGHT = get_monitors()[0].height
+SCREEN_WIDTH = 800#get_monitors()[0].width
+SCREEN_HEIGHT = 480#get_monitors()[0].height
 
 SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 

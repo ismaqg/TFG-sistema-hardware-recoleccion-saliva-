@@ -7,7 +7,7 @@ import constants
 import DBcontroller
 import Checker
 import Language_controller
-from Not_available import Not_available
+from Not_available_screen import Not_available_screen
 from Person import ActivePerson
 from MainScreen_admin import MainScreen_admin
 from MainScreen_operator import MainScreen_operator
@@ -37,17 +37,17 @@ class LogIn_screen():  # singleton
 
             self.__login_screen_frame = Screen_manager.init_screen_frame()            
 
-            login_title = Label(self.__login_screen_frame, text = Language_controller.get_message("bienvenido a SALIBANK"), font = (constants.CATSALUT_TEXT_FONT, 28, 'bold'), bg = constants.CATSALUT_COLOR)
-            login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
+            self.__login_title = Label(self.__login_screen_frame, text = Language_controller.get_message("bienvenido a SALIBANK"), font = (constants.CATSALUT_TEXT_FONT, 28, 'bold'), bg = constants.CATSALUT_COLOR)
+            self.__login_canvas = Canvas(self.__login_screen_frame,  bg="white", highlightthickness=0)
             self.__login_image = ImageTk.PhotoImage(Image.open(constants.IMAGES_DIRECTORY + "TSIdummy.png"))
-            login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
-            login_info = Label(self.__login_screen_frame, text = Language_controller.get_message("instrucciones login"),font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_THIRD_TITLE_TEXT_SIZE, "bold"), bg = constants.CATSALUT_COLOR)
+            self.__login_canvas.create_image(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/4, anchor = CENTER, image = self.__login_image)
+            self.__login_info = Label(self.__login_screen_frame, text = Language_controller.get_message("instrucciones login"),font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_THIRD_TITLE_TEXT_SIZE, "bold"), bg = constants.CATSALUT_COLOR)
             self.__login_input_entry = Entry(self.__login_screen_frame, textvariable = self.__input_variable, borderwidth=0,fg='white', highlightthickness = 0, insertbackground = "white") # invisible
             self.__change_language = Button(self.__login_screen_frame, text = Language_controller.get_message("cambiar idioma"), font = (constants.CATSALUT_TEXT_FONT, constants.SECONDARY_BUTTON_TEXT_SIZE), command = Language_screen.getInstance().go_to_language_screen) 
 
-            login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
-            login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')
-            login_info.grid(row=2, column=0, columnspan = 2, sticky = 'NSEW', pady = (0,10))
+            self.__login_title.grid(row=0,column=0, columnspan = 2, sticky = 'NSEW')
+            self.__login_canvas.grid(row=1, column=0, columnspan = 2, sticky = 'NSEW')
+            self.__login_info.grid(row=2, column=0, columnspan = 2, sticky = 'NSEW', pady = (0,10))
             self.__login_input_entry.grid(row=3,column=0, columnspan = 2, sticky = 'NSEW')
             self.__change_language.grid(row=4, column=1, columnspan = 2, sticky = 'NSEW', pady=(10,0))
             self.__login_input_entry.focus_set() # keep the focus on the Entry so that it is ready to receive an input anytime (even if some other widget is clicked)
@@ -107,7 +107,7 @@ class LogIn_screen():  # singleton
                     # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
                     ActivePerson.destroyCurrent()
                     messagebox.showerror(Language_controller.get_message("no puede iniciar sesion (cabecera)"), Language_controller.get_message("no puede iniciar sesion (cuerpo)"))
-                    Not_available.getInstance().go_to_not_available_screen()
+                    Not_available_screen.getInstance().go_to_Not_available_screen_screen()
                 else:
                     DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
                     self.__login_screen_isActive = False  # we are about to leave login screen
@@ -177,6 +177,11 @@ class LogIn_screen():  # singleton
     def set_login_screen_isActive(self, bool_isActive):
         self.__login_screen_isActive = bool_isActive
 
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self):
+        self.__login_title["text"] = Language_controller.get_message("bienvenido a SALIBANK")
+        self.__login_info["text"] = Language_controller.get_message("instrucciones login")
+        self.__change_language["text"] = Language_controller.get_message("cambiar idioma")
 
     # function to change the current screen to the login screen
     def go_to_login_screen(self):

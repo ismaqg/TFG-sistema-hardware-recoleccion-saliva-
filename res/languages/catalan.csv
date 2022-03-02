@@ -1,0 +1,83 @@
+Benvingut a SALIBANK
+Pasi la seva targeta sanitària individual pel lector de codis de barres
+Canviar Idioma
+NO POT INICIAR SESSIÓ
+No pot iniciar sessió per problemes interns. Torni a intentar-ho en una estona. Els operaris ja estan avisats dels problemes
+IDENTIFICACIÓ ERRÒNIA
+Si us plau, identificat amb la teva targeta sanitaria individual
+ACCÉS DENEGAT
+Accés denegat. Si us plau, torni a intentar acreditar-se escanejant la seva targeta i introduint la clau numèrica correcta
+Introduïu\nclau d'accés
+APAGAR
+El programa es tancarà i la màquina s'apagarà
+ADMINISTRADOR
+OPERARI
+TANCAR\nSESSIÓ
+Etiquetes restants: 
+Kits restants: 
+Mostres entregades: 
+ de 
+REPOSAR\nKITS
+REPOSAR\nETIQUETES\nIMPRESSORA
+RECOLLIR\nMOSTRES
+CONSULTAR\nBASE DE DADES
+Reposar kits
+Ja pots obrir la porta lateral i reposar els kits que falten. Quan ho hagis fet, prem OK
+Recollir mostres
+Ja pots obrir la porta lateral i recollir les mostres entregades pels usuaris. Quan ho hagis fet, prem OK
+Reposar etiquetes
+Ja pots obrir per a reposar la impresora d'etiquetes amb un nou rotllo. Quan ho hagis fet, prem OK
+Kits reposats
+Mostres recollides
+Etiquetes repostes
+Gràcies! Pots seguir utilitzant l'aplicació, pero si ja has acabat no oblidis tancar sessió.
+TANCAR SESSIÓ
+¿Has acabat d'utilizar la màquina?
+USUARI 
+Tancar\nsessió\n(SORTIR)
+OBTENIR KIT
+ENTREGAR MOSTRA
+¿QUÈ\nFAIG?
+AJUDA
+INFORMACIÓ D'US
+"Primer, en cas de que no tengui un kit de recolecció de mostres de saliva, ha de prèmer el botó de 'OBTENIR KIT'. \n
+Després, ha de prpemer el botó de 'ENTREGAR MOSTRA'. Allà se le mostraran els passos a seguir.  "
+BD: 
+Canviar\nBase de Dades
+TORNAR\nENRERE
+OBTENIR KIT
+INFORMACIÓ PRÈVIA:
+Cumpleixo els requisits.\n Vull recollir el kit
+RECOLLIDA KIT
+Ja pots recollir el kit del depòsit lateral. Serà redirigit al menú d'entrega de mostres de saliva, on se li mostraran les instruccions
+PAS 
+SEGÜENT
+IMPRIMIR ETIQUETA
+ENTREGAT
+MOSTRA ENTREGADA
+La mostra ha sigut entregada. Prem 'OK' per ser desconnectat correctament de l'aplicació
+ERROR IMPRESSIÓ
+La impressora no respon o no queden etiquetes. Es tancarà la seva sessió i avisarem a un tècnic. Torni més tard, si us plau
+Recorda que per a que la mostra de saliva sigui vàlida, no pots haber ingerit res als últims 30 minuts.
+"Han de transcòrrer un mínim de 30 minuts entre l'última vegada que va ingerir qualsevol tipus de menjar o líquid i la recollida de saliva. 
+
+Si ha transcorregut aquest temps, premi el botò de ""Cumpleixo els requisits. Vull recollir el kit"".
+
+Si NO ha transcorregut aquest temps, retorni al menú anterior y tanqui sessió. Torni més tard."
+ERROR RECOLLIDA KIT
+Ho sentim, s'ha produït un error intern. Es tancarà la seva sessió. Torni més tard, si us plau.
+ERROR. NO HI HA ETIQUETES
+El programa no pos iniciar perquè no queden etiquetes a la impressora. Si us plau, introdueixi un nou rotllo en ella. Prem OK quan ho hagis fet
+REPOSICIÓ D'ETIQUETES
+Estàs segur d'haver introduït un nou rotllo d'etiquetes?
+ERROR. NO HI HA KITS
+El programa no pot iniciar-se perquè no queda cap kit que puguin utilitzar els usuaris. Si us plau, omple el depòsit de kits. Prem OK quan ho hagis fet
+REPOSICIÓ DE KITS
+EstÀs segur d'haver omplert el depòsit de kits disponibles?
+ERROR. DEPOSIT PLE
+El programa no pot iniciar-se perquè el depòsit de mostres està ple i necessita buidar-se. Si us plau, buida el depòsit de mostres. Prem OK quan ho hagis fet
+BUIDAT DE DEPÒSIT
+Estàs segur d'haver buidat completament el depòsit de mostres?
+NO DISPONIBLE
+TANCAR PROGRAMA
+Clau errònia

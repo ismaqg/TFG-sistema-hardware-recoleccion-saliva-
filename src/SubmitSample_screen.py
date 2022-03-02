@@ -22,7 +22,7 @@ import Counters
 import DBcontroller
 import Language_controller
 from Person import ActivePerson
-from Not_available import Not_available
+from Not_available_screen import Not_available_screen
 
 class SubmitSample_screen: # singleton
     
@@ -68,7 +68,6 @@ class SubmitSample_screen: # singleton
             self.__submitS_body_frame.rowconfigure(1, weight = 8)
             self.__submitS_body_frame.rowconfigure(2, weight = 1)
             self.__submitS_body_frame.columnconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one column in clamKitscreen_body_frame) for sticky=NSEW of the inside widgets to work correctly
-            
 
             SubmitSample_screen.__instance = self
 
@@ -203,7 +202,7 @@ class SubmitSample_screen: # singleton
         else:
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER DISCONECTED: NON AVAILABLE LABELS")
         ActivePerson.getCurrent().logOut()
-        Not_available.getInstance().go_to_not_available_screen()
+        Not_available_screen.getInstance().go_to_Not_available_screen_screen()
 
     """
     TODO: Comentar a profe que con la grandaria de nuestras etiquetas y precisión de nuestro lector de barras, es imposible hacer un codigo de barras unico (formado a partir del tiempo actual y del CIP del usuario) que sea leible por el lector. Por tanto, lo haré solo en base al tiempo actual (ya que no pueden haber submissions simultaneas) y habrá que poner en la memoria que para la versión final hay que encontrar otro método o tener mejor impresora
@@ -225,6 +224,12 @@ class SubmitSample_screen: # singleton
         return time.strftime('%d%m%y%H%M%S') + CIP_encripted
     """
           
+
+    # changes the texts to the current language. This function is called by Language_controller when a new language is setted
+    def change_language(self):
+        self.__title["text"] = Language_controller.get_message("entregar una muestra")
+        self.__return_b["text"] = Language_controller.get_message("volver atrás")
+        # the next_step_button and the info_steps_title texts are changed every time that the program changes to this screen 
 
 
     def go_to_submitSample_screen(self):
