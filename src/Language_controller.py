@@ -108,12 +108,11 @@ def get_message(identifier_str):
     global messages
     if messages == []:  # Programmer forgot to set a default language at main.py. We set SPANISH as default
         set_current_language(Language.SPANISH)
-    else:
-        message_index = str_to_index_map.get(identifier_str, -1)
-        if message_index == -1:
-            Screen_manager.get_root().destroy()
-            raise Exception(identifier_str + " is an invalid identifier_str for Language_controller")
-        return messages[message_index]
+    message_index = str_to_index_map.get(identifier_str, -1)
+    if message_index == -1:
+        Screen_manager.get_root().destroy()
+        raise Exception(identifier_str + " is an invalid identifier_str for Language_controller")
+    return messages[message_index]
 
 
 # when a new language is set, the text showed in the screens (which instances are already created) need to change
