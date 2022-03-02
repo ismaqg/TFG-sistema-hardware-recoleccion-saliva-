@@ -1,0 +1,83 @@
+Welcome to SALIBANK
+Swipe your individual health card through the barcode reader
+Change Language
+CAN'T LOG IN
+You can't log in due to internal problems. Please try again in a bit. Operators are already warned of problems
+MISIDENTIFICATION
+Please identify yourself with your individual health card
+ACCESS DENIED
+Wrong access. Please try again by scanning your card and entering the correct code number
+Enter your\npassword
+TURN OFF
+The program will close and the machine will turn off
+ADMINISTRATOR
+OPERATOR
+LOG OUT
+Remaining labels: 
+Remaining kits: 
+Samples delivered: 
+ of 
+REPLENISH\nKITS
+REPLENISH\nPRINTER\nLABELS
+COLLECT\nSAMPLES
+CHECK\nDATABASE
+Replenish kits
+You can now open the side door and replenish kits. When you have done it, press OK
+Collect samples
+You can now open the side door and collect the samples delivered by users. When you have done it, press OK
+Replenish labels
+You can now open to replenish the label printer with a new roll. When you have done it, press OK
+Kits replenished
+Samples collected
+Labels replenished
+Thanks! You can continue using the application, but if you have finished, don't forget to log out.
+LOG OUT
+Have you finished using the machine?
+USER 
+Log out\n(EXIT)
+GET KIT
+SUBMIT SAMPLE
+WHAT\nDO I DO?
+HELP
+USAGE INFO
+"First, in case you don't have a saliva sample collection kit, you need to press the 'GET KIT' button.\n
+Then, you must click on the 'SUBMIT SAMPLE' button. There you will be shown the steps to follow. "
+DB: 
+Change\nDataBase
+RETURN\nBACK
+GET KIT
+PREVIOUS INFO:
+I meet the requirements.\n I want to get a kit
+KIT COLLECTION
+You can get the kit from the side tank. You will be redirected to the saliva sample delivery menu, where you will be shown instructions
+STEP 
+NEXT
+PRINT LABEL
+DELIVERED
+SAMPLE DELIVERED
+The sample has been delivered. Press 'OK' to be disconnected from the application
+PRINT ERROR
+The printer is not responding or there are no labels left. Your session will be closed and a technician will be notified. come back later, please
+Remember that for the saliva sample to be valid, you must not have eaten anything in the last 30 minutes.
+"A minimum of 30 minutes should elapse between the last time you ingested any type of food or liquid and the collection of saliva.
+
+If that time has elapsed, click the ""I meet the requirements. I want to get a kit"" button.
+
+If this time has NOT elapsed, return to the previous menu and log out. Come back later."
+ERROR GETTING KIT
+Sorry, an internal error occurred. Your session will be closed, please come back later.
+ERROR. NO LABELS
+The program cannot start because there are no labels left in the printer. Please put a new roll in it. Click OK when done
+LABELS REFILL
+Are you sure you have inserted a new roll of labels?
+ERROR. NO KITS
+The program cannot start because there are no kits left for users to use. Please fill in the kits deposit. Click OK when done
+KITS REFILL
+Are you sure you have completely filled the available kits deposit?
+ERROR. FULL TANK
+The program cannot start because the sample container is full and needs to be emptied. Please empty the sample container. Click OK when done
+TANK EMPTYING
+Are you sure you have completely emptied the sample container?
+NOT AVAILABLE
+CLOSE PROGRAM
+Wrong key
