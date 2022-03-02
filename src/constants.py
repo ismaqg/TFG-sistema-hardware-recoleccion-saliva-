@@ -4,6 +4,8 @@ from screeninfo import get_monitors #to check width and height of the monitor
 
 PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory. #TODO: En la rpi es /home/pi/Desktop/SALIBANK_PROGRAM/src
 
+MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK 
+
 ARD1_PORT = "/dev/ttyUSB0"
 ARD2_PORT = "/dev/ttyUSB1"
 PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0

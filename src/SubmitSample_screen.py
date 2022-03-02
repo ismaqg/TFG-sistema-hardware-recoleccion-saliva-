@@ -136,12 +136,13 @@ class SubmitSample_screen: # singleton
             Arduino_controller.inoperative_arduino_actions()
 
 
+
+    # The ID printed is unique. Because has Machine_ID + date + time, so in a certain momment 2 machines can print a label but they have different machine_ID!
     def __print_label(self):
         
         if Checker.is_printer_alive() and Counters.get_available_labels() >= 1:
 
-            #labelID = self.__generate_label_ID() <- TODO para versión final (no prototipo) en funcion de si puedan haber submissions simultaneas, de hw disponible y demás
-            labelID = time.strftime('%d%m%y%H%M%S')  # TODO: En la version final (no prototipo) no estará esta línea, sino la de abajo
+            labelID = constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S')    
             
             # generate the barcode (the barcode code will be the labelID variable)
             barcode_class = barcode.get_barcode_class('code128')
@@ -203,26 +204,6 @@ class SubmitSample_screen: # singleton
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER DISCONECTED: NON AVAILABLE LABELS")
         ActivePerson.getCurrent().logOut()
         Not_available_screen.getInstance().go_to_Not_available_screen_screen()
-
-    """
-    TODO: Comentar a profe que con la grandaria de nuestras etiquetas y precisión de nuestro lector de barras, es imposible hacer un codigo de barras unico (formado a partir del tiempo actual y del CIP del usuario) que sea leible por el lector. Por tanto, lo haré solo en base al tiempo actual (ya que no pueden haber submissions simultaneas) y habrá que poner en la memoria que para la versión final hay que encontrar otro método o tener mejor impresora
-    # to be unique, the ID needs time + CIP (encripted CIP for privacy. But not encripted with hash or something that can have collissions). The time is important because the same person can submit different samples, and the CIP is important because if this machine exists in more than 1 place, it is possible tu submit more than one sample in the same instant
-    def __generate_label_ID(self):
-        CIP_unencripted = ActivePerson.getCurrent().get_CIP()
-        CIP_encripted = "" 
-        for character in CIP_unencripted:
-            if character.isdigit():
-                char_to_add = chr( ord(character) - 13)
-                if char_to_add == "'":
-                    char_to_add = "~"
-                CIP_encripted += char_to_add
-            else: #is letter
-                char_to_add = chr( ord(character) - 30)
-                if char_to_add == "'":
-                    char_to_add = "~"
-                CIP_encripted += char_to_add
-        return time.strftime('%d%m%y%H%M%S') + CIP_encripted
-    """
           
 
     # changes the texts to the current language. This function is called by Language_controller when a new language is setted

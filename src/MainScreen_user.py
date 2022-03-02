@@ -31,13 +31,12 @@ class MainScreen_user(MainScreen):  # singleton
             # NO .grid, because the main_screen_frame is shared with other classes. The .grid is done in "go_to_main_screen"
 
             self.__title = Label(MainScreen._ms_header_frame, text = Language_controller.get_message("título usuario") + "UNKNOWN CIP", bg = constants.CATSALUT_COLOR, font = (constants.CATSALUT_TEXT_FONT, constants.SCREEN_TITLE_TEXT_SIZE, 'bold'))  # The "unknown cip" is changed when the programe goes to this screen
+            self.__info_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("¿qué hago?"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__show_usage_info)
             self.__logout_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("texto botón cerrar sesión para usuario"), borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), fg="red", command = self.logOut_button) 
-
+            
             self.__claim_kit_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("obtener un kit"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = ClaimKit_screen.getInstance().go_to_claimKit_screen)
             self.__submit_sample_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("entregar una muestra"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = SubmitSample_screen.getInstance().go_to_submitSample_screen)
-            self.__info_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("¿qué hago?"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__show_usage_info)
-            self.__help_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("ayuda"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = Help_screen.getInstance().go_to_help_screen)
-
+            
             MainScreen_user.__instance = self
 
 
@@ -63,7 +62,8 @@ class MainScreen_user(MainScreen):  # singleton
 
         # .grids are here and not in constructor because MainScreen_admin, MainScreen_operator and MainScreen_user share the same frame (the main screen frame where this widgets are displayed)
         self.__title.grid(row = 0, column = 0, sticky = 'NSEW')
-        self.__logout_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = 10, pady = 10)
+        self.__info_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (10, 5), pady = 10)
+        self.__logout_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = 10)
 
         if not DBcontroller.user_has_kit() or ActivePerson.getCurrent().get_has_submitted_in_this_session():  # actually checking if the user has delivered a sample in that session is redundant because when he/she delivers a sample the session closes inmediately
             self.__submit_sample_b["state"] = DISABLED
@@ -75,10 +75,9 @@ class MainScreen_user(MainScreen):  # singleton
         else:
             self.__claim_kit_b["state"] = NORMAL
 
-        self.__claim_kit_b.grid(row = 0, column = 0, rowspan = 2, sticky = 'NSEW', padx = (10, 5), pady = 10)
-        self.__submit_sample_b.grid(row = 0, column = 1, rowspan = 2, sticky = 'NSEW', padx = 5, pady = 10)
-        self.__info_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = (10, 5))
-        self.__help_b.grid(row = 1, column = 2, sticky = 'NSEW', padx = (5, 10), pady = (5, 10))
+        self.__claim_kit_b.grid(row = 0, column = 0, sticky = 'NSEW', padx = (10, 5), pady = 10)
+        self.__submit_sample_b.grid(row = 0, column = 1, sticky = 'NSEW', padx = (5, 10), pady = 10)
+        
 
         MainScreen._main_screen_frame.tkraise()
 
@@ -90,7 +89,6 @@ class MainScreen_user(MainScreen):  # singleton
         self.__claim_kit_b.grid_forget()
         self.__submit_sample_b.grid_forget()
         self.__info_b.grid_forget()
-        self.__help_b.grid_forget()
 
     # override abstract parent method
     def logOut_button(self):

@@ -36,7 +36,7 @@ Have you finished using the machine?
 USER 
 Log out\n(EXIT)
 GET KIT
-SUBMIT SAMPLE
+SUBMIT\nSAMPLE
 WHAT\nDO I DO?
 HELP
 USAGE INFO
