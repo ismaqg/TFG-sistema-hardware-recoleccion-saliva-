@@ -66,7 +66,7 @@ class Query_DB_screen: # singleton
     def __fill_display_box_with_DB_content(self):
         self.__DB_content_display_box['state']=NORMAL
         self.__DB_content_display_box.delete('1.0', END)
-        DB_content = DBcontroller.get_DB_content(self.__current_DB)
+        DB_content = DBcontroller.get_local_DB_content(self.__current_DB)
         self.__DB_content_display_box.insert(INSERT, DB_content)
         self.__DB_content_display_box['state'] = DISABLED # Disabled makes it only readable (otherwise we would see the inputs there!)
 

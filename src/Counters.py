@@ -9,10 +9,12 @@ import Screen_manager
 __available_kits = None 
 __stored_samples = None 
 __available_labels = None
+__container_number = None
 
 def initialize_information():
-    global __available_kits, __stored_samples, __available_labels
+    global __available_kits, __stored_samples, __available_labels, __container_number
     __available_kits, __stored_samples, __available_labels = DBcontroller.read_available_resources_csv()
+    __container_number = DBcontroller.read_container_number_csv()
     
 
 def get_available_kits():
@@ -43,6 +45,18 @@ def set_available_labels(x):
     global __available_labels
     __available_labels = x
     DBcontroller.write_available_resources_csv(__available_kits, __stored_samples, __available_labels)
+
+
+
+def get_container_number():
+    global __container_number
+    return __container_number
+
+# called each time that an operator / admin collects the samples container.
+def increment_containter_numer():
+    global __container_number
+    __container_number += 1
+    DBcontroller.write_container_number_csv(__container_number)
 
 
 

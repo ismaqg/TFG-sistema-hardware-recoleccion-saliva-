@@ -71,7 +71,8 @@ class ClaimKit_screen: # singleton
 
 
     def __get_kit(self):
-        if (Checker.is_arduino_supply_alive()):
+        """IMPORTANTE: LEE EL PRIMER TODO QUE HAY JUSTO AQUÍ ABAJO"""
+        if (Checker.is_arduino_supply_alive()):  # TODO: Quizá aquí podríamos pedirle al arduino_controller tal cual lo que toca y ya luego las gestiones de si el arduino no está operativo o salta timeout pues que las haga el propio arduino controller. Tendría más sentido
 
             # TODO: Pedirle el kit al arduino y programar un timeout que puede saltar si tarda mucho
             

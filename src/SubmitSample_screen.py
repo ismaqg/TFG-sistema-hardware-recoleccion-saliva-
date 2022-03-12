@@ -117,12 +117,15 @@ class SubmitSample_screen: # singleton
         
 
     def __sample_submitted(self):
-        if (Checker.is_arduino_storage_alive()):  
+        """IMPORTANTE: LEE EL PRIMER TODO QUE HAY JUSTO AQUÍ ABAJO"""
+        if (Checker.is_arduino_storage_alive()):  # TODO: Quizá aquí podríamos pedirle al arduino_controller tal cual lo que toca y ya luego las gestiones de si el arduino no está operativo o salta timeout pues que las haga el propio arduino controller. Tendría más sentido
 
             # TODO: Al final parece que usaremos el arduino a modo de sensor de que se haya entregado o para medir la temperatura. Así que poner ese código aquí dentro. OJO: Esta es la función de sample submitted, a
             # la que se supone que llama cuando ya ha cerrado la puerta, así que posiblemente necesito otra función para mirar si se abre la puerta. O MEJOR: ese codigo de ver si se abre la puerta y tal ponerlo en el arduino que
             #vaya mirando siempre, y luego en esta función consultarle al arduino: Oye, realmente ya abrió y cerró la puerta?. Y si no, si tengo que poner el codigo en este fichero, el lugar correcto sería el step 6, no esta función (que se llama en step 8)
             # TODO: Poner timeouts en todas las comunicaciones con el arduino
+
+            # TODO: Cada vez que se entregue una muestra hay que pillar la temperatura y actualizar esa (y las demás) en la BD local. También cogeremos temperatura cada 30 mins!
 
             Counters.increment_stored_samples()
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB

@@ -69,13 +69,14 @@ class MainScreen(ABC): # abstract
         cls._ms_body_frame.columnconfigure(5, weight = 0)
          
 
-
-    @abstractmethod
-    def go_to_main_screen(self):
-        pass
-
-    @abstractmethod
-    def erase_mainScreen_contents(self):
+    @staticmethod
+    def _collect_samples():
+        # TODO: mover casi todo el contenido de esta funcion de operator y admin a aqui, y desde allí llamar a esta función. Luego, añadir lo siguiente:
+        # - imprimir etiqueta (si esta viva la impresora, si no ya sabes) con la etiqueta ID (formada por ID maquina + numero contenedor)
+        # - decirle a admin/operator que ya puede recoger el contenedor y le debe pegar la etiqueta
+        # - mover de la BD local a la remota las samples con la funcion esa que tengo del DBcontroller
+        # - incrementar el numero de contenedor para la proxima vez que se recojan samples (tiene que ir despues del punto anterior por huevos porque ahí se usa el numero de contenedor)
+        # NOTA: al string que representa el evento que se pone en info uso añadirle el ID del contenedor que se esta recogiendo
         pass
 
 
@@ -89,6 +90,14 @@ class MainScreen(ABC): # abstract
 
     @abstractmethod
     def logOut_button(self):
+        pass
+
+    @abstractmethod
+    def erase_mainScreen_contents(self):
+        pass
+
+    @abstractmethod
+    def go_to_main_screen(self):
         pass
 
 

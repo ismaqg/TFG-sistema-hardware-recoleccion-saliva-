@@ -4,7 +4,7 @@ from screeninfo import get_monitors #to check width and height of the monitor
 
 PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory. #TODO: En la rpi es /home/pi/Desktop/SALIBANK_PROGRAM/src
 
-MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK 
+MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK, so it will printed with the current time in the users labels and it will be printed with the container number in the operators/admins labels when collecting samples 
 
 ARD1_PORT = "/dev/ttyUSB0"
 ARD2_PORT = "/dev/ttyUSB1"
@@ -16,7 +16,7 @@ IMAGES_DIRECTORY = "../res/images/"
 ADMINSID_PATH = "../res/adminsAndOperators/admins.csv"
 OPERATORSID_PATH = "../res/adminsAndOperators/operators.csv"
 OPERATORS_EMAILS_PATH = "../res/adminsAndOperators/emails.csv"  # contains the operators emails to contact then in case of any problem
-AVAILABLE_RESOURCES_PATH = "../res/resources_data.csv"
+AVAILABLE_RESOURCES_AND_INFO_PATH = "../res/resources_&_info_data.csv"
 SPANISH_LANGUAGE_PATH = "../res/languages/spanish.csv"
 CATALAN_LANGUAGE_PATH = "../res/languages/catalan.csv"
 ENGLISH_LANGUAGE_PATH = "../res/languages/english.csv"
@@ -33,6 +33,9 @@ SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
 LABEL_PRINTING_TIMEOUT = 4 # in seconds
+
+MIN_ALLOWED_TEMPERATURE = 0.0 # in centigrades. TODO: Change
+MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades. TODO: Change
 
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%

@@ -61,6 +61,7 @@ class MainScreen_admin(MainScreen):  # singleton
         self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES")
         messagebox.showinfo( Language_controller.get_message("muestras recogidas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
+        # TODO: Tengo que imprimir también una etiqueta con machine_ID más el número del contenedor actual y hacer lo de borrar las samples de la DB local y actualizar la remota y luego incrementar el número del contenedor. Poner esto en la clase del padre porque así podré llamarlo desde admin o desde operario. Un montonazo de las lineas anteriores se pueden pasar a esa función también
 
     def __refill_labels(self):
         messagebox.showinfo(Language_controller.get_message("efectuar reposicion etiquetas (cabecera)"), Language_controller.get_message("efectuar reposicion etiquetas (cuerpo)"))

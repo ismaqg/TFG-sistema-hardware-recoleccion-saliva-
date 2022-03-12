@@ -13,3 +13,10 @@ def inoperative_arduino_actions():
     messagebox.showerror(Language_controller.get_message("error recogida kit (cabecera)"), Language_controller.get_message("error recogida kit (cuerpo)"))  
     ActivePerson.getCurrent().logOut()
     Not_available_screen.getInstance().go_to_Not_available_screen_screen()
+
+def get_deposit_temperature():
+    #TODO. Y lee lo de abajo que tambien aplica a esta funcion
+    pass
+
+""" IMPORTANTE: LEE ESTE TODO DE ABAJO """
+# TODO: Creo que sería mejor que se pudiesen llamar tal cual a las funciones de Arduino_controller y que se hiciese allí dentro toda la gestión que hay que hacer si arduino está inoperativo

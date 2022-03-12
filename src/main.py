@@ -4,8 +4,8 @@ import os
 import subprocess
 
 import constants
+import Counters  # counters need to be imported before checker (because checker class imports counter class and counter class imports Priority from Checker class, so importing Checkers before Counters generates circular dependency). Also, all the classes that import Checker class need to be imported after this line (example: BDcontroller class imports ArduinoController class and ArduinoController class imports Checker, this is why BDcontroller is imported after than Counters here)
 import DBcontroller
-import Counters
 from Screen_saver import *
 import Checker
 import Language_controller
@@ -35,6 +35,8 @@ Language_controller.set_current_language(Language.SPANISH)
 # TODO: Probar a cambiar la linea anterior por os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)
 
 
+
+
 #Checker.check_hardware_usable_at_turningON() # TODO: DESCOMENTARLO
 Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()
@@ -42,6 +44,8 @@ Checker.check_not_max_stored_samples_at_turningON()
 
 
 Screen_saver.getInstance().go_to_screen_saver()
+
+
 
 
 #root.attributes("-fullscreen", True)
