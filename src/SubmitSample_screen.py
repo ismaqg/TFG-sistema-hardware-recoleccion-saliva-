@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 
+from PIL import ImageTk,Image
+
 import time
 
 import Printer_controller
@@ -11,8 +13,10 @@ import Arduino_controller
 import Counters
 import DBcontroller
 import Language_controller
+from Language_controller import Language
 from Person import ActivePerson
-from Not_available_screen import Not_available_screen
+
+
 
 class SubmitSample_screen: # singleton
     
@@ -84,8 +88,9 @@ class SubmitSample_screen: # singleton
         if self.__current_step == 7: # It will be entered here when the action of the last step (step 6: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
             self.__sample_submitted()
 
+        # current step visuals
         self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + str(self.__current_step)
-        # TODO: Añadir la imagen del step que toque al canva al canva (tranquilo que no hay que hacer 6 ifs. A las imagenes las voy a llamar step1, step2, etc. Por lo que puedo conseguir la imagen que toca porque sé el valor de current_step)
+        self.__set_current_step_image()
 
         # Change the text of the button of this step and make the actions associated, if any:
         if self.__current_step in {2, 5}: 
@@ -98,15 +103,33 @@ class SubmitSample_screen: # singleton
             self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
             self.__next_step_b["state"] = DISABLED
             labelID = constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S')
-            Printer_controller.print_label(labelID)
+            #Printer_controller.print_label(labelID)
             DBcontroller.add_submission_ID(labelID)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 6:
             # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
             self.__next_step_b["text"] = Language_controller.get_message("botón avisar muestra entregada")
             self.__next_step_b["state"] = DISABLED
+            # TODO: aqui entre disabled y normal iría la comprobación de si de verdad se ha entregado la puerta
             self.__next_step_b["state"] = NORMAL
-        
+            """ IMPORTANTE:
+            Si el hw funciona correctamente podria pasar que mi codigo del arduino estuviese mal o algo o que el sensor no fuese muy fino y detectase
+            como que no he abierto y cerrado la puerta. En ese caso, no se activaría el botón entregado y si eso me pasa el día de la exposición
+            estoy muerto, así que hacer que el botón de entregado se active después de X segundos si no detecta que se ha abierto y cerrado
+            """
+            
+
+    def __set_current_step_image(self):
+        current_language = Language_controller.get_current_language()  # return enum
+        language_str = current_language.name.lower()  # enum to string (and lowecased)
+        img = Image.open(constants.IMAGES_DIRECTORY + "step" + str(self.__current_step) + "_" + language_str + ".png")
+        img = img.resize((self.__info_steps_displayer.winfo_width(), self.__info_steps_displayer.winfo_height()), Image.ANTIALIAS)
+        self.__current_step_img = ImageTk.PhotoImage( img )  # current_step_img needs to be a class atribute. Otherwise, it won't work
+        x_center_canva = int(self.__info_steps_displayer.winfo_width() / 2)
+        y_center_canva = int(self.__info_steps_displayer.winfo_height() / 2)
+        self.__info_steps_displayer.create_image(x_center_canva, y_center_canva, image = self.__current_step_img)
+
+
 
     def __sample_submitted(self):
         """IMPORTANTE: LEE EL PRIMER TODO QUE HAY JUSTO AQUÍ ABAJO"""
@@ -142,9 +165,9 @@ class SubmitSample_screen: # singleton
 
     def go_to_submitSample_screen(self):
         self.__current_step = 1
-        # TODO: Añadir la imagen del step 1 al canva
+        self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + "1"
+        self.__set_current_step_image()
         self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
         self.__next_step_b["state"] = NORMAL
-        self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + "1"
         self.__submitSampleScreen_frame.tkraise()
         messagebox.showwarning(Language_controller.get_message("información previa (cabecera)"), Language_controller.get_message("información previa (recordatorio)"))

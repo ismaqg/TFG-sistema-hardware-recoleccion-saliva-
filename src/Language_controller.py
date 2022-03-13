@@ -89,9 +89,10 @@ str_to_index_map = {
 }
 
 messages = []
+current_language = None
 
 def set_current_language(language):
-    global messages
+    global messages, current_language
     if language == Language.SPANISH:
         messages = DBcontroller.get_messages(constants.SPANISH_LANGUAGE_PATH)
     elif language == Language.CATALAN:
@@ -102,6 +103,14 @@ def set_current_language(language):
         Screen_manager.get_root().destroy()
         raise Exception(str(language) + " unsuported language")
     apply_new_language_in_screens()
+    current_language = language
+
+
+def get_current_language():
+    global messages, current_language
+    if messages == []:  # Programmer forgot to set a default language at main.py. We set SPANISH as default
+        set_current_language(Language.SPANISH)
+    return current_language
 
 
 def get_message(identifier_str):

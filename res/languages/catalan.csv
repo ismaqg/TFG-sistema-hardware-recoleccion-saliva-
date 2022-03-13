@@ -15,7 +15,7 @@ OPERARI
 TANCAR\nSESSIÓ
 Etiquetes restants: 
 Kits restants: 
-Mostres entregades: 
+Mostres lliurades: 
  de 
 REPOSAR\nKITS
 REPOSAR\nETIQUETES\nIMPRESSORA
@@ -24,7 +24,7 @@ CONSULTAR\nBASE DE DADES
 Reposar kits
 Ja pots obrir la porta lateral i reposar els kits que falten. Quan ho hagis fet, prem OK
 Recollir mostres
-Ja pots obrir la porta lateral i recollir les mostres entregades pels usuaris. Enganxa l'etiqueta impresa al contenidor de mostres. Quan ho hagis fet, prem OK
+Ja pots obrir la porta lateral i recollir les mostres lliurades pels usuaris. Enganxa l'etiqueta impresa al contenidor de mostres. Quan ho hagis fet, prem OK
 Reposar etiquetes
 Ja pots obrir per a reposar la impresora d'etiquetes amb un nou rotllo. Quan ho hagis fet, prem OK
 Kits reposats
@@ -53,9 +53,9 @@ Ja pots recollir el kit del depòsit lateral. Serà redirigit al menú d'entrega
 PAS 
 SEGÜENT
 IMPRIMIR ETIQUETA
-ENTREGAT
-MOSTRA ENTREGADA
-La mostra ha sigut entregada. Prem 'OK' per ser desconnectat correctament de l'aplicació
+MOSTRA LLIURADA
+MOSTRA LLIURADA
+La mostra ha sigut lliurada. Prem 'OK' per ser desconnectat correctament de l'aplicació
 ERROR IMPRESSIÓ
 La impressora no respon o no queden etiquetes. Es tancarà la seva sessió i avisarem a un tècnic. Torni més tard, si us plau
 Recorda que per a que la mostra de saliva sigui vàlida, no pots haber ingerit res als últims 30 minuts.
