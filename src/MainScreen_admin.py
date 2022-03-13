@@ -54,12 +54,11 @@ class MainScreen_admin(MainScreen):  # singleton
         # TODO futuro: Que el que hace refill tenga la posibilidad de indicar cuantos AÑADE, por si no llena el deposito entero. En ese caso, el valor de kits será el que había más el añadido
 
     def __collect_samples(self):
-        messagebox.showinfo(Language_controller.get_message("efectuar recogida muestras (cabecera)"), Language_controller.get_message("efectuar recogida muestras (cuerpo)"))
-        Counters.set_stored_samples(0)
+        super()._collect_samples()
         self.__stored_samples_info["text"] = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
         self.__stored_samples_info["fg"] = Counters.get_stored_samples_fg_color()
         self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES")
+        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
         messagebox.showinfo( Language_controller.get_message("muestras recogidas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
         # TODO: Tengo que imprimir también una etiqueta con machine_ID más el número del contenedor actual y hacer lo de borrar las samples de la DB local y actualizar la remota y luego incrementar el número del contenedor. Poner esto en la clase del padre porque así podré llamarlo desde admin o desde operario. Un montonazo de las lineas anteriores se pueden pasar a esa función también
 

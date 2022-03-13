@@ -53,7 +53,7 @@ def get_container_number():
     return __container_number
 
 # called each time that an operator / admin collects the samples container.
-def increment_containter_numer():
+def increment_containter_number():
     global __container_number
     __container_number += 1
     DBcontroller.write_container_number_csv(__container_number)

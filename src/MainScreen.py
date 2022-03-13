@@ -2,10 +2,16 @@ from abc import ABC, abstractmethod
 
 from tkinter import messagebox
 
+import constants
 from Person import ActivePerson  # to make abstract classes
 import Screen_manager
 import DBcontroller
 import Language_controller
+import Counters
+import Printer_controller
+
+
+
 
 # The idea of ​​this class is that it will contain the frame of the main screen, but 3 classes will inherit from it, which must
 # have access to that frame. Those 3 classes that inherit are singleton and when they are instantiated for the first and only time
@@ -67,17 +73,25 @@ class MainScreen(ABC): # abstract
         cls._ms_body_frame.columnconfigure(3, weight = 0)
         cls._ms_body_frame.columnconfigure(4, weight = 0)
         cls._ms_body_frame.columnconfigure(5, weight = 0)
-         
+
+
+    def __printer_not_responding_while_printing():
+        # TODO
+        pass
+
 
     @staticmethod
     def _collect_samples():
-        # TODO: mover casi todo el contenido de esta funcion de operator y admin a aqui, y desde allí llamar a esta función. Luego, añadir lo siguiente:
-        # - imprimir etiqueta (si esta viva la impresora, si no ya sabes) con la etiqueta ID (formada por ID maquina + numero contenedor)
-        # - decirle a admin/operator que ya puede recoger el contenedor y le debe pegar la etiqueta
-        # - mover de la BD local a la remota las samples con la funcion esa que tengo del DBcontroller
-        # - incrementar el numero de contenedor para la proxima vez que se recojan samples (tiene que ir despues del punto anterior por huevos porque ahí se usa el numero de contenedor)
-        # NOTA: al string que representa el evento que se pone en info uso añadirle el ID del contenedor que se esta recogiendo
-        pass
+        Printer_controller.print_label(constants.MACHINE_ID + str(Counters.get_container_number()))
+        # TODO: Cambiar ligeramente el mensaje que muestra esta linea de abajo (en todos los idiomas) porque hay que decir que enganche la etiqueta impresa al contenedor de muestras
+        messagebox.showinfo(Language_controller.get_message("efectuar recogida muestras (cabecera)"), Language_controller.get_message("efectuar recogida muestras (cuerpo)"))
+
+        # at this point, we know that the operator/admin has stuck the printed label on the container and has picked it up, because he has pressed OK in the message on the previous line. 
+        DBcontroller.insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions()
+        Counters.increment_containter_number() # this line is needed after the insertion of information in the remote DB because in that insertion is used the container number prior to the 'container_number++'
+        Counters.set_stored_samples(0)
+        # now it returns to the admin/operation functions, where other operations are done, such as changing the value and color that represents the stored samples, or the record of the collection samples action in the info_uso database
+        
 
 
     @staticmethod

@@ -36,7 +36,6 @@ Language_controller.set_current_language(Language.SPANISH)
 
 
 
-
 #Checker.check_hardware_usable_at_turningON() # TODO: DESCOMENTARLO
 Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()

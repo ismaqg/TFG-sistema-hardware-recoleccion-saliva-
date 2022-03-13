@@ -19,4 +19,4 @@ def get_deposit_temperature():
     pass
 
 """ IMPORTANTE: LEE ESTE TODO DE ABAJO """
-# TODO: Creo que sería mejor que se pudiesen llamar tal cual a las funciones de Arduino_controller y que se hiciese allí dentro toda la gestión que hay que hacer si arduino está inoperativo
+# TODO: Creo que sería mejor que se pudiesen llamar tal cual a las funciones de Arduino_controller y que se hiciese allí dentro toda la gestión que hay que hacer si arduino está inoperativo. O sea, que sea dentro de esta clase donde se llame a Checker.is_arduino_alive(), la gestión de timeouts y el salto a NotAvailableScreen
