@@ -51,26 +51,28 @@ def get_operators_emails():
     return operators_emails
 
 
+
 # returns, in this order: available_kits, stored_samples and available_labels
 def read_available_resources_csv():
     with open(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, 'r') as fd:
         data = list(csv.reader(fd))
     return [ int(data[0][1]), int(data[1][1]), int(data[2][1]) ]
 
-def write_available_resources_csv(available_kits, stored_samples, available_labels):
-    data = [
-        ['available_kits', available_kits],
-        ['stored_samples', stored_samples],
-        ['available_labels', available_labels]  ]
-    with open(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, 'w') as fd:
-        writer = csv.writer(fd)
-        writer.writerows(data)
-
-
 def read_container_number_csv():
     with open(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, 'r') as fd:
         data = list(csv.reader(fd))
     return int(data[3][1])  # the container number is in the fourth line, second column of the csv.
+
+
+def write_available_resources_csv(available_kits, stored_samples, available_labels):
+    #I think that there is no option to write a specific row (giving the index) in a csv with python, so I will read the entire content of the csv and rewrite it:
+    container_number = read_container_number_csv()
+    data = [
+        ['available_kits', available_kits],
+        ['stored_samples', stored_samples],
+        ['available_labels', available_labels],
+        ['container_number', container_number]  ]
+    __write_csv(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, data)
 
 def write_container_number_csv(container_number):
     #I think that there is no option to write a specific row (giving the index) in a csv with python, so I will read the entire content of the csv and rewrite it:
@@ -80,9 +82,13 @@ def write_container_number_csv(container_number):
         ['stored_samples', stored_samples],
         ['available_labels', available_labels],
         ['container_number', container_number]  ]
-    with open(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, 'w') as fd:
+    __write_csv(constants.AVAILABLE_RESOURCES_AND_INFO_PATH, data)
+
+def __write_csv(path, data):
+    with open(path, 'w') as fd:
         writer = csv.writer(fd)
         writer.writerows(data)
+
 
 
 def get_messages(language_file_path):
@@ -196,12 +202,12 @@ def user_has_kit():
         connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
         cursor = connection.cursor()
         cursor.execute("SELECT submit_time FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC") # the last row of a certain user is the one with the highest oid (and the cip of that user). This is why I order descending and only get the first row after ordering
-        last_submission_of_that_user = cursor.fetchone()[0] # [0] because the fetchone returns a tuple (in this case of one element, look at the SELECT executed) and we want that element.
+        last_submission_of_that_user = cursor.fetchone() 
         connection.close()
         if last_submission_of_that_user == None:
             return False
         else:
-            if last_submission_of_that_user == "NO SUBMISSION": 
+            if last_submission_of_that_user[0] == "NO SUBMISSION": # [0] because the fetchone returns a tuple (in this case of one element, look at the SELECT executed) and we want that element. We cannot do directly cursor.fetchone()[0] some lines above because maybe cursor.fetchone() equals to 'None'
                 return True  # note that the fact that a row of one user exists, means that he/she requested a kit.
             else: # the last interection of the user with the system was to submit a sample, so the user has not a kit.
                 return False
