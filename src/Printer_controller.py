@@ -71,7 +71,6 @@ def print_label(labelID):
         signal.alarm(0)
 
         DBcontroller.add_new_event("-", "Printed: " + labelID)
-        DBcontroller.add_submission_ID(labelID)
         Counters.decrement_available_labels()
         
     else:

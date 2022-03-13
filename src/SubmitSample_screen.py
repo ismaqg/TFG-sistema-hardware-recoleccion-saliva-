@@ -97,7 +97,9 @@ class SubmitSample_screen: # singleton
         elif self.__current_step == 4:
             self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
             self.__next_step_b["state"] = DISABLED
-            Printer_controller.print_label(constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S'))
+            labelID = constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S')
+            Printer_controller.print_label(labelID)
+            DBcontroller.add_submission_ID(labelID)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 6:
             # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
