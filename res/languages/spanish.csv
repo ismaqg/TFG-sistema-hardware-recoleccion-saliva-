@@ -63,7 +63,7 @@ Recuerda que para que la muestra de saliva sea válida, no debes haber ingerido 
 
 Si ha transcurrido ese tiempo, pulse el botón de ""Cumplo los requisitos. Quiero recoger el kit"".
 
-Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."
+Si NO ha transcurrido ese tiempo, pulse ""NO cumplo los requisitos"". Se cerrará su sesión. Vuelva más tarde."
 ERROR RECOGIDA KIT
 Lo sentimos, se ha producido un error interno. Se cerrará su sesión, vuelva más tarde por favor.
 ERROR. NO HAY ETIQUETAS
@@ -81,3 +81,4 @@ Estás seguro de haber vaciado completamente el depósito de muestras?
 NO DISPONIBLE
 CERRAR PROGRAMA
 Clave errónea
+NO cumplo los requisitos

@@ -61,9 +61,9 @@ The printer is not responding or there are no labels left. Your session will be 
 Remember that for the saliva sample to be valid, you must not have eaten anything in the last 30 minutes.
 "A minimum of 30 minutes should elapse between the last time you ingested any type of food or liquid and the collection of saliva.
 
-If that time has elapsed, click the ""I meet the requirements. I want to get a kit"" button.
+If that time has elapsed, press the ""I meet the requirements. I want to get a kit"" button.
 
-If this time has NOT elapsed, return to the previous menu and log out. Come back later."
+If this time has NOT elapsed, press ""I do NOT meet the requirements"". Your session will be closed. Come back later."
 ERROR GETTING KIT
 Sorry, an internal error occurred. Your session will be closed, please come back later.
 ERROR. NO LABELS
@@ -81,3 +81,4 @@ Are you sure you have completely emptied the sample container?
 NOT AVAILABLE
 CLOSE PROGRAM
 Wrong key
+I DON'T meet the\nrequirements

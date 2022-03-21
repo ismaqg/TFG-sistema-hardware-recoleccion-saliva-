@@ -1,4 +1,3 @@
-from matplotlib import container
 from Person import ActivePerson
 import Screen_manager
 import constants

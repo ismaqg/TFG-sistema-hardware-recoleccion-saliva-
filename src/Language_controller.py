@@ -85,7 +85,8 @@ str_to_index_map = {
     "comprobacion vaciado deposito muestras (cuerpo)" : 74,
     "título pestaña no disponible" : 75,
     "cerrar programa pestaña no disponible" : 76,
-    "clave errónea" : 77
+    "clave errónea" : 77,
+    "no cumplo los requisitos" : 78
 }
 
 messages = []

@@ -49,15 +49,18 @@ class ClaimKit_screen: # singleton
             self.__previous_info_displayer.insert(INSERT, Language_controller.get_message("información previa (extendida)"))
             self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
             self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = Language_controller.get_message("quiero recoger un kit"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__get_kit)
+            self.__dont_get_kit_b = Button(self.__claimKitscreen_body_frame, text = Language_controller.get_message("no cumplo los requisitos"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), bg = constants.LIGHT_RED_BACKGROUNDCOLOR, command = self.__dont_meet_requirements)
 
-            self.__previous_info_title.grid(row = 0, column = 0, sticky = 'NSEW', pady=5)
-            self.__previous_info_displayer.grid(row = 1, column = 0, sticky = 'NSEW', padx = 20)
-            self.__get_kit_b.grid(row = 2, column=0, sticky = 'NSEW', padx=150, pady=5)
+            self.__previous_info_title.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW', pady=5)
+            self.__previous_info_displayer.grid(row = 1, column = 0, columnspan = 2, sticky = 'NSEW', padx = 20)
+            self.__get_kit_b.grid(row = 2, column=0, sticky = 'NSEW', padx=(20,10), pady=5)
+            self.__dont_get_kit_b.grid(row = 2, column=1, sticky = 'NSEW', padx=(10,20), pady=5)
 
             self.__claimKitscreen_body_frame.rowconfigure(0, weight = 1)
             self.__claimKitscreen_body_frame.rowconfigure(1, weight = 3)
             self.__claimKitscreen_body_frame.rowconfigure(2, weight = 1)
-            self.__claimKitscreen_body_frame.columnconfigure(0, weight = 1) # it's necessary to give a weight (even though there is only one column in clamKitscreen_body_frame) for sticky=NSEW of the inside widgets to work correctly
+            self.__claimKitscreen_body_frame.columnconfigure(0, weight = 1)
+            self.__claimKitscreen_body_frame.columnconfigure(1, weight = 1) 
             
 
             ClaimKit_screen.__instance = self
@@ -95,6 +98,13 @@ class ClaimKit_screen: # singleton
         else:
             Arduino_controller.inoperative_arduino_actions()
 
+
+    def __dont_meet_requirements(self):
+        ActivePerson.getCurrent().logOut()  # This function can't be called directly on the "command" parameter of the dont_get_kit_b button instantiation because, if we do that, as soon as the ClaimKit_screen object is created, ActivePerson.getCurrent()
+                                            # would be called in order to prepare the instance/class which contains that "logout()" function that we want to "link" with the dont_get_kit_b button. And at that momment there is no "Current" inside "Person", so an exception would be thrown!
+
+
+
     
     # changes the texts to the current language. This function is called by Language_controller when a new language is setted
     def change_language(self):
@@ -106,6 +116,7 @@ class ClaimKit_screen: # singleton
         self.__previous_info_displayer.insert(INSERT, Language_controller.get_message("información previa (extendida)"))
         self.__previous_info_displayer["state"] = DISABLED
         self.__get_kit_b["text"] = Language_controller.get_message("quiero recoger un kit")
+        self.__dont_get_kit_b["text"] = Language_controller.get_message("no cumplo los requisitos")
 
     def go_to_claimKit_screen(self):
         self.__claimKitscreen_frame.tkraise()

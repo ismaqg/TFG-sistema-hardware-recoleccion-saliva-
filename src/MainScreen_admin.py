@@ -128,5 +128,4 @@ class MainScreen_admin(MainScreen):  # singleton
     def logOut_button(self):
         logout = messagebox.askyesno(Language_controller.get_message("mensaje cierre sesión (cabecera)"), Language_controller.get_message("mensaje cierre sesión (cuerpo)"))
         if logout == True:
-            self.erase_mainScreen_contents()
             ActivePerson.getCurrent().logOut()

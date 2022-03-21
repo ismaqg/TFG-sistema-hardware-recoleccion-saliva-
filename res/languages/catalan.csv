@@ -47,7 +47,7 @@ Canviar\nBase de Dades
 TORNAR\nENRERE
 OBTENIR KIT
 INFORMACIÓ PRÈVIA:
-Cumpleixo els requisits.\n Vull recollir el kit
+Compleixo els requisits.\n Vull recollir el kit
 RECOLLIDA KIT
 Ja pots recollir el kit del depòsit lateral. Serà redirigit al menú d'entrega de mostres de saliva, on se li mostraran les instruccions
 PAS 
@@ -61,9 +61,9 @@ La impressora no respon o no queden etiquetes. Es tancarà la seva sessió i avi
 Recorda que per a que la mostra de saliva sigui vàlida, no pots haber ingerit res als últims 30 minuts.
 "Han de transcòrrer un mínim de 30 minuts entre l'última vegada que va ingerir qualsevol tipus de menjar o líquid i la recollida de saliva. 
 
-Si ha transcorregut aquest temps, premi el botò de ""Cumpleixo els requisits. Vull recollir el kit"".
+Si ha transcorregut aquest temps, premi el botò de ""Compleixo els requisits. Vull recollir el kit"".
 
-Si NO ha transcorregut aquest temps, retorni al menú anterior y tanqui sessió. Torni més tard."
+Si NO ha transcorregut aquest temps, premi ""NO compleixo els requisits"". Es tancarà la sessió. Torni més tard."
 ERROR RECOLLIDA KIT
 Ho sentim, s'ha produït un error intern. Es tancarà la seva sessió. Torni més tard, si us plau.
 ERROR. NO HI HA ETIQUETES
@@ -81,3 +81,4 @@ Estàs segur d'haver buidat completament el depòsit de mostres?
 NO DISPONIBLE
 TANCAR PROGRAMA
 Clau errònia
+NO compleixo els requisits
