@@ -96,19 +96,20 @@ class LogIn_screen():  # singleton
             self.__login_input_entry.delete(0,'end')
             self.__input_variable.set('')
 
-            if person.get_status() == "ADMIN" or person.get_status() == "OPERATOR":
-                additional_security_check = Key_security()
-                self.__change_language["state"]= DISABLED  # disable the change language button while the key_security_screen is being showed
-                # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
-                Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
 
-            else: # USER. And entering here makes the same effect as a root.after_cancel of those 500 ms to check the password, because the timer is not reprogramed.
-                if Checker.check_available_resources() == False:  # cannot login because there are not available resources
-                    # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
-                    ActivePerson.destroyCurrent()
-                    messagebox.showerror(Language_controller.get_message("no puede iniciar sesion (cabecera)"), Language_controller.get_message("no puede iniciar sesion (cuerpo)"))
-                    Not_available_screen.getInstance().go_to_Not_available_screen_screen()
-                else:
+            if Checker.check_available_resources() == False:  # cannot login because there are not available resources
+                # NOTE: the function "check available resources at user login" implicitly sends a message of the error to an Operator, and registers the event in the DB.
+                ActivePerson.destroyCurrent()
+                messagebox.showerror(Language_controller.get_message("no puede iniciar sesion (cabecera)"), Language_controller.get_message("no puede iniciar sesion (cuerpo)"))
+                Not_available_screen.getInstance().go_to_Not_available_screen_screen()
+            else:
+                if person.get_status() == "ADMIN" or person.get_status() == "OPERATOR":
+                    additional_security_check = Key_security()
+                    self.__change_language["state"]= DISABLED  # disable the change language button while the key_security_screen is being showed
+                    # Program a timer to check the response to the 2nd authentication password and logIn (go to main screen) if correct or abort if not correct:
+                    Screen_manager.get_root().after(500, lambda:self.__check_2nd_authentication_response_and_logIn_if_correct(additional_security_check, person))
+
+                else: # USER. And entering here makes the same effect as a root.after_cancel of those 500 ms to check the password, because the timer is not reprogramed.
                     DBcontroller.add_new_event(person.get_CIP(), "USER LOGIN SUCCESS")
                     self.__login_screen_isActive = False  # we are about to leave login screen
                     MainScreen_user.getInstance().go_to_main_screen() 
