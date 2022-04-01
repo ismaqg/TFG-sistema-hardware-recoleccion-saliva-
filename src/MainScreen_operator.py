@@ -58,10 +58,7 @@ class MainScreen_operator(MainScreen):  # singleton
 
     def __collect_samples(self):
         super()._collect_samples()
-        self.__stored_samples_info["text"] = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
-        self.__stored_samples_info["fg"] = Counters.get_stored_samples_fg_color()
-        self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "OPERATOR COLLECTED SAMPLES. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+        self.__stored_samples_info.config( text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
         messagebox.showinfo( Language_controller.get_message("muestras recogidas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
 
     def __refill_labels(self):

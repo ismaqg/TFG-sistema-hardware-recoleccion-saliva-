@@ -22,11 +22,11 @@ REPOSAR\nETIQUETES\nIMPRESSORA
 RECOLLIR\nMOSTRES
 CONSULTAR\nBASE DE DADES
 Reposar kits
-Ja pots obrir la porta lateral i reposar els kits que falten. Quan ho hagis fet, prem OK
+Ja pots obrir la comporta superior esquerra i reposar els kits que falten. Quan ho hagis fet, prem OK.
 Recollir mostres
-Ja pots obrir la porta lateral i recollir les mostres lliurades pels usuaris. Enganxa l'etiqueta impresa al contenidor de mostres. Quan ho hagis fet, prem OK
+Ja pots obrir la comporta superior dreta i recollir les mostres lliurades pels usuaris. Enganxa l'etiqueta impresa al contenidor de mostres. Quan ho hagis fet, prem OK.
 Reposar etiquetes
-Ja pots obrir per a reposar la impresora d'etiquetes amb un nou rotllo. Quan ho hagis fet, prem OK
+Ja pots obrir comporta superior central per a reposar la impresora d'etiquetes amb un nou rotllo. Quan ho hagis fet, prem OK.
 Kits reposats
 Mostres recollides
 Etiquetes repostes
@@ -49,7 +49,7 @@ OBTENIR KIT
 INFORMACIÓ PRÈVIA:
 Compleixo els requisits.\n Vull recollir el kit
 RECOLLIDA KIT
-Ja pots recollir el kit del depòsit lateral. Serà redirigit al menú d'entrega de mostres de saliva, on se li mostraran les instruccions
+Ja pot recollir el kit a la portella a la seva esquerra. Serà redirigit al menú d'entrega de mostres de saliva, on se li mostraran les instruccions
 PAS 
 SEGÜENT
 IMPRIMIR ETIQUETA
@@ -75,7 +75,7 @@ El programa no pot iniciar-se perquè no queda cap kit que puguin utilitzar els 
 REPOSICIÓ DE KITS
 EstÀs segur d'haver omplert el depòsit de kits disponibles?
 ERROR. DEPOSIT PLE
-El programa no pot iniciar-se perquè el depòsit de mostres està ple i necessita buidar-se. Si us plau, buida el depòsit de mostres. Prem OK quan ho hagis fet
+El programa no pot iniciar-se perquè el depòsit de mostres està ple i necessita buidar-se. Prem OK per a més informació.
 BUIDAT DE DEPÒSIT
 Estàs segur d'haver buidat completament el depòsit de mostres?
 NO DISPONIBLE

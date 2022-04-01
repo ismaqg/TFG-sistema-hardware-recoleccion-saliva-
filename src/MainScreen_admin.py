@@ -55,12 +55,9 @@ class MainScreen_admin(MainScreen):  # singleton
 
     def __collect_samples(self):
         super()._collect_samples()
-        self.__stored_samples_info["text"] = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")"
-        self.__stored_samples_info["fg"] = Counters.get_stored_samples_fg_color()
-        self.__stored_samples_info["bg"] = Counters.get_stored_samples_bg_color()
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR COLLECTED SAMPLES. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+        self.__stored_samples_info.config( text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
         messagebox.showinfo( Language_controller.get_message("muestras recogidas (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
-        # TODO: Tengo que imprimir también una etiqueta con machine_ID más el número del contenedor actual y hacer lo de borrar las samples de la DB local y actualizar la remota y luego incrementar el número del contenedor. Poner esto en la clase del padre porque así podré llamarlo desde admin o desde operario. Un montonazo de las lineas anteriores se pueden pasar a esa función también
+
 
     def __refill_labels(self):
         messagebox.showinfo(Language_controller.get_message("efectuar reposicion etiquetas (cabecera)"), Language_controller.get_message("efectuar reposicion etiquetas (cuerpo)"))

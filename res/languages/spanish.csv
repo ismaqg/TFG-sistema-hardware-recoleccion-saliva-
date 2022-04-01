@@ -22,11 +22,11 @@ REPONER\nETIQUETAS\nIMPRESORA
 RECOGER\nMUESTRAS
 CONSULTAR\nBASE DE DATOS
 Reponer kits
-Ya puedes abrir la puerta lateral y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK
+Ya puedes abrir la compuerta superior izquierda y reponer los kits que falten. Cuando lo hayas hecho, pulsa OK.
 Recoger muestras
-Ya puedes abrir la puerta lateral y recoger las muestras entregadas por los usuarios. Pega la etiqueta impresa en el contenedor de muestras. Cuando lo hayas hecho, pulsa OK
+Ya puedes abrir la compuerta superior derecha y recoger las muestras entregadas por los usuarios. Pega la etiqueta impresa en el contenedor de muestras. Cuando lo hayas hecho, pulsa OK.
 Reponer etiquetas
-Ya puedes abrir para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK
+Ya puedes abrir la compuerta superior derecha para reponer la impresora de etiquetas con un nuevo rollo. Cuando lo hayas hecho, pulsa OK.
 Kits repuestos
 Muestras recogidas
 Etiquetas repuestas
@@ -49,7 +49,7 @@ OBTENER KIT
 INFORMACIÓN PREVIA:
 Cumplo los requisitos.\n Quiero recoger el kit
 RECOGIDA KIT
-Ya puedes recoger el kit del depósito lateral. Será redirigido al menú de entrega de muestra de saliva, donde se le mostrarán las instrucciones
+Ya puede recoger el kit en la portezuela a su izquierda. Será redirigido al menú de entrega de muestra de saliva, donde se le mostrarán las instrucciones
 PASO 
 SIGUIENTE
 IMPRIMIR ETIQUETA
@@ -75,7 +75,7 @@ El programa no puede iniciarse porque no queda ningún kit que puedan utilizar l
 REPOSICIÓN DE KITS
 Estás seguro de haber rellenado completamente el depósito de kits disponibles?
 ERROR. DEPOSITO LLENO
-El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Por favor, vacía el depósito de muestras. Haz click en OK cuando lo hayas hecho
+El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Pulsa OK para más información.
 VACIADO DE DEPÓSITO
 Estás seguro de haber vaciado completamente el depósito de muestras?
 NO DISPONIBLE

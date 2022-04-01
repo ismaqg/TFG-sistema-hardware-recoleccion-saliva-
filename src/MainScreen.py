@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 from tkinter import messagebox
 
 import constants
+import DBcontroller  # needs to be imported before activePerson
 from Person import ActivePerson  # to make abstract classes
 import Screen_manager
-import DBcontroller
 import Language_controller
 import Counters
 import Printer_controller
@@ -83,14 +83,17 @@ class MainScreen(ABC): # abstract
     @staticmethod
     def _collect_samples():
         Printer_controller.print_label(constants.MACHINE_ID + str(Counters.get_container_number()))
-        # TODO: Cambiar ligeramente el mensaje que muestra esta linea de abajo (en todos los idiomas) porque hay que decir que enganche la etiqueta impresa al contenedor de muestras
         messagebox.showinfo(Language_controller.get_message("efectuar recogida muestras (cabecera)"), Language_controller.get_message("efectuar recogida muestras (cuerpo)"))
 
         # at this point, we know that the operator/admin has stuck the printed label on the container and has picked it up, because he has pressed OK in the message on the previous line. 
         DBcontroller.insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions()
+        if ActivePerson.isThereActivePerson():
+            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+        else:
+            DBcontroller.add_new_event("-", "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
         Counters.increment_containter_number() # this line is needed after the insertion of information in the remote DB because in that insertion is used the container number prior to the 'container_number++'
         Counters.set_stored_samples(0)
-        # now it returns to the admin/operation functions, where other operations are done, such as changing the value and color that represents the stored samples, or the record of the collection samples action in the info_uso database
+        # now, unless this function has been accessed through a 'TurningON', it returns to the admin/operation functions, where other operations are done, such as changing the value and color that represents the stored samples, or the record of the collection samples action in the info_uso database
         
 
 

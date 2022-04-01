@@ -22,11 +22,11 @@ REPLENISH\nPRINTER\nLABELS
 COLLECT\nSAMPLES
 CHECK\nDATABASE
 Replenish kits
-You can now open the side door and replenish kits. When you have done it, press OK
+You can now open the top left gate and replenish kits. When you have done it, press OK.
 Collect samples
-You can now open the side door and collect the samples delivered by users. Stick the printed label on the sample container. When you have done it, press OK
+You can now open the top right gate and collect the samples delivered by users. Stick the printed label on the sample container. When you have done it, press OK.
 Replenish labels
-You can now open to replenish the label printer with a new roll. When you have done it, press OK
+You can now open the top central gate to replenish the label printer with a new roll. When you have done it, press OK.
 Kits replenished
 Samples collected
 Labels replenished
@@ -49,7 +49,7 @@ GET KIT
 PREVIOUS INFO:
 I meet the requirements.\n I want to get a kit
 KIT COLLECTION
-You can get the kit from the side tank. You will be redirected to the saliva sample delivery menu, where you will be shown instructions
+You can now pick up the kit at the door on your left. You will be redirected to the saliva sample delivery menu, where you will be shown instructions
 STEP 
 NEXT
 PRINT LABEL
@@ -75,7 +75,7 @@ The program cannot start because there are no kits left for users to use. Please
 KITS REFILL
 Are you sure you have completely filled the available kits deposit?
 ERROR. FULL TANK
-The program cannot start because the sample container is full and needs to be emptied. Please empty the sample container. Click OK when done
+The program cannot start because the sample container is full and needs to be emptied. Press OK for more information.
 TANK EMPTYING
 Are you sure you have completely emptied the sample container?
 NOT AVAILABLE
