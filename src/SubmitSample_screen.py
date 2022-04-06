@@ -87,6 +87,7 @@ class SubmitSample_screen: # singleton
 
         if self.__current_step == 7: # It will be entered here when the action of the last step (step 6: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
             self.__sample_submitted()
+            return
 
         # current step visuals
         self.__info_steps_title["text"] = Language_controller.get_message("paso número...") + str(self.__current_step)

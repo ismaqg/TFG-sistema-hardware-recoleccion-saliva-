@@ -89,8 +89,9 @@ class MainScreen(ABC): # abstract
         DBcontroller.insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions()
         if ActivePerson.isThereActivePerson():
             DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
-        else:
+        else: # case: container full when turning on the machine
             DBcontroller.add_new_event("-", "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+        
         Counters.increment_containter_number() # this line is needed after the insertion of information in the remote DB because in that insertion is used the container number prior to the 'container_number++'
         Counters.set_stored_samples(0)
         # now, unless this function has been accessed through a 'TurningON', it returns to the admin/operation functions, where other operations are done, such as changing the value and color that represents the stored samples, or the record of the collection samples action in the info_uso database

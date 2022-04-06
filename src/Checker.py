@@ -61,8 +61,9 @@ def check_hardware_usable_at_turningON():
     if not is_arduino_storage_alive():
         problems += 'ARDUINO STORAGE MODULE IS NOT CONNECTED OR NOT WORKING\n'    
     if problems != '':
+        messagebox.showerror("PROBLEMAS CON EL HARDWARE", "La aplicación no puede iniciarse. Problemas con el hardware: " + problems)
         Screen_manager.get_root().destroy()
-        raise Exception("THE PROGRAM CAN'T START BECAUSE:\n. PLEASE CHECK THAT THEY ARE WELL CONNECTED AND TURNED ON / WORKING" + problems)
+        raise Exception("THE PROGRAM CAN'T START BECAUSE:\n" + problems)
 
 #ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_available_labels_at_turningON():
@@ -90,15 +91,12 @@ def check_available_kits_at_turningON():
             Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
             DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPLENISHED KITS AT POWER UP")
 
-
 # ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_not_max_stored_samples_at_turningON():
-    if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT: # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
+    if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
         # TODO: Testear esto. O sea, testear que en un turningON funcione bien todo lo que tiene que ocurrir acerca de recoger muestras.
         messagebox.showerror(Language_controller.get_message("necesario vaciado deposito muestras (cabecera)"), Language_controller.get_message("necesario vaciado deposito muestras (cuerpo)"))
-        
         MainScreen._collect_samples()
-
 
 def check_available_resources():
     problems = ''
