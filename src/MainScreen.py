@@ -80,6 +80,9 @@ class MainScreen(ABC): # abstract
         pass
 
 
+    # NOTE: In this function it is important to first print the label and then do the management with the DDBB for the following reason: Both actions could fail due to external problems (problems with the remote DB or problems with the printer). If the label is printed first and then the operation with the DDBB fails,
+    # there would be no problem: The operator would find out about the failure because the program would abort and later he could try again to print and use the new printed label instead of the previous one (and in the DDBB would be shown the ID of the new printed label). On the other hand, if we first did the management
+    # with the DDBBs and then printed and the printing failed, we would have the DDBBs changed but we would never obtain the label with the identification number shown in the DDBBs, so it would be a huge problem.
     @staticmethod
     def _collect_samples():
         Printer_controller.print_label(constants.MACHINE_ID + str(Counters.get_container_number()))
