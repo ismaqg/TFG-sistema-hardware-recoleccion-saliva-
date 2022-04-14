@@ -10,6 +10,7 @@ from Screen_saver import *
 import Checker
 import Language_controller
 from Language_controller import Language
+import Arduino_controller
 
 
 
@@ -31,6 +32,8 @@ root = Screen_manager.start_application()
 # subprocess.Popen("echo 'salibank' | sudo -S  chmod 666 " + constants.PRINTER_PORT, stdout=subprocess.PIPE, shell=True) # TODO: Uncomment for raspberry. salibank is the rpi password
 
 # TODO: Probar a cambiar la linea anterior por os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)
+
+Arduino_controller.init_arduinos_connections() 
 
 Checker.check_hardware_usable_at_turningON() # TODO: DESCOMENTARLO
 Checker.check_available_labels_at_turningON()

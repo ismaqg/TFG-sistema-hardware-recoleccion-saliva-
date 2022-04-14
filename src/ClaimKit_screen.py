@@ -82,7 +82,7 @@ class ClaimKit_screen: # singleton
             timeout = False  # TODO: cambiarlo por lo del TODO anterior. La variablerepresenta timeout en la accion de abrir la puerta y dejar caer kit
 
             if timeout:
-                Arduino_controller.inoperative_arduino_actions()
+                Arduino_controller.inoperative_arduino_actions("supply")
             else:  # arduino has dropped a kit
                 # TODO: Encender barra leds del lado donde ha caido el kit. Con timeouts por si el arduino falla
                 Counters.decrement_available_kits()
@@ -96,7 +96,7 @@ class ClaimKit_screen: # singleton
                 # TODO: Apagar leds de la puerta. Con timeouts por si el arduino falla
                 SubmitSample_screen.getInstance().go_to_submitSample_screen()
         else:
-            Arduino_controller.inoperative_arduino_actions()
+            Arduino_controller.inoperative_arduino_actions("supply")
 
 
     def __dont_meet_requirements(self):

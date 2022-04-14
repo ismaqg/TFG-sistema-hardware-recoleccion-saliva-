@@ -9,6 +9,8 @@ MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means th
 ARD1_PORT = "/dev/ttyUSB0"
 ARD2_PORT = "/dev/ttyUSB1"
 PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0
+ARDUINO_STORAGE_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
+ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
 
 DB_MEDICALINFO_PATH = "../res/database/muestras_saliva.db" 
 DB_USEINFO_PATH = "../res/database/info_uso.db"
@@ -32,7 +34,8 @@ SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
-LABEL_PRINTING_TIMEOUT = 4 # in seconds
+LABEL_PRINTING_TIMEOUT = 3 # in seconds
+ARDUINO_COMMUNICATION_TIMEOUT = 3 # in seconds
 
 MIN_ALLOWED_TEMPERATURE = 0.0 # in centigrades. TODO: Change
 MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades. TODO: Change

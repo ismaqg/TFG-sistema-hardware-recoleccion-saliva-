@@ -152,7 +152,7 @@ class SubmitSample_screen: # singleton
 
             # TODO: Apagar leds de la puerta que ya ha cerrado. Con timeouts por si el arduino falla   
         else:
-            Arduino_controller.inoperative_arduino_actions()
+            Arduino_controller.inoperative_arduino_actions("storage")
 
             
           
