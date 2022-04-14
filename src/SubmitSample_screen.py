@@ -1,3 +1,4 @@
+from http.client import OK
 from tkinter import *
 from tkinter import messagebox
 
@@ -143,14 +144,26 @@ class SubmitSample_screen: # singleton
 
             # TODO: Cada vez que se entregue una muestra hay que pillar la temperatura y actualizar esa (y las demás) en la BD local. También cogeremos temperatura cada 30 mins!
 
+            self.__next_step_b["state"] = DISABLED
             Counters.increment_stored_samples()
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
             DBcontroller.add_sample_submission()  # to muetras_saliva DB
             ActivePerson.getCurrent().set_has_submitted_to_true()
-            messagebox.showinfo(Language_controller.get_message("aviso de muestra entregada (cabecera)"), Language_controller.get_message("aviso de muestra entregada (cuerpo)"))
-            ActivePerson.getCurrent().logOut()
-
-            # TODO: Apagar leds de la puerta que ya ha cerrado. Con timeouts por si el arduino falla   
+            
+            # Show info about sample delivered and log out. If users says OK just log him out, but if user is AFK, log him out also! 
+            try:
+                aux = Tk() # auxiliar screen where show the messagebox
+                aux.withdraw() # hide the new auxiliar screen.
+                after_identification = aux.after(10000, aux.destroy)  # if user is AFK, destroy the auxiliar screen (and it will destroy the messagebox!)
+                messagebox.showinfo(Language_controller.get_message("aviso de muestra entregada (cabecera)"), Language_controller.get_message("aviso de muestra entregada (cuerpo)"), master = aux)  # the parent of this messagebox is the auxiliar screen
+                if messagebox.OK: # the user is not AFK, so we need to cancel the timeout, destroy the auxiliar window and logOut (in the 'finally' clause)
+                    aux.after_cancel(after_identification) 
+                    aux.destroy()
+            except: # si salta el temporizador del after entraremos aquí porque ya no se podrá coger la respuesta del messagebox porque no existirá. El except está creado para que esa excepción no nos salga por pantalla y se ignore.
+                pass
+            finally: # independientemente de si el usuario ha interactuado o estaba AFK (que en ese caso salta una excepcion despues de destruir la pantalla auxiliar) se deberá hacer logout de la persona (que eso implícitamente devuelve al sistema a la pantalla de logIn)
+                ActivePerson.getCurrent().logOut()
+            
         else:
             Arduino_controller.inoperative_arduino_actions("storage")
 
