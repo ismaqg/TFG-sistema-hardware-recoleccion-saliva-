@@ -33,8 +33,7 @@ root = Screen_manager.start_application()
 
 # TODO: Probar a cambiar la linea anterior por os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)
 
-Arduino_controller.init_arduinos_connections() 
-
+ 
 Checker.check_hardware_usable_at_turningON() 
 Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()
@@ -42,6 +41,7 @@ Checker.check_not_max_stored_samples_at_turningON()
 
 Language_controller.set_current_language(Language.SPANISH)
 
+Arduino_controller.init_arduinos_connections()
 root.after(10000, Arduino_controller.get_deposit_temperature_periodically_and_update_DB) # 10 seconds after powering on: check temperature and update DB if needed. After that, a periodic interruption is programmed every X minutes to get the temperature again and repeat the process. 
 
 Screen_saver.getInstance().go_to_screen_saver()

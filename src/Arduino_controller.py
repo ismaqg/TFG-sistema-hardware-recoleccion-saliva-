@@ -27,9 +27,12 @@ arduino_supply = None
 
 def init_arduinos_connections():
     global arduino_storage, arduino_supply
-    arduino_storage = serial.Serial(constants.ARDUINO_STORAGE_PORT, 9600, timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1) # NOTE: if communication needs more than ARDUINO_COMMUNICATION_TIMEOUT seconds, an alarm is triggered (and Not_available_screen is raised), you can see it in other functions as get_deposit_temperature(). This "timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1" is here to close the communication with arduino after that happens, to not have blocked the serial communication port trying to still communicate when the program is already inoperative.
-    arduino_supply = serial.Serial(constants.ARDUINO_SUPPLY_PORT, 9600, timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1) 
-    time.sleep(2); # TODO: Igual puedo ahorrarmela si ya de por sí pasan almenos 2 segundos entre la llamda a esta función y que se intenta establecer la primera comunicación con los arduinos
+    if Checker.is_arduino_storage_alive() and Checker.is_arduino_supply_alive():
+        arduino_storage = serial.Serial(constants.ARDUINO_STORAGE_PORT, 9600, timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1) # NOTE: if communication needs more than ARDUINO_COMMUNICATION_TIMEOUT seconds, an alarm is triggered (and Not_available_screen is raised), you can see it in other functions as get_deposit_temperature(). This "timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1" is here to close the communication with arduino after that happens, to not have blocked the serial communication port trying to still communicate when the program is already inoperative.
+        arduino_supply = serial.Serial(constants.ARDUINO_SUPPLY_PORT, 9600, timeout = constants.ARDUINO_COMMUNICATION_TIMEOUT + 1) 
+        #time.sleep(2) <- este es mas o menos el tiempo que necesitan las lineas anteriores para hacerse correctamente antes de que se intente hacer nada de linea serie sobre el arduino. Ahora mismo lo primero que se intenta hacer para interactuar con él es pedirle la temperatura a los 10s de iniciarse, pero si se quisiese esa temperatura a los 0s habría que descomentar este time.sleep(2)
+    else:
+        inoperative_arduino_actions("storage and supply")
 
 
 def inoperative_arduino_actions(which_arduino):
@@ -136,5 +139,3 @@ def stop_checking_if_sample_submission():
     else:
         inoperative_arduino_actions("storage")
 
-""" IMPORTANTE: LEE ESTE TODO DE ABAJO """
-# TODO: Creo que sería mejor que se pudiesen llamar tal cual a las funciones de Arduino_controller y que se hiciese allí dentro toda la gestión que hay que hacer si arduino está inoperativo. O sea, que sea dentro de esta clase donde se llame a Checker.is_arduino_alive(), la gestión de timeouts y el salto a NotAvailableScreen.

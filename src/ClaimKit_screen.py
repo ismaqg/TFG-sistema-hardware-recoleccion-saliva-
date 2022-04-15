@@ -74,29 +74,18 @@ class ClaimKit_screen: # singleton
 
 
     def __get_kit(self):
-        """IMPORTANTE: LEE EL PRIMER TODO QUE HAY JUSTO AQUÍ ABAJO"""
-        if (Checker.is_arduino_supply_alive()):  # TODO: Quizá aquí podríamos pedirle al arduino_controller tal cual lo que toca y ya luego las gestiones de si el arduino no está operativo o salta timeout pues que las haga el propio arduino controller. Tendría más sentido
-
-            # TODO: Pedirle el kit al arduino y programar un timeout que puede saltar si tarda mucho
-            
-            timeout = False  # TODO: cambiarlo por lo del TODO anterior. La variablerepresenta timeout en la accion de abrir la puerta y dejar caer kit
-
-            if timeout:
-                Arduino_controller.inoperative_arduino_actions("supply")
-            else:  # arduino has dropped a kit
-                # TODO: Encender barra leds del lado donde ha caido el kit. Con timeouts por si el arduino falla
-                Counters.decrement_available_kits()
-                DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")  # to info_uso DB
-                if DBcontroller.user_has_kit():
-                    DBcontroller.update_time_pickup_kit()  # to muestras_saliva DB
-                else:
-                    DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
-                messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) # TODO: No sé si es un depósito lateral, igual tengo que cambiar el mensaje
-                ActivePerson.getCurrent().set_has_claimed_kit_to_true()
-                # TODO: Apagar leds de la puerta. Con timeouts por si el arduino falla
-                SubmitSample_screen.getInstance().go_to_submitSample_screen()
+        # TODO: Pedirle el kit al arduino (hacer girar el motor y que pare cuando detectemos que ha caido el kit). Todo lo de arduino con timeouts y tal obviamente
+                   
+        Counters.decrement_available_kits()
+        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")  # to info_uso DB
+        if DBcontroller.user_has_kit():
+            DBcontroller.update_time_pickup_kit()  # to muestras_saliva DB
         else:
-            Arduino_controller.inoperative_arduino_actions("supply")
+            DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
+        messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) # TODO: No sé si es un depósito lateral, igual tengo que cambiar el mensaje
+        ActivePerson.getCurrent().set_has_claimed_kit_to_true()
+        SubmitSample_screen.getInstance().go_to_submitSample_screen()
+
 
 
     def __dont_meet_requirements(self):
