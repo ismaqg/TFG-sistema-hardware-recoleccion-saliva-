@@ -6,8 +6,6 @@ PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  #
 
 MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK, so it will printed with the current time in the users labels and it will be printed with the container number in the operators/admins labels when collecting samples 
 
-ARD1_PORT = "/dev/ttyUSB0"
-ARD2_PORT = "/dev/ttyUSB1"
 PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0
 ARDUINO_STORAGE_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
 ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
@@ -34,11 +32,12 @@ SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
+CHECK_TEMPERATURE_TIMER = 20000 # in miliseconds (TODO: Despues de testearlo cambiarlo a algo tipo 10 minutos (o 60 y así en la defensa del tfg no me da problemas))
 LABEL_PRINTING_TIMEOUT = 3 # in seconds
-ARDUINO_COMMUNICATION_TIMEOUT = 3 # in seconds
+ARDUINO_COMMUNICATION_TIMEOUT = 2 # in seconds
 
-MIN_ALLOWED_TEMPERATURE = 0.0 # in centigrades. TODO: Change
-MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades. TODO: Change
+MIN_ALLOWED_TEMPERATURE = 0.0 # in centigrades. 
+MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades. 
 
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%

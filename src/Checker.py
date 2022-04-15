@@ -19,16 +19,16 @@ from enum import Enum
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
 def is_arduino_supply_alive():
-    # TODO. Mirar si esta vivo (y retornar true o false en consecuencia). En caso de no estar vivo hay que avisar del problema critico: notify_operator("ARDUINO NOT RESPONDING", Priority.CRITICAL)
-    return True
+    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    return os.path.exists(constants.ARDUINO_SUPPLY_PORT)
 
 def is_arduino_storage_alive():
-    # TODO. Mirar si esta vivo (y retornar true o false en consecuencia). En caso de no estar vivo hay que avisar del problema critico: notify_operator("ARDUINO NOT RESPONDING", Priority.CRITICAL)
-    return True
+    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    return os.path.exists(constants.ARDUINO_STORAGE_PORT)
 
 
 def is_printer_alive():
-    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
     return os.path.exists(constants.PRINTER_PORT)
     
     

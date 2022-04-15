@@ -267,7 +267,7 @@ def add_sample_submission():
     oid = query_result[0]
     claim_kit_time = query_result[1]
     submit_time = time.strftime("%d/%m/%Y, %H:%M:%S") 
-    min_T = max_T = Arduino_controller.get_deposit_temperature()  # TODO: Creo que sería mejor que se pudiesen llamar tal cual a las funciones de Arduino_controller (tal como estoy haciendo aquí, sin ver si está vivo o no) y que se hiciese allí dentro toda la gestión que hay que hacer si arduino está inoperativo
+    min_T = max_T = Arduino_controller.get_deposit_temperature() 
     valid = "NO"
     if min_T >= str(constants.MIN_ALLOWED_TEMPERATURE) and max_T <= str(constants.MAX_ALLOWED_TEMPERATURE):
             valid = "YES"
@@ -289,7 +289,7 @@ def add_submission_ID(submissionID):
         raise Exception("PRE of add_submission_ID is not satisfied")
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
-    # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user:
+    # get the oid (primary key) of the last record (which is the record with kitpick info but not submit info) of the current user. (the last is that one with higher oid):
     cursor.execute("SELECT oid FROM muestras_saliva WHERE CIP = '" + ActivePerson.getCurrent().get_CIP() + "' ORDER BY oid DESC")
     oid = cursor.fetchone()[0]  # [0] because we want only the integer contained in the tuple of one element that cursor.fetchone() is returning
     # update that record:  
@@ -300,9 +300,31 @@ def add_submission_ID(submissionID):
     connection.close()
 
 
-def modify_DB_with_new_temperature(T):
-    # TODO: Aqui hay que mirar la temperatura min y max que había por cada fila (en la que hubiesen submissions). if T < min_T: min_T = T; elif T > max_T: max_T = T. Y si T se sale de los margenes de seguridad: Valid = "NO" 
-    pass
+# in the local DB (with submit_time <> 'NO SUBMISSION') we have all the samples that are in the container, exposed to the temperature T
+def modify_DB_temperatures_if_needed(T):
+    # TODO: Aqui hay que mirar la temperatura min y max que había por cada fila (en la que hubiesen submissions). if T < min_T: min_T = T; elif T > max_T: max_T = T. Y si T se sale de los margenes de seguridad: Valid = "NO"
+    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+    cursor = connection.cursor()
+    cursor.execute("SELECT oid, min_temperature, max_temperature FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'")
+    samples_inside_machine = cursor.fetchall()
+    for sample in samples_inside_machine:
+        oid = str(sample[0])
+        min_T = str(sample[1])
+        max_T = str(sample[2])
+        if T < min_T:
+            min_T = T
+        elif T > max_T:
+            max_T = T
+        valid = "YES"
+        if min_T < str(constants.MIN_ALLOWED_TEMPERATURE) or max_T > str(constants.MAX_ALLOWED_TEMPERATURE):
+            valid = "NO"
+        cursor.execute("UPDATE muestras_saliva SET " +
+                    "min_temperature = '" + min_T + "', " +
+                    "max_temperature = '" + max_T + "', " +
+                    "valid = '" + valid + "' " +
+                    "WHERE oid = '" + oid + "' ")
+    connection.commit()
+    connection.close()
     
 
 

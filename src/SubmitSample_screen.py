@@ -10,6 +10,7 @@ import Printer_controller
 import Screen_manager
 import constants
 import Checker
+from Checker import Priority
 import Arduino_controller
 import Counters
 import DBcontroller
@@ -86,8 +87,8 @@ class SubmitSample_screen: # singleton
 
         self.__current_step += 1
 
-        if self.__current_step == 7: # It will be entered here when the action of the last step (step 6: deliver the sample) has been completed (i.e. THE SAMPLE HAS BEEN SUBMITTED)
-            self.__sample_submitted()
+        if self.__current_step == 7: # It will be entered here when the user clicks the button of "SAMPLE SUBMITTED". This will mean that the user is saying that has submitted a sample but the arduino hasn't detected it.
+            self.__sample_submitted(arduino_detection = False)
             return
 
         # current step visuals
@@ -104,21 +105,18 @@ class SubmitSample_screen: # singleton
         elif self.__current_step == 4:
             self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
             self.__next_step_b["state"] = DISABLED
-            labelID = constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S')
-            Printer_controller.print_label(labelID)
-            DBcontroller.add_submission_ID(labelID)
+            self.__most_recent_labelID = constants.MACHINE_ID + time.strftime('%d%m%y%H%M%S')  # the labelID is stored in "self" because is used in the "__sample_submitted() function"
+            Printer_controller.print_label(self.__most_recent_labelID)
+            DBcontroller.add_submission_ID(self.__most_recent_labelID)
             self.__next_step_b["state"] = NORMAL
         elif self.__current_step == 6:
-            # TODO: Hay que mirar con el sensor del arduino si de verdad abre la puerta. Timeouts por si peta
             self.__next_step_b["text"] = Language_controller.get_message("botón avisar muestra entregada")
             self.__next_step_b["state"] = DISABLED
-            # TODO: aqui entre disabled y normal iría la comprobación de si de verdad se ha entregado la puerta
+            Arduino_controller.start_checking_if_sample_submission()
             self.__next_step_b["state"] = NORMAL
-            """ IMPORTANTE:
-            Si el hw funciona correctamente podria pasar que mi codigo del arduino estuviese mal o algo o que el sensor no fuese muy fino y detectase
-            como que no he abierto y cerrado la puerta. En ese caso, no se activaría el botón entregado y si eso me pasa el día de la exposición
-            estoy muerto, así que hacer que el botón de entregado se active después de X segundos si no detecta que se ha abierto y cerrado
-            """
+            # Program a timer to check if sample was submitted (each 0.5seconds):
+            self.__check_is_submitted_countdown = Screen_manager.get_root().after(500, self.__check_if_sample_submitted)
+
             
 
     def __set_current_step_image(self):
@@ -132,40 +130,43 @@ class SubmitSample_screen: # singleton
         self.__info_steps_displayer.create_image(x_center_canva, y_center_canva, image = self.__current_step_img)
 
 
-
-    def __sample_submitted(self):
-        """IMPORTANTE: LEE EL PRIMER TODO QUE HAY JUSTO AQUÍ ABAJO"""
-        if (Checker.is_arduino_storage_alive()):  # TODO: Quizá aquí podríamos pedirle al arduino_controller tal cual lo que toca y ya luego las gestiones de si el arduino no está operativo o salta timeout pues que las haga el propio arduino controller. Tendría más sentido
-
-            # TODO: Al final parece que usaremos el arduino a modo de sensor de que se haya entregado o para medir la temperatura. Así que poner ese código aquí dentro. OJO: Esta es la función de sample submitted, a
-            # la que se supone que llama cuando ya ha cerrado la puerta, así que posiblemente necesito otra función para mirar si se abre la puerta. O MEJOR: ese codigo de ver si se abre la puerta y tal ponerlo en el arduino que
-            #vaya mirando siempre, y luego en esta función consultarle al arduino: Oye, realmente ya abrió y cerró la puerta?. Y si no, si tengo que poner el codigo en este fichero, el lugar correcto sería el step 6, no esta función (que se llama en step 8)
-            # TODO: Poner timeouts en todas las comunicaciones con el arduino
-
-            # TODO: Cada vez que se entregue una muestra hay que pillar la temperatura y actualizar esa (y las demás) en la BD local. También cogeremos temperatura cada 30 mins!
-
-            self.__next_step_b["state"] = DISABLED
-            Counters.increment_stored_samples()
-            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
-            DBcontroller.add_sample_submission()  # to muetras_saliva DB
-            ActivePerson.getCurrent().set_has_submitted_to_true()
-            
-            # Show info about sample delivered and log out. If users says OK just log him out, but if user is AFK, log him out also! 
-            try:
-                aux = Tk() # auxiliar screen where show the messagebox
-                aux.withdraw() # hide the new auxiliar screen.
-                after_identification = aux.after(10000, aux.destroy)  # if user is AFK, destroy the auxiliar screen (and it will destroy the messagebox!)
-                messagebox.showinfo(Language_controller.get_message("aviso de muestra entregada (cabecera)"), Language_controller.get_message("aviso de muestra entregada (cuerpo)"), master = aux)  # the parent of this messagebox is the auxiliar screen
-                if messagebox.OK: # the user is not AFK, so we need to cancel the timeout, destroy the auxiliar window and logOut (in the 'finally' clause)
-                    aux.after_cancel(after_identification) 
-                    aux.destroy()
-            except: # si salta el temporizador del after entraremos aquí porque ya no se podrá coger la respuesta del messagebox porque no existirá. El except está creado para que esa excepción no nos salga por pantalla y se ignore.
-                pass
-            finally: # independientemente de si el usuario ha interactuado o estaba AFK (que en ese caso salta una excepcion despues de destruir la pantalla auxiliar) se deberá hacer logout de la persona (que eso implícitamente devuelve al sistema a la pantalla de logIn)
-                ActivePerson.getCurrent().logOut()
-            
+    def __check_if_sample_submitted(self):
+        if (Arduino_controller.is_sample_submitted()):
+            self.__sample_submitted(arduino_detection = True)
+            # NOTE: Here it's not necessary to call Arduino_controller.stop_checking_if_sample_submission() because Arduino implicitly stops doing that checking if has detected a sample submission.
         else:
-            Arduino_controller.inoperative_arduino_actions("storage")
+            # Reprogram the timer (for another 0.5s):
+            self.__check_is_submitted_countdown = Screen_manager.get_root().after(500, self.__check_if_sample_submitted)
+
+
+    def __sample_submitted(self, arduino_detection):
+
+        self.__next_step_b["state"] = DISABLED
+        Counters.increment_stored_samples()
+        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "SAMPLE SUBMITTED")  # to info_uso DB
+        DBcontroller.add_sample_submission()  # to muetras_saliva DB. This function implicitly add a temperature (calling the arduino function) and some other important things
+        ActivePerson.getCurrent().set_has_submitted_to_true()
+        
+        if (not arduino_detection): # this function has been called because user indicated the sample submission by clicking the button, but the arduino didn't detect the sample!
+            Screen_manager.get_root().after_cancel(self.__check_is_submitted_countdown)  # don't want to go anymore to the "check_if_sample_submitted" function. NOTE: This is only called in the case of "arduino didnt detect", because otherway the timer is not reprogrammed so is not necessary an "after_cancel"
+            Checker.notify_operator("User informed of a sample submission but Arduino didn't detect it. The label ID of the sample is: " + self.__most_recent_labelID, Priority.LOW)
+            Arduino_controller.stop_checking_if_sample_submission()  #in the Rpi we stopped checking if submitted, but... we need to communicate this (the fact that the user has clicked on SAMPLE SUBMITTED) to the arduino (read arduino code to see why)
+
+        # Show info about sample delivered and log out. If users says OK just log him out, but if user doesn't interact (is AFK) after delivering sample, log him out also! 
+        try:
+            aux = Tk() # auxiliar screen where show the messagebox
+            aux.withdraw() # hide the new auxiliar screen.
+            after_identification = aux.after(10000, aux.destroy)  # if user is AFK (10 sec without interacting), destroy the auxiliar screen (and it will destroy the messagebox!)
+            messagebox.showinfo(Language_controller.get_message("aviso de muestra entregada (cabecera)"), Language_controller.get_message("aviso de muestra entregada (cuerpo)"), master = aux)  # the parent of this messagebox is the auxiliar screen
+            if messagebox.OK: # the user is not AFK, so we need to cancel the timeout, destroy the auxiliar window and logOut (in the 'finally' clause)
+                aux.after_cancel(after_identification) 
+                aux.destroy()
+        except: # si salta el temporizador del after entraremos aquí porque ya no se podrá coger la respuesta del messagebox porque no existirá. El except está creado para que esa excepción no nos salga por pantalla y se ignore.
+            pass
+        finally: # independientemente de si el usuario ha interactuado o estaba AFK (que en ese caso salta una excepcion despues de destruir la pantalla auxiliar) se deberá hacer logout de la persona (que eso implícitamente devuelve al sistema a la pantalla de logIn)
+            ActivePerson.getCurrent().logOut()
+            
+
 
             
           

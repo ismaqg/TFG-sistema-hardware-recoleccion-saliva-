@@ -65,7 +65,9 @@ def print_label(labelID):
         signal.alarm(constants.LABEL_PRINTING_TIMEOUT)
         
         # send the information to the printer:
+        """
         send(instructions=print_instructions, printer_identifier=constants.PRINTER_PORT, backend_identifier=backendID, blocking=True)
+        """
                     
         # ignore the timeout because if this line is reached, the printer has just printed.
         signal.alarm(0)
