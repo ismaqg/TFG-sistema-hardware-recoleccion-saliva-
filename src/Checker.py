@@ -19,11 +19,11 @@ from enum import Enum
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
 def is_arduino_supply_alive():
-    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
     return os.path.exists(constants.ARDUINO_SUPPLY_PORT)
 
 def is_arduino_storage_alive():
-    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
     return os.path.exists(constants.ARDUINO_STORAGE_PORT)
 
 

@@ -37,7 +37,6 @@ void setup(void) {
   // initial value of the sample delivery variables:
   can_check_if_sample_submitted = false;
   sample_submitted = false;
-  pinMode(13, OUTPUT); //------------------------------------------------------------------------------------------------------------  
 }
 
 void loop(void) {
@@ -73,7 +72,6 @@ void loop(void) {
 
   // constantly check if sample submission is detected (starts when the user reaches the submit sample screen and stops when the submission is detected or when the user indicates that it has already been submitted (which would mean that the sensor didn't detected the sample, but user has ended his session so the sensor doesn't need to still be checking):
   if (can_check_if_sample_submitted) {
-      digitalWrite(13, digitalRead (IR_SENSOR)); //----------------------------------------------------------------------------------
       int status_IRsensor = digitalRead (IR_SENSOR);
       if (status_IRsensor == LOW){ // Has detected an object
           sample_submitted = true;
