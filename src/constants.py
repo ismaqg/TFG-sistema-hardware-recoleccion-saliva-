@@ -34,7 +34,8 @@ SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
 CHECK_TEMPERATURE_TIMER = 20000 # in miliseconds (TODO: Despues de testearlo cambiarlo a algo tipo 10 minutos (o 60 y así en la defensa del tfg no me da problemas))
 LABEL_PRINTING_TIMEOUT = 3 # in seconds
-ARDUINO_COMMUNICATION_TIMEOUT = 2 # in seconds
+ARDUINO_STORAGE_COMMUNICATION_TIMEOUT = 2 # in seconds
+ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT = 12 # in seconds
 
 MIN_ALLOWED_TEMPERATURE = 0.0 # in centigrades. 
 MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades. 

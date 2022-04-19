@@ -74,20 +74,24 @@ class ClaimKit_screen: # singleton
 
 
     def __get_kit(self):
-        # TODO: Pedirle el kit al arduino (hacer girar el motor y que pare cuando detectemos que ha caido el kit). Todo lo de arduino con timeouts y tal obviamente
-                   
-        Counters.decrement_available_kits()
-        DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")  # to info_uso DB
-        if DBcontroller.user_has_kit():
-            DBcontroller.update_time_pickup_kit()  # to muestras_saliva DB
-        else:
-            DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
-        messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) # TODO: No sé si es un depósito lateral, igual tengo que cambiar el mensaje
-        ActivePerson.getCurrent().set_has_claimed_kit_to_true()
-        SubmitSample_screen.getInstance().go_to_submitSample_screen()
+
+        # TODO: Pedirle el kit al arduino (hacer girar el motor y que pare cuando detectemos que ha caido el kit). Que retorne la variable success
+        # TODO: Como tarda unos segundos, poner un gif de espera!! 
+
+        if success:  # in case of not success, the not available screen (+notify operator, etc) will have been shown in the call to drop_kit()
+            Counters.decrement_available_kits()
+            DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "COLLECTED KIT")  # to info_uso DB
+            if DBcontroller.user_has_kit():
+                DBcontroller.update_time_pickup_kit()  # to muestras_saliva DB
+            else:
+                DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
+            messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) # TODO: No sé si es un depósito lateral, igual tengo que cambiar el mensaje
+            ActivePerson.getCurrent().set_has_claimed_kit_to_true()
+            SubmitSample_screen.getInstance().go_to_submitSample_screen()
 
 
 
+    # function activated by button.
     def __dont_meet_requirements(self):
         ActivePerson.getCurrent().logOut()  # This function can't be called directly on the "command" parameter of the dont_get_kit_b button instantiation because, if we do that, as soon as the ClaimKit_screen object is created, ActivePerson.getCurrent()
                                             # would be called in order to prepare the instance/class which contains that "logout()" function that we want to "link" with the dont_get_kit_b button. And at that momment there is no "Current" inside "Person", so an exception would be thrown!
