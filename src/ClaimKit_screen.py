@@ -12,6 +12,8 @@ import Counters
 import DBcontroller
 import Language_controller
 from SubmitSample_screen import SubmitSample_screen
+import GIF
+
 
 class ClaimKit_screen: # singleton
     
@@ -74,9 +76,10 @@ class ClaimKit_screen: # singleton
 
 
     def __get_kit(self):
-
-        # TODO: Pedirle el kit al arduino (hacer girar el motor y que pare cuando detectemos que ha caido el kit). Que retorne la variable success
-        # TODO: Como tarda unos segundos, poner un gif de espera!! 
+ 
+        GIF.start_gif(constants.IMAGES_DIRECTORY + "loading.gif")
+        success = Arduino_controller.drop_kit()
+        GIF.stop_gif() 
 
         if success:  # in case of not success, the not available screen (+notify operator, etc) will have been shown in the call to drop_kit()
             Counters.decrement_available_kits()
