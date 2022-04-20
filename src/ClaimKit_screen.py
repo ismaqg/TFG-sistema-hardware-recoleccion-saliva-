@@ -12,7 +12,7 @@ import Counters
 import DBcontroller
 import Language_controller
 from SubmitSample_screen import SubmitSample_screen
-import GIF
+from GIF import GIF
 
 
 class ClaimKit_screen: # singleton
@@ -64,6 +64,7 @@ class ClaimKit_screen: # singleton
             self.__claimKitscreen_body_frame.columnconfigure(0, weight = 1)
             self.__claimKitscreen_body_frame.columnconfigure(1, weight = 1) 
             
+            self.__loading_GIF = GIF(constants.IMAGES_DIRECTORY + "loading.gif")
 
             ClaimKit_screen.__instance = self
 
@@ -77,9 +78,9 @@ class ClaimKit_screen: # singleton
 
     def __get_kit(self):
  
-        GIF.start_gif(constants.IMAGES_DIRECTORY + "loading.gif")
+        self.__loading_GIF.start_gif()
         success = Arduino_controller.drop_kit()
-        GIF.stop_gif() 
+        self.__loading_GIF.stop_gif() 
 
         if success:  # in case of not success, the not available screen (+notify operator, etc) will have been shown in the call to drop_kit()
             Counters.decrement_available_kits()
