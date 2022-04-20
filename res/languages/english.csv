@@ -67,13 +67,13 @@ If this time has NOT elapsed, press ""I do NOT meet the requirements"". Your ses
 ERROR GETTING KIT
 Sorry, an internal error occurred. Your session will be closed, please come back later.
 ERROR. NO LABELS
-The program cannot start because there are no labels left in the printer. Please put a new roll in it. Click OK when done
+The program cannot start because there are no labels left in the printer. Please put a new roll in it.
 LABELS REFILL
-Are you sure you have inserted a new roll of labels?
+Were you able to insert a new roll of labels?
 ERROR. NO KITS
-The program cannot start because there are no kits left for users to use. Please fill in the kits deposit. Click OK when done
+The program cannot start because there are no kits left for users to use. Please fill in the kits deposit.
 KITS REFILL
-Are you sure you have completely filled the available kits deposit?
+Were you able to completely fill the kits deposit?
 ERROR. FULL TANK
 The program cannot start because the sample container is full and needs to be emptied. Press OK for more information.
 TANK EMPTYING

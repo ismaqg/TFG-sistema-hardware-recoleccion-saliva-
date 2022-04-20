@@ -69,34 +69,34 @@ def check_hardware_usable_at_turningON():
 def check_available_labels_at_turningON():
     # TODO: Test function!! 
     if Counters.get_available_labels() == 0: # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
-        messagebox.showerror(Language_controller.get_message("necesaria reposicion etiquetas (cabecera)"), Language_controller.get_message("necesaria reposicion etiquetas (cuerpo)")) # NOTE: This function is blocking until OK is pressed (and when OK is pressed it's supposed that the operator has refilled labels)
-        # double checking because the operator who is turning on the machine maybe doesn't have available labels so the machine needs to shut down instead of saving the information of "labels refilled":
-        if Counters.get_available_labels() == 0:
-            Screen_manager.get_root().destroy()
-            raise Exception("PROGRAM CAN'T START WITHOUT LABELS ON THE PRINTER")
-        else:
+        messagebox.showerror(Language_controller.get_message("necesaria reposicion etiquetas (cabecera)"), Language_controller.get_message("necesaria reposicion etiquetas (cuerpo)")) 
+        refilled = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion etiquetas (cabecera)"), Language_controller.get_message("comprobacion reposicion etiquetas (cuerpo)"))
+        if refilled:
             Counters.set_available_labels(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL)
             DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPLENISHED LABELS AT POWER UP")
+        else:
+            Screen_manager.get_root().destroy()
+            raise Exception("PROGRAM CAN'T START WITHOUT LABELS ON THE PRINTER")
 
 #ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_available_kits_at_turningON():
     # TODO: Test function!! 
     if Counters.get_available_kits() == 0: # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
-        messagebox.showerror(Language_controller.get_message("necesaria reposicion kits (cabecera)"), Language_controller.get_message("necesaria reposicion kits (cuerpo)"))  # NOTE: This function is blocking until OK is pressed (and when OK is pressed it's supposed that the operator has refilled kits)
-        # double checking because the operator who is turning on the machine maybe doesn't have available kits so the machine needs to shut down instead of saving the information of "kits refilled":
-        if Counters.get_available_kits() == 0:
-            Screen_manager.get_root().destroy()
-            raise Exception("PROGRAM CAN'T START WITHOUT AVAILABLE KITS")
-        else:
+        messagebox.showerror(Language_controller.get_message("necesaria reposicion kits (cabecera)"), Language_controller.get_message("necesaria reposicion kits (cuerpo)"))  
+        refilled = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion kits (cabecera)"), Language_controller.get_message("comprobacion reposicion kits (cuerpo)"))
+        if refilled:
             Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
             DBcontroller.add_new_event("-", "OPERADOR/ADMIN REPLENISHED KITS AT POWER UP")
+        else:
+            Screen_manager.get_root().destroy()
+            raise Exception("PROGRAM CAN'T START WITHOUT AVAILABLE KITS")
 
 # ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_not_max_stored_samples_at_turningON():
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
         # TODO: Testear esto. O sea, testear que en un turningON funcione bien todo lo que tiene que ocurrir acerca de recoger muestras.
         messagebox.showerror(Language_controller.get_message("necesario vaciado deposito muestras (cabecera)"), Language_controller.get_message("necesario vaciado deposito muestras (cuerpo)"))
-        MainScreen._collect_samples()
+        MainScreen._collect_samples()  # an operator is always able to do this (doesn't need extra resources), this is why we don't show a message saying "were you able to empty the samples container?"
 
 def check_available_resources():
     problems = ''

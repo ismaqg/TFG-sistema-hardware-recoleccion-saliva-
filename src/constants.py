@@ -7,7 +7,7 @@ PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  #
 MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK, so it will printed with the current time in the users labels and it will be printed with the container number in the operators/admins labels when collecting samples 
 
 PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0
-ARDUINO_STORAGE_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
+ARDUINO_STORAGE_PORT = "/dev/ttyACM1" # TODO: En la Rpi hay que ver qué path es
 ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
 
 DB_MEDICALINFO_PATH = "../res/database/muestras_saliva.db" 

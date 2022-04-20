@@ -1,12 +1,15 @@
 from tkinter import *
+from turtle import width
 import Screen_manager
+import constants
 
 
 # global variables for GIF:
 framelist = []  # list with the different photograms of the GIF
 last_frame_index = 0
 anim = None  # identifier of the "after" function return value
-#GIF_container = None  # Tkinter label
+GIF_container = None  # Tkinter label (containing the GIF)
+GIF_container_container = None  # Tkinter frame (containing the label which contains the GIF)
 
 
 def __animate_gif(index):
@@ -32,17 +35,18 @@ def start_gif(GIF_path):
             last_frame_index = frame_index - 1  # save index for last frame. Used in the "animate gif" function
             break  # break while loop
     # label to show gif:
-    global GIF_container
-    GIF_container = Label(Screen_manager.get_root(), image = '')  # without starting image. The starting image will be given in the animate_gif function
+    global GIF_container, GIF_container_container
+    GIF_container_container = Screen_manager.init_screen_frame()  # frame to contain the label with the GIF.
+    GIF_container = Label(GIF_container_container, image = '')  # without starting image. The starting image will be given in the animate_gif function
     GIF_container.grid(row = 0, column = 0, sticky = 'NSEW')
+    GIF_container_container.tkraise()  # show the frame containing the label with the GIF above all the other widgets of the application
     # START GIF ANIMATION
     __animate_gif(0)
 
 
 # PRE: Some gif has been started
 def stop_gif():
-    global anim, GIF_container, framelist
+    global anim, GIF_container, GIF_container_container, framelist
     Screen_manager.get_root().after_cancel(anim)
-    GIF_container.grid_forget()
-    GIF_container.destroy()
+    GIF_container_container.destroy()
     framelist.clear()
