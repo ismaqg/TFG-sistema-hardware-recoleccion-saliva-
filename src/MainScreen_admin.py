@@ -60,7 +60,7 @@ class MainScreen_admin(MainScreen):  # singleton
 
 
     def __refill_labels(self):
-        messagebox.showinfo(Language_controller.get_message("efectuar reposicion etiquetas (cabecera)"), Language_controller.get_message("efectuar reposicion etiquetas (cuerpo)"))
+        messagebox.showinfo(Language_controller.get_message("efectuar reposición etiquetas (cabecera)"), Language_controller.get_message("efectuar reposición etiquetas (cuerpo)"))
         Counters.set_available_labels(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL)
         self.__remaining_labels_info.config( text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRADOR REPLENISHED LABELS")

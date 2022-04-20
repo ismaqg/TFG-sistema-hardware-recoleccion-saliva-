@@ -12,7 +12,6 @@ import Counters
 import DBcontroller
 import Language_controller
 from SubmitSample_screen import SubmitSample_screen
-from GIF import GIF
 
 
 class ClaimKit_screen: # singleton
@@ -50,7 +49,7 @@ class ClaimKit_screen: # singleton
             self.__previous_info_displayer = Text(self.__claimKitscreen_body_frame, font = (constants.CATSALUT_TEXT_FONT, constants.PARAGRAPH_TEXT_SIZE), height = 6, wrap = WORD)  # height hardcoded to 6 because we want 6 lines of "previous information" to be showed on this screen on the raspberry 
             self.__previous_info_displayer.insert(INSERT, Language_controller.get_message("información previa (extendida)"))
             self.__previous_info_displayer["state"] = DISABLED  # No changes can be done to the previous info text box at this point
-            self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = Language_controller.get_message("quiero recoger un kit"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__get_kit)
+            self.__get_kit_b = Button(self.__claimKitscreen_body_frame, text = Language_controller.get_message("quiero recoger un kit"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = self.__get_kit_wrapper)
             self.__dont_get_kit_b = Button(self.__claimKitscreen_body_frame, text = Language_controller.get_message("no cumplo los requisitos"), borderwidth=3, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), bg = constants.LIGHT_RED_BACKGROUNDCOLOR, command = self.__dont_meet_requirements)
 
             self.__previous_info_title.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW', pady=5)
@@ -64,8 +63,6 @@ class ClaimKit_screen: # singleton
             self.__claimKitscreen_body_frame.columnconfigure(0, weight = 1)
             self.__claimKitscreen_body_frame.columnconfigure(1, weight = 1) 
             
-            self.__loading_GIF = GIF(constants.IMAGES_DIRECTORY + "loading.gif")
-
             ClaimKit_screen.__instance = self
 
     
@@ -76,11 +73,21 @@ class ClaimKit_screen: # singleton
         MainScreen_user.getInstance().go_to_main_screen()
 
 
+    # Esta función (que es la activada por el botón) en esencia existe para llamar a la función __get_kit(), pero existe por un motivo:
+    # La línea de código "success = Arduino_controller.drop_kit()" es bloqueante, así que si nosotros hacemos las 2 primeras líneas de esta función justo antes de la llamada a "success = Arduino_controller.drop_kit()"
+    # tendríamos que no veríamos el cambio de texto y estado de "__get_kit_b" que nosotros queríamos tener antes de bloquearnos, ¿por qué? pues porque los cambios sobre widgets se "commitean" cuando la aplicación está
+    # "idle" en root.mainloop(). Por tanto, si nosotros tenemos esta función de __get_kit_wrapper() en el que, al final de ella, en lugar de saltar directamente a __get_kit() ponemos un temporizador diciendo "que salte
+    # a __get_kit() después de 1ms" pues forzaremos saltar a mainloop (porque los temporizadores de "after" también se atienden en el mainloop. Entonces, al saltar a mainloop primero se harán los cambios sobre el __get_kit_b
+    # que nosotros queríamos hacer y, luego, se satará a hacer el "Arduino_controller.drop_kit()" de la función __get_kit(). Este 1ms el usuario no lo notará pero nosotros conseguiremos que el botón de recibir kit cambie de
+    # estado antes de que la aplicación se bloquee :)
+    def __get_kit_wrapper(self):
+        self.__get_kit_b["state"] = DISABLED
+        self.__get_kit_b["text"] = Language_controller.get_message("espera")
+        Screen_manager.get_root().after(1, self.__get_kit)  # 1ms... Lee arriba de la cabecera de la función la explicación de por qué
+
     def __get_kit(self):
- 
-        self.__loading_GIF.start_gif()
-        success = Arduino_controller.drop_kit()
-        self.__loading_GIF.stop_gif() 
+
+        success = Arduino_controller.drop_kit() 
 
         if success:  # in case of not success, the not available screen (+notify operator, etc) will have been shown in the call to drop_kit()
             Counters.decrement_available_kits()
@@ -116,4 +123,6 @@ class ClaimKit_screen: # singleton
         self.__dont_get_kit_b["text"] = Language_controller.get_message("no cumplo los requisitos")
 
     def go_to_claimKit_screen(self):
+        self.__get_kit_b["state"] = NORMAL  # this button was disabled for the previous user if he wanted to get a kit (it was disabled in the momment he wanted the kit), so we have to enable it again for a new use of this screen.
+        self.__get_kit_b["text"] = Language_controller.get_message("quiero recoger un kit")  # mismo motivo que el comentario de la línea anterior
         self.__claimKitscreen_frame.tkraise()

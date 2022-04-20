@@ -86,7 +86,8 @@ str_to_index_map = {
     "título pestaña no disponible" : 75,
     "cerrar programa pestaña no disponible" : 76,
     "clave errónea" : 77,
-    "no cumplo los requisitos" : 78
+    "no cumplo los requisitos" : 78,
+    "espera" : 79
 }
 
 messages = []
