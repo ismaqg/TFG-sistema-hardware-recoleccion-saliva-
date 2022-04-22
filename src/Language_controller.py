@@ -110,14 +110,14 @@ def set_current_language(language):
 
 def get_current_language():
     global messages, current_language
-    if messages == []:  # Programmer forgot to set a default language at main.py. We set SPANISH as default
+    if messages == []:  # Programmer forgot to set a default language at main.py. We set the default language (spanish)
         set_current_language(Language.SPANISH)
     return current_language
 
 
 def get_message(identifier_str):
     global messages
-    if messages == []:  # Programmer forgot to set a default language at main.py. We set SPANISH as default
+    if messages == []:  # Programmer forgot to set a default language at main.py. We set the default language (spanish)
         set_current_language(Language.SPANISH)
     message_index = str_to_index_map.get(identifier_str, -1)
     if message_index == -1:
