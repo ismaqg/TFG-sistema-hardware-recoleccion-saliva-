@@ -75,10 +75,6 @@ class MainScreen(ABC): # abstract
         cls._ms_body_frame.columnconfigure(5, weight = 0)
 
 
-    def __printer_not_responding_while_printing():
-        # TODO
-        pass
-
 
     # NOTE: In this function it is important to first print the label and then do the management with the DDBB for the following reason: Both actions could fail due to external problems (problems with the remote DB or problems with the printer). If the label is printed first and then the operation with the DDBB fails,
     # there would be no problem: The operator would find out about the failure because the program would abort and later he could try again to print and use the new printed label instead of the previous one (and in the DDBB would be shown the ID of the new printed label). On the other hand, if we first did the management
@@ -91,9 +87,9 @@ class MainScreen(ABC): # abstract
         # at this point, we know that the operator/admin has stuck the printed label on the container and has picked it up, because he has pressed OK in the message on the previous line. 
         DBcontroller.insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions()
         if ActivePerson.isThereActivePerson():
-            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+            DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "SAMPLES COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
         else: # case: container full when turning on the machine
-            DBcontroller.add_new_event("-", "SAMPLE COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
+            DBcontroller.add_new_event("-", "SAMPLES COLLECTION. Container ID: " + constants.MACHINE_ID + str(Counters.get_container_number()))
         
         Counters.increment_containter_number() # this line is needed after the insertion of information in the remote DB because in that insertion is used the container number prior to the 'container_number++'
         Counters.set_stored_samples(0)
