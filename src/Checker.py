@@ -37,16 +37,18 @@ def is_printer_alive():
 
 def notify_operator(problem_description, priority):
     receiver_email = DBcontroller.get_operators_emails()
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = "[" + priority.name + "]"
+        msg['From'] = constants.SALIBANK_MAIN_EMAIL
+        msg['To'] = ', '.join(receiver_email)
+        msg.set_content(problem_description)
 
-    msg = EmailMessage()
-    msg['Subject'] = "[" + priority.name + "]"
-    msg['From'] = constants.SALIBANK_MAIN_EMAIL
-    msg['To'] = ', '.join(receiver_email)
-    msg.set_content(problem_description)
-
-    server = smtplib.SMTP('localhost')
-    server.send_message(msg)
-    server.quit()
+        server = smtplib.SMTP('localhost')
+        server.send_message(msg)
+        server.quit()
+    except:
+        print("Not able to send email to Operators: Probably there is no internet connection")  # TODO: NOTE that in a definitive version this need to be changed to some way to communicate with the operator without internet.
 
 
 

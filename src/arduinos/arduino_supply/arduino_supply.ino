@@ -9,6 +9,10 @@
 #define DROP_KIT '0'
 #define ACTION_FINISHED '1'
 
+// relé states
+#define MOTOR_ON LOW  // a LOW to the relé is used to close the circuit (and, therefore, give 12V to the motor)
+#define MOTOR_OFF HIGH
+
 void setup() {
   // start up the serial communication:
   Serial.begin(9600);
@@ -16,7 +20,7 @@ void setup() {
   pinMode (IR_SENSOR, INPUT);
   // don't move the motor (LOW into the rele pin):
   pinMode (RELE_PIN, OUTPUT);
-  digitalWrite (RELE_PIN, LOW);
+  digitalWrite (RELE_PIN, MOTOR_OFF);
 }
 
 void loop() {
@@ -27,7 +31,7 @@ void loop() {
       if(value_read == DROP_KIT) {
         
          // start moving the motor:
-         digitalWrite (RELE_PIN, HIGH);
+         digitalWrite (RELE_PIN, MOTOR_ON);
          
          // wait until kit has dropped (sensor outputs HIGH while an object is not being detected):
          int status_IRsensor = digitalRead (IR_SENSOR);  
@@ -36,7 +40,7 @@ void loop() {
          }
          
          // stop moving the motor:   
-         digitalWrite (RELE_PIN, LOW);  
+         digitalWrite (RELE_PIN, MOTOR_OFF);  
 
          // communicate to the Raspberry that the process has end:
          Serial.print(ACTION_FINISHED);
