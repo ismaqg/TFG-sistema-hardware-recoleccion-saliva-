@@ -193,7 +193,6 @@ def get_local_DB_content(DB_name):
 #    - the last register of the user says that he/she hasn't submited a sample (which means that he/she has a kit now)
 # Note: returning true doesn't disable the option of collecting another kit (because the user maybe lost his kit)
 def user_has_kit():
-    # TODO: He cambiado las cosas que cogia en el select (ahora ya no cojo el oid). Si esta funcion peta es que hace falta coger también el oid si luego hago un order by oid
     if ActivePerson.getCurrent().get_status() != "USER":
         Screen_manager.get_root().destroy()
         raise Exception("Current person using the system is not an user, it's a " + ActivePerson.getCurrent().get_status() + " so there is not information about if 'user has kit'")
@@ -247,7 +246,7 @@ def add_new_record_with_pickup_kit():
                         'time_elapsed': "-",
                         'submission_ID': "-",
                         'valid': "-",
-                        'min_temperature': -100.0,  # TODO: Igual no se lo traga así y hay que ponerlo como string
+                        'min_temperature': -100.0,  
                         'max_temperature': 100.0
                     })
     connection.commit()
@@ -302,7 +301,6 @@ def add_submission_ID(submissionID):
 
 # in the local DB (with submit_time <> 'NO SUBMISSION') we have all the samples that are in the container, exposed to the temperature T
 def modify_DB_temperatures_if_needed(T):
-    # TODO: Aqui hay que mirar la temperatura min y max que había por cada fila (en la que hubiesen submissions). if T < min_T: min_T = T; elif T > max_T: max_T = T. Y si T se sale de los margenes de seguridad: Valid = "NO"
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
     cursor = connection.cursor()
     cursor.execute("SELECT oid, min_temperature, max_temperature FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'")
@@ -363,7 +361,6 @@ def insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample
      
 
 
-# TODO: eliminar la existencia de la tabla local porque si no no concuerda con la cantidad de columnas que contemplo ahora + funciones para toquetear esos campos nuevos (como modify_DB_with_new_temperature(T)) + DB remota para info_uso también (opcional. Hacerlo mucho mas adelante si sobra tiempo)
 
 
 """

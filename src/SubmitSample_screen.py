@@ -73,7 +73,6 @@ class SubmitSample_screen: # singleton
         MainScreen_user.getInstance().go_to_main_screen()
 
 
-    # TODO: Algunos comentarios de aquí abajo los tendré que cambiar si al final las compuertas no son abiertas y cerradas por un arduino
     """
     STEP 1: Show the first instruction -> Salivate and spit in the big tube. The necessary of this step is done in go_to_submitSample_screen, not in next_step_actions.
     STEP 2: Show the 2nd instruction -> transfer saliva to small tube.

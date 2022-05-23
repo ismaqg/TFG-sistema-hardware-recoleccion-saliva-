@@ -57,9 +57,6 @@ class Query_DB_screen: # singleton
             self.__DBscr_body_frame.columnconfigure(1, weight=1)
             self.__DBscr_body_frame.rowconfigure(0, weight = 1)  # it's necessary to give a weight (even though there is only one row in the header_frame) for sticky=NSEW of title and return_b to work correctly
              
-
-            # TODO: Si hay alguna funcionalidad que quieran hacer acerca de la DB, añadir botones con diferentes opciones a la derecha del todo. Por ejemplo la opcion de abajo a la derecha podria permitir ver la otra tabla que no se muestra (esta que sustituya el output de la otra tabla que se está viendo.
-
             Query_DB_screen.__instance = self
 
 

@@ -103,7 +103,7 @@ class MainScreen(ABC): # abstract
         if shutdown == True:
             DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "PROGRAM SHUTDOWN" )
             Screen_manager.get_root().destroy()
-            # TODO: hacer un shutdown now de la rpi por codigo (y en el bashrc de la rpi hacer que se lance esta aplicacion directamente)    
+
 
     @abstractmethod
     def logOut_button(self):

@@ -18,17 +18,17 @@ from enum import Enum
 #ENUM:
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
+# TODO: Descomentar el "return true"
 def is_arduino_supply_alive():
-    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    #return True  
     return os.path.exists(constants.ARDUINO_SUPPLY_PORT)
 
 def is_arduino_storage_alive():
-    #return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    #return True  
     return os.path.exists(constants.ARDUINO_STORAGE_PORT)
 
-
 def is_printer_alive():
-    return True  # TODO: CAMBIAR ESTA LINEA POR EL CODIGO DE DEBAJO
+    #return True  
     return os.path.exists(constants.PRINTER_PORT)
     
     
@@ -48,7 +48,9 @@ def notify_operator(problem_description, priority):
         server.send_message(msg)
         server.quit()
     except:
-        print("Not able to send email to Operators: Probably there is no internet connection")  # TODO: NOTE that in a definitive version this need to be changed to some way to communicate with the operator without internet.
+        # NOTE that in a definitive version this need to be changed to some way to communicate with the operator without internet.
+        print("Not able to send email to Operators: Probably there is no internet connection")  
+        
 
 
 
@@ -69,7 +71,6 @@ def check_hardware_usable_at_turningON():
 
 #ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_available_labels_at_turningON():
-    # TODO: Test function!! 
     if Counters.get_available_labels() == 0: # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
         messagebox.showerror(Language_controller.get_message("necesaria reposicion etiquetas (cabecera)"), Language_controller.get_message("necesaria reposicion etiquetas (cuerpo)")) 
         refilled = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion etiquetas (cabecera)"), Language_controller.get_message("comprobacion reposicion etiquetas (cuerpo)"))
@@ -81,8 +82,7 @@ def check_available_labels_at_turningON():
             raise Exception("PROGRAM CAN'T START WITHOUT LABELS ON THE PRINTER")
 
 #ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
-def check_available_kits_at_turningON():
-    # TODO: Test function!! 
+def check_available_kits_at_turningON(): 
     if Counters.get_available_kits() == 0: # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
         messagebox.showerror(Language_controller.get_message("necesaria reposicion kits (cabecera)"), Language_controller.get_message("necesaria reposicion kits (cuerpo)"))  
         refilled = messagebox.askyesno(Language_controller.get_message("comprobacion reposicion kits (cabecera)"), Language_controller.get_message("comprobacion reposicion kits (cuerpo)"))
@@ -96,7 +96,6 @@ def check_available_kits_at_turningON():
 # ONLY CALLABLE WHEN TURNING ON THE RASPBERRY (and the program)
 def check_not_max_stored_samples_at_turningON():
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:
-        # TODO: Testear esto. O sea, testear que en un turningON funcione bien todo lo que tiene que ocurrir acerca de recoger muestras.
         messagebox.showerror(Language_controller.get_message("necesario vaciado deposito muestras (cabecera)"), Language_controller.get_message("necesario vaciado deposito muestras (cuerpo)"))
         MainScreen._collect_samples()  # an operator is always able to do this (doesn't need extra resources), this is why we don't show a message saying "were you able to empty the samples container?"
 

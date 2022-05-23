@@ -51,7 +51,7 @@ class MainScreen_admin(MainScreen):  # singleton
         self.__remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
         DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR REPLENISHED KITS")
         messagebox.showinfo( Language_controller.get_message("kits repuestos (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
-        # TODO futuro: Que el que hace refill tenga la posibilidad de indicar cuantos AÑADE, por si no llena el deposito entero. En ese caso, el valor de kits será el que había más el añadido
+
 
     def __collect_samples(self):
         super()._collect_samples()

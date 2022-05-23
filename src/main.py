@@ -1,7 +1,6 @@
 from tkinter import *
 
 import os
-import subprocess
 
 import constants
 import Counters  # counters need to be imported before checker (because checker class imports counter class and counter class imports Priority from Checker class, so importing Checkers before Counters generates circular dependency). Also, all the classes that import Checker class need to be imported after this line (example: BDcontroller class imports ArduinoController class and ArduinoController class imports Checker, this is why BDcontroller is imported after than Counters here)
@@ -28,12 +27,9 @@ Counters.initialize_information()
 
 root = Screen_manager.start_application()
 
-# os.chmod(constants.PRINTER_PORT, 0o666 )  # give RW permissions to the label printer. # TODO: Borrar porque no es válida esta línea ya que no hay forma de darle la password de la rpi  
-# subprocess.Popen("echo 'salibank' | sudo -S  chmod 666 " + constants.PRINTER_PORT, stdout=subprocess.PIPE, shell=True) # TODO: Uncomment for raspberry. salibank is the rpi password
+# TODO: Descomentar linea para la rpi (al testear en PC tambien puedo descomentarla pero tendre que cambiar la contraseña)
+#os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)  # R+W premission to the printer
 
-# TODO: Probar a cambiar la linea anterior por os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)
-
- 
 Checker.check_hardware_usable_at_turningON() 
 Checker.check_available_labels_at_turningON()
 Checker.check_available_kits_at_turningON()
@@ -46,7 +42,7 @@ root.after(10000, Arduino_controller.get_deposit_temperature_periodically_and_up
 
 Screen_saver.getInstance().go_to_screen_saver()
 
-
+# TODO: Descomentar linea para la rpi
 #root.attributes("-fullscreen", True)
 
 mainloop()

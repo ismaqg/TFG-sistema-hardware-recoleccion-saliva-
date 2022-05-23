@@ -96,7 +96,7 @@ class ClaimKit_screen: # singleton
                 DBcontroller.update_time_pickup_kit()  # to muestras_saliva DB
             else:
                 DBcontroller.add_new_record_with_pickup_kit()  # to muestras_saliva DB
-            messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) # TODO: No sé si es un depósito lateral, igual tengo que cambiar el mensaje
+            messagebox.showinfo(Language_controller.get_message("kit dispensado (cabecera)"), Language_controller.get_message("kit dispensado (cuerpo)")) 
             ActivePerson.getCurrent().set_has_claimed_kit_to_true()
             SubmitSample_screen.getInstance().go_to_submitSample_screen()
 

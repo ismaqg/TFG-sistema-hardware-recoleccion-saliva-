@@ -6,9 +6,9 @@ PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  #
 
 MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK, so it will printed with the current time in the users labels and it will be printed with the container number in the operators/admins labels when collecting samples 
 
-PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar. En la Rpi es /dev/usb/lp0
+PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar al probarlo en Rpi. En la Rpi es /dev/usb/lp0
 ARDUINO_STORAGE_PORT = "/dev/ttyACM1" # TODO: En la Rpi hay que ver qué path es
-ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" # TODO: En la Rpi hay que ver qué path es
+ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" 
 
 DB_MEDICALINFO_PATH = "../res/database/muestras_saliva.db" 
 DB_USEINFO_PATH = "../res/database/info_uso.db"
@@ -21,18 +21,18 @@ SPANISH_LANGUAGE_PATH = "../res/languages/spanish.csv"
 CATALAN_LANGUAGE_PATH = "../res/languages/catalan.csv"
 ENGLISH_LANGUAGE_PATH = "../res/languages/english.csv"
 
-STORED_SAMPLES_LIMIT = 50    # TODO: ponerlo a la cantidad maxima de muestras que se pueden poner
-AVAILABLE_KITS_AFTER_REFILL = 20    # TODO: ponerlo a la cantidad de kits disponibles que vayan a caber en la maquina
-NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     # TODO: ponerlo a la cantidad de etiquetas que vengan en un rollo nuevo de la impresora
+STORED_SAMPLES_LIMIT = 50    
+AVAILABLE_KITS_AFTER_REFILL = 20    
+NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     
 
-SCREEN_WIDTH = 800#get_monitors()[0].width
-SCREEN_HEIGHT = 480#get_monitors()[0].height
+SCREEN_WIDTH = 800#get_monitors()[0].width  # TODO: Cambiar en la Rpi por la funcion comentada
+SCREEN_HEIGHT = 480#get_monitors()[0].height  # TODO: Cambiar en la Rpi por la funcion comentada
 
 SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 
 SCREEN_SAVER_BACK_TIMER = 15000 # in miliseconds
 INACTIVITY_CHECK_RESOURCES_TIMER = 1800000 # 30 min = 1800 seconds = 1800000 ms
-CHECK_TEMPERATURE_TIMER = 20000 # in miliseconds (TODO: Despues de testearlo cambiarlo a algo tipo 10 minutos (o 60 y así en la defensa del tfg no me da problemas))
+CHECK_TEMPERATURE_TIMER = 20000 # in miliseconds 
 LABEL_PRINTING_TIMEOUT = 3 # in seconds
 ARDUINO_STORAGE_COMMUNICATION_TIMEOUT = 2 # in seconds
 ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT = 12 # in seconds
@@ -43,22 +43,13 @@ MAX_ALLOWED_TEMPERATURE = 40.0 # in centigrades.
 WARNING_STOCK_THRESHOLD = 0.4 # 40% 
 ALARM_STOCK_THRESHOLD = 0.15 # 15%
 
-PREVIOUS_INFO_SALIVA_TEST = """Deben transcurrir un mínimo de 30 minutos entre la última vez que ingirió cualquier tipo de comida o líquido y la recogida de saliva. 
 
-Si ha transcurrido ese tiempo, pulse el botón de "Cumplo los requisitos. Quiero recoger el kit".
-
-Si NO ha transcurrido ese tiempo, retorne al menú anterior y cierre sesión. Vuelva más tarde."""  # TODO: Quitarlo de constantes y ponerlo en los archivos de lenguajes
-
-
-CORRECT_PASSWORD_ENCRIPTED = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"  # The password is "1234" and this hash is the encription of "1234" with sha256. Remember to delete this comment in the final version of SALIBANK (this is prototype) because here is shown the password decripted 
+CORRECT_PASSWORD_ENCRIPTED = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"  # The password for admins/operators is "1234" and this hash is the encription of "1234" with sha256. Remember to delete this comment in the final version of SALIBANK (this is prototype) because in this comment is shown the password decripted 
 
 
 
 # ----- STYLE ------
 CATSALUT_COLOR = "#7BACFC"
-#CATSALUT_COLOR2 = "#7db3e1"  I finally dont use it
-#CATSALUT_COLOR3 = "#9fd2ec"  I finally dont use it
-#LIGHT_GRAY_BACKGROUNDCOLOR = "#c0c0c0"  I finally dont use it
 LIGHT_RED_BACKGROUNDCOLOR = "#ffa6a6"
 
 ALARM_BACKGROUNDCOLOR = "#ffa6a6"
