@@ -48,7 +48,7 @@ class MainScreen_admin(MainScreen):  # singleton
 
     def __refill_kits(self):
         messagebox.showinfo(Language_controller.get_message("efectuar reposicion kits (cabecera)"), Language_controller.get_message("efectuar reposicion kits (cuerpo)"))
-        numerical_keyboard = Numerical_keyboard("kits disponibles", constants.AVAILABLE_KITS_AFTER_REFILL)
+        numerical_keyboard = Numerical_keyboard("Kits disponibles", constants.AVAILABLE_KITS_AFTER_REFILL)
         Screen_manager.get_root().after(500, lambda:super()._refill_kits(numerical_keyboard))  
         
 
