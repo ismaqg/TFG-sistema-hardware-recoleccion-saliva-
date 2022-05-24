@@ -9,6 +9,8 @@ import constants
 import DBcontroller
 import Screen_manager
 import Language_controller
+from Keyboard import Numerical_keyboard
+
 
 class MainScreen_operator(MainScreen):  # singleton 
 
@@ -34,7 +36,7 @@ class MainScreen_operator(MainScreen):  # singleton
             self.__quit_program_b = Button(MainScreen._ms_header_frame, text = Language_controller.get_message("apagar"), bg = constants.LIGHT_RED_BACKGROUNDCOLOR, fg = "red", borderwidth=5, font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), command = super()._quit_program)
 
             self.__remaining_labels_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color())
-            self.__remaining_kits_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+            self.remaining_kits_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
             self.__stored_samples_info = Label(MainScreen._ms_body_frame, text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) + ")", font = (constants.CATSALUT_TEXT_FONT, constants.CONTROL_INFORMATION_TEXT_SIZE, 'bold'), borderwidth=2, relief="groove", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color())
 
             self.__refill_kits_b = Button(MainScreen._ms_body_frame, text = Language_controller.get_message("reponer kits"), font = (constants.CATSALUT_TEXT_FONT, constants.BUTTON_TEXT_SIZE, 'bold'), borderwidth=5, command = self.__refill_kits)
@@ -48,12 +50,11 @@ class MainScreen_operator(MainScreen):  # singleton
 
     # the following 3 methods need to be in this class and not in their parent's class because they use an attribute of the class
 
-    def __refill_kits(self):  
+    def __refill_kits(self):
         messagebox.showinfo(Language_controller.get_message("efectuar reposicion kits (cabecera)"), Language_controller.get_message("efectuar reposicion kits (cuerpo)"))
-        Counters.set_available_kits(constants.AVAILABLE_KITS_AFTER_REFILL)
-        self.__remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
-        DBcontroller.add_new_event( ActivePerson.getCurrent().get_CIP(), "OPERATOR REPLENISHED KITS")
-        messagebox.showinfo( Language_controller.get_message("kits repuestos (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
+        numerical_keyboard = Numerical_keyboard("Kits disponibles", constants.AVAILABLE_KITS_AFTER_REFILL)
+        Screen_manager.get_root().after(500, lambda:super()._refill_kits(numerical_keyboard))  
+        
 
     def __collect_samples(self):
         super()._collect_samples()
@@ -83,7 +84,7 @@ class MainScreen_operator(MainScreen):  # singleton
     # override abstract parent method
     def go_to_main_screen(self):
         # this is necessary if the mainscreen_operator and mainscreen_admin are already created and an operator has refilled kits / labels or collected samples:
-        self.__remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color() )
+        self.remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color() )
         self.__remaining_labels_info.config( text = Language_controller.get_message("avisador etiquetas restantes") + str(Counters.get_available_labels()) + Language_controller.get_message("de") + str(constants.NUMBER_OF_LABELS_IN_LABEL_ROLL), fg = Counters.get_available_labels_fg_color(), bg = Counters.get_available_labels_bg_color() )
         self.__stored_samples_info.config( text = Language_controller.get_message("avisador muestras entregadas") + str(Counters.get_stored_samples()) + " (max: " + str(constants.STORED_SAMPLES_LIMIT) +")", fg = Counters.get_stored_samples_fg_color(), bg = Counters.get_stored_samples_bg_color() )
 
@@ -97,7 +98,7 @@ class MainScreen_operator(MainScreen):  # singleton
         self.__quit_program_b.grid(row = 0, column = 2, sticky = 'NSEW', padx = (5, 10), pady = 10)
 
         self.__remaining_labels_info.grid(row = 0, column = 0, columnspan = 2, sticky = 'NSEW', pady = (10,0))
-        self.__remaining_kits_info.grid(row = 0, column = 2, columnspan = 2, sticky = 'NSEW', pady = (10,0))
+        self.remaining_kits_info.grid(row = 0, column = 2, columnspan = 2, sticky = 'NSEW', pady = (10,0))
         self.__stored_samples_info.grid(row = 0, column = 4, columnspan = 2, sticky = 'NSEW', pady = (10,0))
 
         self.__refill_kits_b.grid(row = 1, column = 0, columnspan = 3, sticky = 'NSEW', padx = (10, 5), pady = (10, 5))
@@ -115,7 +116,7 @@ class MainScreen_operator(MainScreen):  # singleton
         self.__quit_program_b.grid_forget()
 
         self.__remaining_labels_info.grid_forget()
-        self.__remaining_kits_info.grid_forget()
+        self.remaining_kits_info.grid_forget()
         self.__stored_samples_info.grid_forget()
 
         self.__refill_kits_b.grid_forget()

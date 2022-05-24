@@ -9,6 +9,7 @@ import Screen_manager
 import Language_controller
 import Counters
 import Printer_controller
+from Keyboard import Numerical_keyboard
 
 
 
@@ -74,6 +75,27 @@ class MainScreen(ABC): # abstract
         cls._ms_body_frame.columnconfigure(4, weight = 0)
         cls._ms_body_frame.columnconfigure(5, weight = 0)
 
+
+    # El operador indica cuantos kits hay después del refill por teclado (habiendo un valor máximo: el máximo aceptado por la máquina)
+    def _refill_kits(numerical_keyboard):
+        if numerical_keyboard.is_keyboard_alive():  # otherwise the function to check the number of refilled kits is nor reprogrammed
+            if not numerical_keyboard.is_number_introduced():
+                # program to check the keyboard input after another 0.5 seconds:
+                Screen_manager.get_root().after(500, lambda:MainScreen._refill_kits(numerical_keyboard))
+            else:
+                number_introduced = numerical_keyboard.number_introduced()
+                if (number_introduced > constants.AVAILABLE_KITS_AFTER_REFILL):
+                    number_introduced = constants.AVAILABLE_KITS_AFTER_REFILL
+                Counters.set_available_kits(number_introduced)
+                if ActivePerson.getCurrent().get_status() == "ADMIN":
+                    from MainScreen_admin import MainScreen_admin
+                    MainScreen_admin.getInstance().remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+                    DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "ADMINISTRATOR REPLENISHED KITS")
+                else:
+                    from MainScreen_operator import MainScreen_operator
+                    MainScreen_operator.getInstance().remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
+                    DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "OPERATOR REPLENISHED KITS")
+                messagebox.showinfo( Language_controller.get_message("kits repuestos (cabecera)"), Language_controller.get_message("reposicion/recogida finalizada (cuerpo)"))
 
 
     # NOTE: In this function it is important to first print the label and then do the management with the DDBB for the following reason: Both actions could fail due to external problems (problems with the remote DB or problems with the printer). If the label is printed first and then the operation with the DDBB fails,

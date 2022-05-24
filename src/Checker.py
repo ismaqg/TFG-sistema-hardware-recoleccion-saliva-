@@ -4,6 +4,7 @@ import os.path
 
 import smtplib
 from email.message import EmailMessage
+import requests
 
 import Counters
 from MainScreen import MainScreen
@@ -18,7 +19,7 @@ from enum import Enum
 #ENUM:
 Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
-# TODO: Descomentar el "return true"
+# TODO: Descomentar el "return true" de los siguientes 4 metodos para testeos donde vaya a faltar alguno de los componentes en cuestión
 def is_arduino_supply_alive():
     #return True  
     return os.path.exists(constants.ARDUINO_SUPPLY_PORT)
@@ -32,6 +33,14 @@ def is_printer_alive():
     return os.path.exists(constants.PRINTER_PORT)
     
     
+def is_internet_connection():
+    # return True
+    url = "https://www.google.com/"
+    try:
+        request = requests.get(url, timeout = constants.INTERNET_CONNECTION_TIMEOUT)
+        return True
+    except (requests.ConnectionError, requests.Timeout) as exception:
+        return False
 
 
 
@@ -48,14 +57,15 @@ def notify_operator(problem_description, priority):
         server.send_message(msg)
         server.quit()
     except:
-        # NOTE that in a definitive version this need to be changed to some way to communicate with the operator without internet.
-        print("Not able to send email to Operators: Probably there is no internet connection")  
+        if not is_internet_connection():
+            # NOTE that in a definitive version this need to be changed to some way to communicate with the operator without internet.
+            print("Not able to send email to Operators: No internet connection")  
+        else:
+            print("Not able to send email to Operators: There is internet connection but it couldn't send the email")
         
 
-
-
 #ONLY CALLABLE  WHEN TURNING ON THE RASPBERRY (and the program)
-def check_hardware_usable_at_turningON():
+def check_hardware_usable_and_internet_connection_at_turningON():
     # NOTE: Here we do not send a message to the operator because it is assumed that the machine has been turned on by an operator / admin
     problems = ''
     if not is_printer_alive():
@@ -63,9 +73,11 @@ def check_hardware_usable_at_turningON():
     if not is_arduino_supply_alive():
         problems += 'ARDUINO SUPPLY MODULE IS NOT CONNECTED OR NOT WORKING\n'
     if not is_arduino_storage_alive():
-        problems += 'ARDUINO STORAGE MODULE IS NOT CONNECTED OR NOT WORKING\n'    
+        problems += 'ARDUINO STORAGE MODULE IS NOT CONNECTED OR NOT WORKING\n'
+    if not is_internet_connection():
+        problems += 'NO INTERNET CONNECTION\n'
     if problems != '':
-        messagebox.showerror("PROBLEMAS CON EL HARDWARE", "La aplicación no puede iniciarse. Problemas con el hardware: " + problems)
+        messagebox.showerror("PROBLEMAS EN EL INICIO", "La aplicación no puede iniciarse. Problemas hardware o de conexión detectados: " + problems)
         Screen_manager.get_root().destroy()
         raise Exception("THE PROGRAM CAN'T START BECAUSE:\n" + problems)
 
@@ -113,6 +125,8 @@ def check_available_resources():
         problems += 'Arduino storage inoperativo.\n'
     if not is_printer_alive():
         problems += 'Impresora inoperativa.\n'
+    if not is_internet_connection():
+        problems += 'NO INTERNET CONNECTION\n'
 
     if problems == '':
         return True

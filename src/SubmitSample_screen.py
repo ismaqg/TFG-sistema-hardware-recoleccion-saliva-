@@ -184,4 +184,4 @@ class SubmitSample_screen: # singleton
         self.__next_step_b["text"] = Language_controller.get_message("botón siguiente")
         self.__next_step_b["state"] = NORMAL
         self.__submitSampleScreen_frame.tkraise()
-        messagebox.showwarning(Language_controller.get_message("información previa (cabecera)"), Language_controller.get_message("información previa (recordatorio)"))
+        #messagebox.showwarning(Language_controller.get_message("información previa (cabecera)"), Language_controller.get_message("información previa (recordatorio)"))

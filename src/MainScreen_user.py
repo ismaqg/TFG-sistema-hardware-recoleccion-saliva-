@@ -3,7 +3,6 @@ from tkinter import messagebox
 
 from MainScreen import MainScreen
 from Person import ActivePerson
-from Help_screen import Help_screen
 from ClaimKit_screen import ClaimKit_screen
 from SubmitSample_screen import SubmitSample_screen
 import constants
