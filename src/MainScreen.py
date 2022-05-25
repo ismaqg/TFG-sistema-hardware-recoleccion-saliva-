@@ -83,8 +83,9 @@ class MainScreen(ABC): # abstract
                 # program to check the keyboard input after another 0.5 seconds:
                 Screen_manager.get_root().after(500, lambda:MainScreen._refill_kits(numerical_keyboard))
             else:
-                number_introduced = numerical_keyboard.number_introduced()
+                number_introduced = numerical_keyboard.get_number_introduced()
                 if (number_introduced > constants.AVAILABLE_KITS_AFTER_REFILL):
+                    messagebox.showwarning(Language_controller.get_message("número inválido"), str(constants.AVAILABLE_KITS_AFTER_REFILL) + Language_controller.get_message("se actualizará con el valor máximo"))
                     number_introduced = constants.AVAILABLE_KITS_AFTER_REFILL
                 Counters.set_available_kits(number_introduced)
                 if ActivePerson.getCurrent().get_status() == "ADMIN":

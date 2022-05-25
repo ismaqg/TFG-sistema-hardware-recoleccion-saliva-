@@ -73,7 +73,7 @@ Pudiste introducir un nuevo rollo de etiquetas?
 ERROR. NO HAY KITS
 El programa no puede iniciarse porque no queda ningún kit que puedan utilizar los usuarios. Por favor, rellena el depósito de kits. 
 REPOSICIÓN DE KITS
-Pudiste rellenar completamente el depósito de kits?
+Pudiste rellenar el depósito de kits?
 ERROR. DEPOSITO LLENO
 El programa no puede iniciarse porque el depósito de muestras está lleno y necesita vaciarse. Pulsa OK para más información.
 VACIADO DE DEPÓSITO
@@ -83,3 +83,6 @@ CERRAR PROGRAMA
 Clave errónea
 NO cumplo los requisitos
 ESPERA...
+Kits disponibles
+ es el máximo. Se actualizará con ese valor.
+Número inválido 

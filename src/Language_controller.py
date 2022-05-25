@@ -87,7 +87,10 @@ str_to_index_map = {
     "cerrar programa pestaña no disponible" : 76,
     "clave errónea" : 77,
     "no cumplo los requisitos" : 78,
-    "espera" : 79
+    "espera" : 79,
+    "kits disponibles" : 80,
+    "se actualizará con el valor máximo" : 81,
+    "número inválido" : 82
 }
 
 messages = []

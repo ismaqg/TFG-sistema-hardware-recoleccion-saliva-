@@ -130,9 +130,9 @@ def check_available_resources():
 
     if problems == '':
         return True
-    else:  # if this occurs, a message is displayed, the event is registered and the rpi is powered off
+    else:  
         print("Los problemas internos son: " + problems)
-        if ActivePerson.isThereActivePerson():  # function called because someone tried to log in
+        if ActivePerson.isThereActivePerson():  # function called because someone tried to log in (when trying to logIn, an active person is instantiated before calling this method)
             DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "USER LOGIN FAIL. NO AVAILABLE RESOURCES:\n" + problems)
         else:  # function called because it has been seen that all the resources do not work well after a period of inactivity of the machine
             DBcontroller.add_new_event("-", "AFTER INACTIVITY, DETECTED NO AVAILABLE RESOURCES:\n" + problems)

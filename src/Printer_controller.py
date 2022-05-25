@@ -84,7 +84,7 @@ def print_label(labelID):
 # This function can be called for this reasons: printer not working or no labels left to print
 def __printer_not_responding_while_printing(signum, frame):
     messagebox.showerror(Language_controller.get_message("aviso de error de impresión (cabecera)"), Language_controller.get_message("aviso de error de impresión (cuerpo)"))
-    Checker.notify_operator("Impresora colgada a media impresión", Checker.Priority.CRITICAL)
+    Checker.notify_operator("Impresora no puede usarse (no funciona o faltan etiquetas)", Checker.Priority.CRITICAL)
     if Counters.get_available_labels() >= 1:
         DBcontroller.add_new_event(ActivePerson.getCurrent().get_CIP(), "CURRENT SESSION CLOSED: PRINTER NOT WORKING")
     else:

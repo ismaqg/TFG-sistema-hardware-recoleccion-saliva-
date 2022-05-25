@@ -73,7 +73,7 @@ Were you able to insert a new roll of labels?
 ERROR. NO KITS
 The program cannot start because there are no kits left for users to use. Please fill in the kits deposit.
 KITS REFILL
-Were you able to completely fill the kits deposit?
+Were you able to fill the kits deposit?
 ERROR. FULL TANK
 The program cannot start because the sample container is full and needs to be emptied. Press OK for more information.
 TANK EMPTYING
@@ -83,3 +83,6 @@ CLOSE PROGRAM
 Wrong key
 I DON'T meet the\nrequirements
 WAIT...
+Available kits
+ is the maximum. It will update with that value.
+Invalid number 
