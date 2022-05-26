@@ -22,7 +22,9 @@ TEMP_STRING_LENGTH = 5
 SAMPLE_SUBMISSION_RESPONSE_LENGTH = 1
 
 # Constants for the arduino SUPPLY:
-DROP_KIT_IDENTIFIER = '0' # no pasa nada por que coincida con el GET_TEMP_IDENTIFIER, porque es para otro arduino.
+DROP_KIT_IDENTIFIER = '0'  # no pasa nada por que coincida con el GET_TEMP_IDENTIFIER, porque es para otro arduino.
+DROP_KIT_FINISHED_SUCCESS = '1'  # kit ha caido y sensor lo ha detectado (y el motor ha parado)
+DROP_KIT_FINISHED_FAILURE = '2'  # el sensor no ha detectado caida kit así que el motor ha parado por un timeout programado en el arduino. (puede significar sensor roto o cualquier cosa peor, como que el tornillo sin fin se haya desencajado del motor)
 DROP_KIT_RESPONSE_LENGTH = 1
 
 # Arduino pySerial instances:
@@ -58,13 +60,13 @@ def get_deposit_temperature():
         # ask for temperature to arduino:
         try:
             arduino_storage.write(str.encode(GET_TEMP_IDENTIFIER))
-        except:  # SerialTimeoutException (raised if timeout is reached)
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
             inoperative_arduino_actions("storage", "SerialTimeoutException al pedir al arduino la temperatura")  
 
         # get response (temperature) from arduino:
         temperature = arduino_storage.read(TEMP_STRING_LENGTH).decode('UTF-8') # receive temperature
-        if (len(temperature) != TEMP_STRING_LENGTH):  # this will be the case of timeout reached
-            inoperative_arduino_actions("storage", "ha saltado timeout al intentar recibir del arduino la temperatura")
+        if (len(temperature) != TEMP_STRING_LENGTH):  # this will be the case of communication timeout reached
+            inoperative_arduino_actions("storage", "ha saltado timeout de comunicacion al intentar recibir del arduino la temperatura")
 
         # return temperature (string):
         return temperature
@@ -86,7 +88,7 @@ def start_checking_if_sample_submission():
         # say to arduino to start checking if sample is submitted:
         try:
             arduino_storage.write(str.encode(START_CHECKING_IF_SAMPLE_SUBMITTED_IDENTIFIER))
-        except:  # SerialTimeoutException (raised if timeout is reached)
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
             inoperative_arduino_actions("storage", "SerialTimeoutException al decir al arduino que puede empezar la comprobación de si se entrega muestra") 
     else:
         inoperative_arduino_actions("storage", "No se detecta el arduino conectado")
@@ -99,19 +101,20 @@ def is_sample_submitted():
         # ask if sample was submitted to arduino:
         try:
             arduino_storage.write(str.encode(GET_IF_SAMPLE_SUBMITTED_IDENTIFIER))
-        except:  # SerialTimeoutException (raised if timeout is reached)
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
             inoperative_arduino_actions("storage", "SerialTimeoutException al pedirle al arduino que nos diga si se entrega muestra")
          
         # get response from arduino ('1' if sample submitted, '0' if not):
         sample_submission_response = arduino_storage.read(SAMPLE_SUBMISSION_RESPONSE_LENGTH).decode('UTF-8')
-        if (len(sample_submission_response) != SAMPLE_SUBMISSION_RESPONSE_LENGTH):  # this will be the case of timeout reached
-            inoperative_arduino_actions("storage", "ha saltado timeout al intentar recibir del arduino la respuesta de si ya se ha detectado una muestra")
+        if (len(sample_submission_response) != SAMPLE_SUBMISSION_RESPONSE_LENGTH):  # this will be the case of communication timeout reached
+            inoperative_arduino_actions("storage", "ha saltado timeout de comunicacion al intentar recibir del arduino la respuesta de si ya se ha detectado una muestra")
         
         # return if sample submitted (boolean):
         return bool(int(sample_submission_response))  # sample_submission_response can be '0' or '1'. And we convert it in true or false
     
     else:
         inoperative_arduino_actions("storage", "No se detecta el arduino conectado")
+        return False
 
 
 # This function will only be called if user indicates that he has submitted a sample and the arduino sensor didn't detect it.
@@ -120,7 +123,7 @@ def stop_checking_if_sample_submission():
         # say to arduino to stop checking if sample is submitted:
         try:
             arduino_storage.write(str.encode(START_CHECKING_IF_SAMPLE_SUBMITTED_IDENTIFIER))
-        except:  # SerialTimeoutException (raised if timeout is reached)
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
             inoperative_arduino_actions("storage", "SerialTimeoutException al decir al arduino que ya puede dejar de mirar si se entrega muestra") 
     else:
         inoperative_arduino_actions("storage", "No se detecta el arduino conectado")
@@ -129,25 +132,32 @@ def stop_checking_if_sample_submission():
 """ ******************* ARDUINO SUPPLY FUNCTIONS: ******************* """
 
 
-# Si el sensor no detecta que cae un kit, se mostrará la pantalla de not available. Returns true if success, false if not
+# Si el sensor no detecta que cae un kit/ ha habido problemas con el motor o tornillo sin fin, se mostrará la pantalla de not available. Returns true if success, false if not
 def drop_kit():
     if(Checker.is_arduino_supply_alive()):
 
         # say to arduino to drop a kit:
         try:
             arduino_supply.write(str.encode(DROP_KIT_IDENTIFIER))
-        except:  # SerialTimeoutException (raised if timeout is reached)
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
             inoperative_arduino_actions("supply", "SerialTimeoutException al decir al arduino que puede dejar caer un kit") 
 
-        # NOTE: The timeout of the arduino supply is much bigger than the arduino storage because it needs some seconds to drop a kit. 
+        # NOTE: The communication timeout of the arduino supply is much bigger than the arduino storage because it needs some seconds to drop a kit. 
         
         # receive from arduino the message that the kit has been dropped:
         kit_dropped = arduino_supply.read(DROP_KIT_RESPONSE_LENGTH).decode('UTF-8')
-        if (len(kit_dropped) != DROP_KIT_RESPONSE_LENGTH):  # this will be the case of timeout reached
-            inoperative_arduino_actions("storage", "El sensor no ha detectado que haya caído un kit (ha saltado el timeout)")
+        if (len(kit_dropped) != DROP_KIT_RESPONSE_LENGTH):  # this will be the case of communication timeout reached (0 bytes read)
+            inoperative_arduino_actions("storage", "Timeout de la comunicación con el arduino: no ha llegado a comunicar nada de vuelta a la Rpi")
             return False
-        
-        return True
+        elif kit_dropped == DROP_KIT_FINISHED_FAILURE:
+            inoperative_arduino_actions("storage", "Ha saltado el timeout del motor, eso significa que o el kit ha caído pero el sensor no ha sido capaz de detectarlo (y por tanto está roto) o ha ocurrido un problema con el motor o el tornillo sin fin o los kits se han encallado")
+            return False
+        elif kit_dropped == DROP_KIT_FINISHED_SUCCESS:
+            return True
+        else:
+            print("Función drop_kit() de Arduino_controller: ha llegado a un estado no esperado")
+            return False
 
     else:
         inoperative_arduino_actions("supply", "No se detecta el arduino conectado")
+        return False

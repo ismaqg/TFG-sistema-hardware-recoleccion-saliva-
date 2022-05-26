@@ -21,20 +21,20 @@ Priority = Enum("Priority", "CRITICAL HIGH MEDIUM LOW")
 
 # TODO: Descomentar el "return true" de los siguientes 4 metodos para testeos donde vaya a faltar alguno de los componentes en cuestión
 def is_arduino_supply_alive():
-    #return True  
+    #return True  #<-Uncomment to avoid the arduino (supply module) connection checking
     return os.path.exists(constants.ARDUINO_SUPPLY_PORT)
 
 def is_arduino_storage_alive():
-    #return True  
+    #return True  #<-Uncomment to avoid the arduino (storage module) connection checking
     return os.path.exists(constants.ARDUINO_STORAGE_PORT)
 
 def is_printer_alive():
-    #return True  
+    #return True  #<-Uncomment to avoid the printer connection checking
     return os.path.exists(constants.PRINTER_PORT)
     
     
 def is_internet_connection():
-    # return True
+    # return True  #<-Uncomment to avoid the internet checking 
     url = "https://www.google.com/"
     try:
         request = requests.get(url, timeout = constants.INTERNET_CONNECTION_TIMEOUT)
