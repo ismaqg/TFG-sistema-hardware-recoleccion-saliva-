@@ -21,12 +21,12 @@
 // timer interruption interval:
 #define TIMER_INTERRUPTION   8000L  // 8s
 
-// variable to control if our motor stopped by a sensor detection or by timeout
-bool timeout_reached = false;
+// variable to control if our motor stopped by a sensor detection or by timeout. Volatile to not make any optimization (this variable will change in an ISR and will be readed in the main loop)
+volatile bool timeout_reached = false;
 
 
-// TimerInterruptHandler
-void timeout() {
+// Timer Interrupt Handler (Interrupt Service Routine)
+void timeout_ISR() {
   // if timer interrupt was activated
   timeout_reached = true;  // this will detonate some actions in the main loop, look there.
 }
@@ -50,7 +50,7 @@ void loop() {
     
       char value_read = Serial.read();
       if(value_read == DROP_KIT) {
-        
+
          // start moving the motor:
          digitalWrite (RELE_PIN, MOTOR_ON);
 
@@ -58,12 +58,12 @@ void loop() {
          timeout_reached = false;
 
          // program a timer interruption (to stop the motor in case that the sensor didn't detect the kit fall)
-         ITimer1.attachInterruptInterval(TIMER_INTERRUPTION, timeout);  
+         ITimer1.attachInterruptInterval(TIMER_INTERRUPTION, timeout_ISR);  
          
          // wait until kit has dropped (sensor outputs HIGH while an object is not being detected) or until timeout is reached:
          int status_IRsensor = digitalRead (IR_SENSOR);  
-         while (status_IRsensor == HIGH  ||  timeout_reached){  // status_IRsensor == HIGH means anything detected by the sensor
-            status_IRsensor = digitalRead (IR_SENSOR); 
+         while (status_IRsensor == HIGH  &&  !timeout_reached){  // status_IRsensor == HIGH means anything detected by the sensor
+            status_IRsensor = digitalRead (IR_SENSOR);
          }
 
          // stop the timer interruption (until another kit is requested by another user):
