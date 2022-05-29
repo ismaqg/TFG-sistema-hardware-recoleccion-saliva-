@@ -111,6 +111,8 @@ def check_not_max_stored_samples_at_turningON():
         messagebox.showerror(Language_controller.get_message("necesario vaciado deposito muestras (cabecera)"), Language_controller.get_message("necesario vaciado deposito muestras (cuerpo)"))
         MainScreen._collect_samples()  # an operator is always able to do this (doesn't need extra resources), this is why we don't show a message saying "were you able to empty the samples container?"
 
+
+# se la llama cada vez que salta el temporizador de "mucho tiempo sin inicios de sesión" y en cada login. Las funciones que la llaman ya se encargan de, en función de la respuesta, ir a NotAvailableScreen y demás gestiones necesarias cuando hay fallos
 def check_available_resources():
     problems = ''
     if Counters.get_stored_samples() == constants.STORED_SAMPLES_LIMIT:

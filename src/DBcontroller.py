@@ -3,6 +3,8 @@ import Screen_manager
 import constants
 import Arduino_controller
 import Counters
+import Checker
+from Not_available_screen import Not_available_screen
 
 import csv
 import sqlite3
@@ -100,6 +102,19 @@ def get_messages(language_file_path):
 
 
 
+def __unable_to_connect_to_remote_DB_actions():
+    print("No se puede conectar con BD remota")
+    if not Checker.is_internet_connection():
+        Checker.notify_operator("Imposible conectar con la base de datos remota: NO HAY INTERNET" , Checker.Priority.CRITICAL)
+    else:
+        Checker.notify_operator("Imposible conectar con la base de datos remota por algún motivo distinto a la falta de internet" , Checker.Priority.CRITICAL)
+    add_new_event("-", "SIN ACCESO A BD REMOTA")
+    if ActivePerson.isThereActivePerson():
+        ActivePerson.getCurrent().logOut()
+    Not_available_screen.getInstance().go_to_Not_available_screen_screen()
+
+
+
 def create_DBs_if_not_exist():
     # saliva samples submision information DB:
     connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
@@ -127,26 +142,29 @@ def create_DBs_if_not_exist():
     connection.commit()
     connection.close()
     # remote DB:
-    conn = psycopg2.connect(
-        host= "ec2-54-220-243-77.eu-west-1.compute.amazonaws.com",
-        database= "d8s1tilci8353n",
-        user= "vbfblvogizjcup",
-        password= "2adc81cd9aaa58f02c6591e49b859d41428a23e1ebcd511e00a1450c54f25c71")
-    cursor = conn.cursor()
-    cursor.execute("""CREATE TABLE if not exists muestras_saliva (
-                CIP text,
-                last_pickup_time text,
-                submit_time text,
-                time_elapsed text,
-                submission_ID text PRIMARY KEY,
-                valid text,
-                min_temperature real,
-                max_temperature real,
-                container_ID text )
-                """)
-    cursor.close()
-    conn.commit()
-    conn.close()
+    try:
+        conn = psycopg2.connect(
+            host= "ec2-54-220-243-77.eu-west-1.compute.amazonaws.com",
+            database= "d8s1tilci8353n",
+            user= "vbfblvogizjcup",
+            password= "2adc81cd9aaa58f02c6591e49b859d41428a23e1ebcd511e00a1450c54f25c71")
+        cursor = conn.cursor()
+        cursor.execute("""CREATE TABLE if not exists muestras_saliva (
+                    CIP text,
+                    last_pickup_time text,
+                    submit_time text,
+                    time_elapsed text,
+                    submission_ID text PRIMARY KEY,
+                    valid text,
+                    min_temperature real,
+                    max_temperature real,
+                    container_ID text )
+                    """)
+        cursor.close()
+        conn.commit()
+        conn.close()
+    except:
+        __unable_to_connect_to_remote_DB_actions()
 
 def add_new_event(ID, event):
     connection = sqlite3.connect(constants.DB_USEINFO_PATH)
@@ -327,37 +345,40 @@ def modify_DB_temperatures_if_needed(T):
 
 
 def insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions():
-    # Take the content of the local DB:
-    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
-    cursor = connection.cursor()
-    # Select (in the local DB) the rows that contain the information of the samples submitted and store them in a variable:
-    cursor.execute("SELECT * FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'") 
-    local_DB_submissions = cursor.fetchall()
-    # Add to the selected rows a new column: container_ID:
-    container_ID = constants.MACHINE_ID + str(Counters.get_container_number())  # The concatenation of machine_ID plus the container number is the identification of a certain cointainer, printed in a label in the moment that an operator/admin collects the samples container
-    samples_collected = []
-    for row in local_DB_submissions:
-        samples_collected.append(row + (container_ID,))  # add to each row a new element that is the container ID (casted to tuple of one element, to be added to the row, which is a tuple of many elements). That tuple will be a new element of the samples_collected list, ready to be added in the remote DB
-    cursor.close()
-    connection.close()
-    # Insert those rows in the remote DB:
-    conn = psycopg2.connect(
-        host= "ec2-54-220-243-77.eu-west-1.compute.amazonaws.com",
-        database= "d8s1tilci8353n",
-        user= "vbfblvogizjcup",
-        password= "2adc81cd9aaa58f02c6591e49b859d41428a23e1ebcd511e00a1450c54f25c71")
-    cursor = conn.cursor()
-    query = "INSERT INTO muestras_saliva (CIP, last_pickup_time, submit_time, time_elapsed, submission_ID, valid, min_temperature, max_temperature, container_ID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor.executemany(query, samples_collected)
-    cursor.close()
-    conn.commit()
-    conn.close()
-    # Delete local DB sample sumbissions:
-    connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
-    cursor = connection.cursor()
-    cursor.execute("DELETE FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'")
-    connection.commit()
-    connection.close()
+    try:
+        # Take the content of the local DB:
+        connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+        cursor = connection.cursor()
+        # Select (in the local DB) the rows that contain the information of the samples submitted and store them in a variable:
+        cursor.execute("SELECT * FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'") 
+        local_DB_submissions = cursor.fetchall()
+        # Add to the selected rows a new column: container_ID:
+        container_ID = constants.MACHINE_ID + str(Counters.get_container_number())  # The concatenation of machine_ID plus the container number is the identification of a certain cointainer, printed in a label in the moment that an operator/admin collects the samples container
+        samples_collected = []
+        for row in local_DB_submissions:
+            samples_collected.append(row + (container_ID,))  # add to each row a new element that is the container ID (casted to tuple of one element, to be added to the row, which is a tuple of many elements). That tuple will be a new element of the samples_collected list, ready to be added in the remote DB
+        cursor.close()
+        connection.close()
+        # Insert those rows in the remote DB:
+        conn = psycopg2.connect(
+            host= "ec2-54-220-243-77.eu-west-1.compute.amazonaws.com",
+            database= "d8s1tilci8353n",
+            user= "vbfblvogizjcup",
+            password= "2adc81cd9aaa58f02c6591e49b859d41428a23e1ebcd511e00a1450c54f25c71")
+        cursor = conn.cursor()
+        query = "INSERT INTO muestras_saliva (CIP, last_pickup_time, submit_time, time_elapsed, submission_ID, valid, min_temperature, max_temperature, container_ID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.executemany(query, samples_collected)
+        cursor.close()
+        conn.commit()
+        conn.close()
+        # Delete local DB sample sumbissions:
+        connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM muestras_saliva WHERE submit_time <> 'NO SUBMISSION'")
+        connection.commit()
+        connection.close()
+    except:
+        __unable_to_connect_to_remote_DB_actions()
      
 
 
