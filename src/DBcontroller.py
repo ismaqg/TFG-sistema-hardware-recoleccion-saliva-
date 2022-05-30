@@ -10,7 +10,7 @@ import csv
 import sqlite3
 import time
 from datetime import datetime
-import psycopg2
+# import psycopg2
 
 
 
@@ -142,6 +142,8 @@ def create_DBs_if_not_exist():
     connection.commit()
     connection.close()
     # remote DB:
+    """
+    OJO, AL PONER ESTE TRIPLE COMILLADO HE TENIDO QUE CAMBIAR EL DEL cursor.execute POR UN COMILLADO SIMPLE. LUEGO REVERTIR EL CAMBIO
     try:
         conn = psycopg2.connect(
             host= "ec2-54-220-243-77.eu-west-1.compute.amazonaws.com",
@@ -149,7 +151,7 @@ def create_DBs_if_not_exist():
             user= "vbfblvogizjcup",
             password= "2adc81cd9aaa58f02c6591e49b859d41428a23e1ebcd511e00a1450c54f25c71")
         cursor = conn.cursor()
-        cursor.execute("""CREATE TABLE if not exists muestras_saliva (
+        cursor.execute("CREATE TABLE if not exists muestras_saliva (
                     CIP text,
                     last_pickup_time text,
                     submit_time text,
@@ -159,12 +161,13 @@ def create_DBs_if_not_exist():
                     min_temperature real,
                     max_temperature real,
                     container_ID text )
-                    """)
+                    ")
         cursor.close()
         conn.commit()
         conn.close()
     except:
         __unable_to_connect_to_remote_DB_actions()
+    """
 
 def add_new_event(ID, event):
     connection = sqlite3.connect(constants.DB_USEINFO_PATH)
@@ -345,6 +348,8 @@ def modify_DB_temperatures_if_needed(T):
 
 
 def insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample_submissions():
+    pass
+    """
     try:
         # Take the content of the local DB:
         connection = sqlite3.connect(constants.DB_MEDICALINFO_PATH)
@@ -379,7 +384,7 @@ def insert_local_DB_sample_submissions_into_remote_DB_and_delete_local_DB_sample
         connection.close()
     except:
         __unable_to_connect_to_remote_DB_actions()
-     
+    """ 
 
 
 
