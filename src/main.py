@@ -27,8 +27,7 @@ Counters.initialize_information()
 
 root = Screen_manager.start_application()
 
-# TODO: Descomentar linea para la rpi (al testear en PC tambien puedo descomentarla pero tendre que cambiar la contraseña)
-#os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)  # R+W premission to the printer
+os.system("echo 'salibank' | sudo -S chmod 666 " + constants.PRINTER_PORT)  # R+W premission to the printer
 
 Checker.check_hardware_usable_and_internet_connection_at_turningON() 
 Checker.check_available_labels_at_turningON()
@@ -42,8 +41,7 @@ root.after(10000, Arduino_controller.get_deposit_temperature_periodically_and_up
 
 Screen_saver.getInstance().go_to_screen_saver()
 
-# TODO: Descomentar linea para la rpi
-#root.attributes("-fullscreen", True)
+root.attributes("-fullscreen", True)
 
 mainloop()
 

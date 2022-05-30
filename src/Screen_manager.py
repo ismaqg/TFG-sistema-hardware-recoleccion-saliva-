@@ -14,7 +14,7 @@ def start_application():
         width = constants.SCREEN_WIDTH
         height = constants.SCREEN_HEIGHT
         __root.geometry(str(width) + "x" + str(height))
-        #__root.config(cursor="none")  # TODO: Uncomment for raspberry
+        __root.config(cursor="none")  
     return __root
 
 def get_root():

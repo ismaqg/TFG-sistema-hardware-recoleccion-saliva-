@@ -2,12 +2,12 @@ from screeninfo import get_monitors #to check width and height of the monitor
 
 # ------------ paths and constants -----------------------------
 
-PROGRAM_SOURCE_CODE_PATH = "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src"  # path of this file's directory. #TODO: En la rpi es /home/pi/Desktop/SALIBANK_PROGRAM/src
+PROGRAM_SOURCE_CODE_PATH = "/home/pi/Desktop/SALIBANK_PROGRAM/src"  
 
 MACHINE_ID = "AAAA"  # each character can be a letter or a number. This means that each machine_ID has 36^4 = 1,679,616 different values. The Machine_ID is unique en each machine of SALIBANK, so it will printed with the current time in the users labels and it will be printed with the container number in the operators/admins labels when collecting samples 
 
-PRINTER_PORT = "/dev/usb/lp5" # TODO: Cambiar al probarlo en Rpi. En la Rpi es /dev/usb/lp0
-ARDUINO_STORAGE_PORT = "/dev/ttyACM1" # TODO: En la Rpi hay que ver qué path es
+PRINTER_PORT = "/dev/usb/lp0" 
+ARDUINO_STORAGE_PORT = "/dev/ttyACM1" 
 ARDUINO_SUPPLY_PORT = "/dev/ttyACM0" 
 
 DB_MEDICALINFO_PATH = "../res/database/muestras_saliva.db" 
@@ -25,8 +25,8 @@ STORED_SAMPLES_LIMIT = 50
 AVAILABLE_KITS_AFTER_REFILL = 20    
 NUMBER_OF_LABELS_IN_LABEL_ROLL = 200     
 
-SCREEN_WIDTH = 800#get_monitors()[0].width  # TODO: Cambiar en la Rpi por la funcion comentada
-SCREEN_HEIGHT = 480#get_monitors()[0].height  # TODO: Cambiar en la Rpi por la funcion comentada
+SCREEN_WIDTH = get_monitors()[0].width 
+SCREEN_HEIGHT = get_monitors()[0].height  
 
 SALIBANK_MAIN_EMAIL = "salibanktfg@gmail.com"
 
