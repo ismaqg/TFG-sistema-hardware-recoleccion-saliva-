@@ -78,7 +78,7 @@ class MainScreen(ABC): # abstract
 
     # El operador indica cuantos kits hay después del refill por teclado (habiendo un valor máximo: el máximo aceptado por la máquina)
     def _refill_kits(numerical_keyboard):
-        if numerical_keyboard.is_keyboard_alive():  # otherwise the function to check the number of refilled kits is nor reprogrammed
+        if numerical_keyboard.is_keyboard_alive():  # otherwise the function to check the number of refilled kits is not reprogrammed
             if not numerical_keyboard.is_number_introduced():
                 # program to check the keyboard input after another 0.5 seconds:
                 Screen_manager.get_root().after(500, lambda:MainScreen._refill_kits(numerical_keyboard))
@@ -87,7 +87,9 @@ class MainScreen(ABC): # abstract
                 if (number_introduced > constants.AVAILABLE_KITS_AFTER_REFILL):
                     messagebox.showwarning(Language_controller.get_message("número inválido"), str(constants.AVAILABLE_KITS_AFTER_REFILL) + Language_controller.get_message("se actualizará con el valor máximo"))
                     number_introduced = constants.AVAILABLE_KITS_AFTER_REFILL
+                # set kits in the csv:
                 Counters.set_available_kits(number_introduced)
+                # change displayed info about kits:
                 if ActivePerson.getCurrent().get_status() == "ADMIN":
                     from MainScreen_admin import MainScreen_admin
                     MainScreen_admin.getInstance().remaining_kits_info.config( text = Language_controller.get_message("avisador kits restantes") + str(Counters.get_available_kits()) + Language_controller.get_message("de") + str(constants.AVAILABLE_KITS_AFTER_REFILL), fg = Counters.get_available_kits_fg_color(), bg = Counters.get_available_kits_bg_color())
