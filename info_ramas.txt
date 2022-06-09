@@ -1,0 +1,1 @@
+La rama master tiene el codigo para testear el codigo en el PC de casa (pero asumiendo que se tiene todo el hardware. Si no es así mira lo que hay que hacer en el otro txt), y la rama raspberry tiene el código para testear el código en la raspberry. Por último la otra rama es igual que raspberry pero sin hacer uso de BD remota.
