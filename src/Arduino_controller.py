@@ -8,6 +8,7 @@ from Not_available_screen import Not_available_screen
 from Person import ActivePerson
 import Language_controller
 import constants
+import time
 
 import serial
 
@@ -26,6 +27,10 @@ DROP_KIT_IDENTIFIER = '0'  # no pasa nada por que coincida con el GET_TEMP_IDENT
 DROP_KIT_FINISHED_SUCCESS = '1'  # kit ha caido y sensor lo ha detectado (y el motor ha parado)
 DROP_KIT_FINISHED_FAILURE = '2'  # el sensor no ha detectado caida kit así que el motor ha parado por un timeout programado en el arduino. (puede significar sensor roto o cualquier cosa peor, como que el tornillo sin fin se haya desencajado del motor)
 DROP_KIT_RESPONSE_LENGTH = 1
+WHO_ARE_YOU_IDENTIFIER = '?'
+ARDUINO_ID_RESPONSE_LENGTH = 1
+ARDUINO_SUPPLY_ID = 'A'
+ARDUINO_STORAGE_ID = 'B'
 
 # Arduino pySerial instances:
 arduino_storage = None
@@ -38,7 +43,41 @@ def init_arduinos_connections():
     if Checker.is_arduino_storage_alive() and Checker.is_arduino_supply_alive():
         arduino_storage = serial.Serial(constants.ARDUINO_STORAGE_PORT, 9600, timeout = constants.ARDUINO_STORAGE_COMMUNICATION_TIMEOUT, write_timeout = constants.ARDUINO_STORAGE_COMMUNICATION_TIMEOUT)
         arduino_supply = serial.Serial(constants.ARDUINO_SUPPLY_PORT, 9600, timeout = constants.ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT, write_timeout = constants.ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT) 
-        #time.sleep(2) <- este es mas o menos el tiempo que necesitan las lineas anteriores para hacerse correctamente antes de que se intente hacer nada de linea serie sobre el arduino. Ahora mismo lo primero que se intenta hacer para interactuar con él es pedirle la temperatura a los 10s de iniciarse, pero si se quisiese esa temperatura a los 0s habría que descomentar este time.sleep(2)
+        time.sleep(2) #este es mas o menos el tiempo que necesitan las lineas anteriores para hacerse correctamente antes de que se intente hacer nada de linea serie sobre el arduino. 
+    else:
+        inoperative_arduino_actions("storage and supply", "No se detecta algún arduino conectado")
+
+
+# se ocupa de que, si se ha conectado el arduino supply en ACM1 y storage en ACM0 (es decir, al reves de como deberia), actualizar el valor de las variables que contienen la información de los puertos y volver a establecer conexión
+def give_correct_port_to_arduinos():
+    global arduino_storage, arduino_supply
+    if Checker.is_arduino_storage_alive() and Checker.is_arduino_supply_alive():
+
+        # ask for identifier to the arduino connected to the ARDUINO_SUPPLY port:
+        try:
+            arduino_supply.write(str.encode(WHO_ARE_YOU_IDENTIFIER))
+        except:  # SerialTimeoutException (raised if communication timeout is reached)
+            inoperative_arduino_actions("supply or storage", "SerialTimeoutException al preguntar al arduino conectado a ACM0 quién es él (si supply o storage")
+
+        # get response (identifier) from arduino:
+        arduino_identifier = arduino_supply.read(ARDUINO_ID_RESPONSE_LENGTH).decode('UTF-8')
+        if (len(arduino_identifier) != ARDUINO_ID_RESPONSE_LENGTH):  # this will be the case of communication timeout reached
+            inoperative_arduino_actions("supply or storage", "ha saltado timeout de comunicacion al intentar recibir el identificador de los arduinos")
+
+        # check if in the ARDUINO_SUPPLY_PORT was connected the ARDUINO_STORAGE (in that case, change the ports of the variables that are indicating each path) and restart the communications (because maybe different timeouts were setted in the init_connections function)
+        if arduino_identifier == ARDUINO_STORAGE_ID:
+            # swap:
+            aux = constants.ARDUINO_SUPPLY_PORT
+            constants.ARDUINO_SUPPLY_PORT = constants.ARDUINO_STORAGE_PORT
+            constants.ARDUINO_STORAGE_PORT = aux
+            # restart serial comm:
+            arduino_storage = serial.Serial(constants.ARDUINO_STORAGE_PORT, 9600, timeout = constants.ARDUINO_STORAGE_COMMUNICATION_TIMEOUT, write_timeout = constants.ARDUINO_STORAGE_COMMUNICATION_TIMEOUT)
+            arduino_supply = serial.Serial(constants.ARDUINO_SUPPLY_PORT, 9600, timeout = constants.ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT, write_timeout = constants.ARDUINO_SUPPLY_COMMUNICATION_TIMEOUT) 
+        elif arduino_identifier == ARDUINO_SUPPLY_ID:
+            pass
+        else:
+            print("ha habido algún problema al mirar quién es el arduino conectado en ACM0: no han retornado ni una 'A' ni una 'B'")
+
     else:
         inoperative_arduino_actions("storage and supply", "No se detecta algún arduino conectado")
 
@@ -46,8 +85,9 @@ def init_arduinos_connections():
 def inoperative_arduino_actions(which_arduino, extra_info):
     Checker.notify_operator("ARDUINO (" + which_arduino + ") INOPERATIVO. Info extra: " + extra_info, Checker.Priority.CRITICAL)
     DBcontroller.add_new_event("-", "APP CLOSED. ARDUINO (" + which_arduino + ") INOPERATIVE")
-    messagebox.showerror(Language_controller.get_message("error recogida kit (cabecera)"), Language_controller.get_message("error recogida kit (cuerpo)"))  
-    ActivePerson.getCurrent().logOut()
+    messagebox.showerror(Language_controller.get_message("error recogida kit (cabecera)"), Language_controller.get_message("error recogida kit (cuerpo)"))
+    if ActivePerson.isThereActivePerson():
+        ActivePerson.getCurrent().logOut()
     Not_available_screen.getInstance().go_to_Not_available_screen_screen()
 
 
@@ -155,7 +195,7 @@ def drop_kit():
         elif kit_dropped == DROP_KIT_FINISHED_SUCCESS:
             return True
         else:
-            print("Función drop_kit() de Arduino_controller: ha llegado a un estado no esperado")
+            print("Función drop_kit() de Arduino_controller: ha llegado a un estado no esperado. Arduino ha retornado: " + str(kit_dropped))
             return False
 
     else:

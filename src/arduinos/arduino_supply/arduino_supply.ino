@@ -13,6 +13,8 @@
 #define DROP_KIT '0'
 #define ACTION_FINISHED_WITH_SUCCESS '1'  // Kit dropped and sensor detected it
 #define ACTION_FINISHED_WITH_FAILURE '2'  // Kit dropped but sensor didn't detect it (so motor stopped because of the timer interruption)
+#define WHO_ARE_YOU '?'  // Rpi requests for identification to arduino
+#define WHO_AM_I 'A'  // arduino supply identifier
 
 // relé states
 #define MOTOR_ON LOW  // a LOW to the relé is used to close the circuit (and, therefore, give 12V to the motor)
@@ -47,8 +49,10 @@ void setup() {
 void loop() {
   
   if (Serial.available()) {
-    
+      // Serial.read() empties the buffer, so we CAN'T use the function in all the if-elses, we need to use it once and keep the value:
       char value_read = Serial.read();
+
+      // DROP KIT REQUEST:
       if(value_read == DROP_KIT) {
 
          // start moving the motor:
@@ -81,6 +85,11 @@ void loop() {
 
          // note that, for all the kit requests, timeout_reached is setted to false and a new interruption is reprogramated
          // (and when the kit is dropped or we have got a timeout, interrupt is detached until next user)
+      }
+
+      // IDENTIFICATION REQUEST:
+      else if(value_read == WHO_ARE_YOU) {
+         Serial.print(WHO_AM_I);  
       }
   }
 

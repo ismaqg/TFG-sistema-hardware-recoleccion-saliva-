@@ -13,6 +13,4 @@ Hay que hacer algunos cambios si se prueba en raspberry o en el PC de casa, y so
 	En PC mejor tener comentada la línea de "cursor=none"
 
 
-
-
-******IMPORTANTE*******: Sea en Rpi o en PC de casa, asegurarse de que el Arduino del módulo subministrador ha sido conectado en el puerto ACM0 y el Arduino del módulo recolector ha sido conectado en el puerto ACM1. Esto en el futuro se podría cambiar: que cada Arduino tenga una variable que indique quién es y que se le pregunte al de ACM0 quién es, en caso de que la respuesta sea correcta no se hace nada pero en caso de que conteste el arduino que debería estar conectado en ACM1 pues cambiar los valores de las variables ARDUINO_STORAGE_PORT y ARDUINO_SUPPLY_PORT
+NOTA: El programa por defecto espera al arduino supply en ACM0 y el storage en ACM1, pero en teoria se puede conectar al revés porque por programa se cambia.
