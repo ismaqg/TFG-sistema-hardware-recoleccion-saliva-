@@ -16,6 +16,8 @@
 #define START_CHECKING_IF_SAMPLE_SUBMITTED '1'
 #define GET_IF_SAMPLE_SUBMITTED '2'
 #define STOP_CHECKING_IF_SAMPLE_SUBMITTED '3'
+#define WHO_ARE_YOU '?'  // Rpi requests for identification to arduino
+#define WHO_AM_I 'B'  // arduino storage identifier
 
 // Setup a oneWire instance to communicate with any OneWire devices (used by temperature sensor)   
 OneWire oneWire(ONE_WIRE_BUS); 
@@ -67,6 +69,11 @@ void loop(void) {
           can_check_if_sample_submitted = false;
           sample_submitted = false;  //redundant.
       } 
+
+      // IDENTIFICATION REQUEST:
+      else if(value_read == WHO_ARE_YOU) {
+         Serial.print(WHO_AM_I);  
+      }
       
   }
 

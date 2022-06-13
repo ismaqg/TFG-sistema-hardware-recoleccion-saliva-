@@ -1,0 +1,17 @@
+Para testear partes del sistema obviando comprobaciones sobre el buen funcionamiento del hardware (necesario si no se dispone de alguna parte del hardware), hay que hacer lo siguiente:
+
+- en la primera línea de las primeras funciones de la clase Checkers, poner un return True
+- comentar el root.after(10000, ...) del main
+- comentar la llamada en main a la funcion init_arduino_connections()
+- comentar la llamada en main a la funcion give_correct_port_to_arduinos()
+- comentar la línea de "send(...)" que hay en Printer_controller
+- Si se quiere testear cualquier cosa de petición de kit o de entrega de muestra y no se tienen esos arduinos, comentar las líneas que llaman a funciones de Arduino_controller en las clases de getKit o submitSample
+
+
+NOTA: Obviamente todas las librerias necesarias deben haber sido instaladas para poder testear este programa en un nuevo ordenador. Si no sabes cuáles son simplemente intenta ejecutar y dará error en aquellas que no tengas (porque no se podrá hacer el import).
+
+
+NOTA: El programa por defecto espera al arduino supply en ACM0 y el storage en ACM1, pero en teoria se puede conectar al revés porque por programa se cambia.
+
+
+
