@@ -1,0 +1,16 @@
+Hay que hacer algunos cambios si se prueba en raspberry o en el PC de casa, y son los siguientes:
+
+- ARCHIVO CONSTANTES:
+	En raspberry tenemos SCREEN_WIDTH = get_monitors()[0].width (y el equivalente para height) pero en PC deberíamos hardcodear el valor del tamaño de la pantalla que habrá en la raspberry (800 x 480)
+	Variable program_directory_path: En PC debe ser "/home/ismael/Documentos/TFG/SALIBANK_PROGRAM/src" (o el oportuno según el PC) y en la raspberry debe ser "/home/pi/Desktop/SALIBANK_PROGRAM/src"
+	Printer_port: /dev/usb/lp5 seguramente será en PC (si no, mirarlo en /dev/usb a ver cuál es el lp que se ve) y /dev/usb/lp0 será en Rpi.
+- ARCHIVO MAIN:
+	La línea que da permisos a la impresora hay que cambiarla (porque contiene la contraseña y no será la misma para PC que para Raspberry). En PC es más seguro quitarla y dar permisos a mano.
+	En PC quitar la línea de root.attributes("-fullscreen", True)
+- ARCHIVO CHECKER y PRINTER CONTROLLER:
+	En PC, si no tienes todo el material, deberás poner algunos return True o comentar cosas. Mira el otro txt.
+- ARCHIVO SCREEN MANAGER:
+	En PC mejor tener comentada la línea de "cursor=none"
+
+
+NOTA: El programa por defecto espera al arduino supply en ACM0 y el storage en ACM1, pero en teoria se puede conectar al revés porque por programa se cambia.
