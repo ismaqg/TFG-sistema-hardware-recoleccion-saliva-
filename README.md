@@ -21,4 +21,9 @@ USO DEL SISTEMA POR PARTE DE UN OPERADOR O ADMINISTRADOR:
 https://drive.google.com/file/d/10E1s1bws7V3OXz6RXL2Z-sKkVkkqbEYG/view?usp=sharing
 
 ## La memoria de este trabajo puede ser encontrada aquí:
-(próximamente)
+
+MEMORIA:
+https://drive.google.com/file/d/1aCXYzBCFqEmjF4RBp85nQ_s09-SaJaHo/view?usp=sharing
+
+ANEXOS:
+https://drive.google.com/file/d/1x0ZabSHlSAeVmOO3gmqft1LFoOMU1mC0/view?usp=sharing
