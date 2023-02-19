@@ -1,5 +1,5 @@
 ## MI LINKEDIN:
-Se me puede encontrar en LinkedIn como Ismael Quiñones Gama, por si algún día se quiere llevar esto a una versión final ;)
+https://www.linkedin.com/in/ismael-qui%C3%B1ones-gama-0328b9243/
 
 # TFG (SALIBANK)
 Aquí puede encontrarse el código de mi trabajo de fin de grado (TFG). El TFG consiste en la creación de un prototipo para una máquina de recolección de muestras de saliva para posterior análisis en laboratorio. La nota recibida en el TFG fue de Sobresaliente. El resumen del trabajo es el siguiente:
